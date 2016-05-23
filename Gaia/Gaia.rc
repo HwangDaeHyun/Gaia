@@ -217,7 +217,7 @@ END
 //
 
 IDB_ICON                BITMAP                  "res\\icon.bmp"
-IDB_MENU_BLACK          BITMAP                  "res\\menu_back.bmp"
+IDB_MENU_BACK           BITMAP                  "res\\menu_back.bmp"
 IDB_MENU_EDIT           BITMAP                  "res\\menu_edit.bmp"
 IDB_MENU_FILE           BITMAP                  "res\\menu_file.bmp"
 IDB_MENU_LOOK           BITMAP                  "res\\menu_look.bmp"

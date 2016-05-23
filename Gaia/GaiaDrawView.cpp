@@ -2,7 +2,7 @@
 #include "Gaia.h"
 #include "GaiaDrawView.h"
 #include"DblBufMaker.h"
-#include"LAnd.h"
+#include"AndGate.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -207,12 +207,11 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	LABEL1:{}
 		if (possible){
 			e[sel]->mv = RGB(178, 204, 255);
-
 		}
 		else{
-
 			e[sel]->mv = RGB(255, 167, 167);
-		}e[sel]->base_point.x = clickBase.x + dx;
+		}
+		e[sel]->base_point.x = clickBase.x + dx;
 		e[sel]->base_point.y = clickBase.y + dy;
 		printf("%d %d\n", dx, dy);
 		this->DrawArea(&bDC);
@@ -253,29 +252,29 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	GaiaObject* p = new LAnd();
+	GaiaObject* p = new AndGate();
 	p->SetPoint(10, 10);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new LAnd();
+	p = new AndGate();
 	p->SetPoint(20, 20);
 	p->SetRadius(1);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
-	p = new LAnd();
+	p = new AndGate();
 	p->SetPoint(20, 40);
 	p->SetRadius(0);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
-	p = new LAnd();
+	p = new AndGate();
 	p->SetPoint(40, 40);
 	p->SetRadius(0);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
-	p = new LAnd();
+	p = new AndGate();
 	p->SetPoint(60, 40);
 	p->SetRadius(0);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new LAnd();
+	p = new AndGate();
 	p->SetPoint(60, 10);
 	p->SetRadius(0);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);

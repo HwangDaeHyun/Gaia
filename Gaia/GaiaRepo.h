@@ -3,7 +3,7 @@
 #pragma once
 
 #include"SingleTon.h"
-#include"GaiaView.h"
+#include"GaiaCView.h"
 #include"GaiaSplitterWnd.h"
 #include"GaiaObject.h"
 #include<deque>
@@ -23,7 +23,7 @@ CREATE_SINGLETON(GaiaLayoutRepo) {
 public:
 	const int frameThickness = 8;
 	const int menuHeight = 80;
-	vector<GaiaView*> views;
+	vector<GaiaCView*> views;
 
 	GaiaLayoutRepo() {
 		this->highlight = RGB(0, 130, 153);

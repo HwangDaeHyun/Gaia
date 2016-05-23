@@ -2,7 +2,7 @@
 #include "AndGate.h"
 
 void AndGate::Draw(CDC* pDC){
-	CRect rect(this->base_point.x - 5, this->base_point.y - 5, this->base_point.x + LObjectSize.GetLength() * 10 - 5, this->base_point.y + LObjectSize.GetLength() * 10 - 5);
+	CRect rect(this->base_point.x - 5, this->base_point.y - 5, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 5, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 5);
 	this->baseRect = rect;
 	ior = rect.Width() / 10;
 	CBrush brush(mv == RGB(0, 0, 0) ? basic : mv);

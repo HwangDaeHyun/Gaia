@@ -12,9 +12,9 @@ public:
 	GaiaMainView();
 	virtual ~GaiaMainView();
 protected:
-	GaiaView* m_gaiaSheetView;
-	GaiaView* m_gaiaToolView;
-	GaiaView* m_gaiaDrawView;
+	GaiaCView* m_gaiaSheetView;
+	GaiaCView* m_gaiaToolView;
+	GaiaCView* m_gaiaDrawView;
 	GaiaSplitterWnd m_wndSplitter;
 public:
 	void DrawSplitterBar()override;
@@ -29,15 +29,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnDestroy();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnPaint();
+	afx_msg void OnNcPaint();
 };
-#ifndef _DEBUG  // GaiaStudioView.cpp의 디버그 버전
-inline GaiaDoc* GaiaView::GetDocument() const
-{
-	return reinterpret_cast<GaiaDoc*>(m_pDocument);
-}
-#endif
 
 

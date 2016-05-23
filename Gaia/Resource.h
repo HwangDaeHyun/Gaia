@@ -20,13 +20,13 @@
 #define ID_VIEW_APPLOOK_WINDOWS_7       219
 #define IDB_ICON                        319
 #define IDB_MENU_BLACK                  320
+#define IDB_MENU_BACK                   320
 #define IDB_MENU_EDIT                   321
 #define IDB_MENU_FILE                   322
 #define IDB_MENU_LOOK                   323
 #define IDB_MENU_NEW                    324
 #define IDB_TOOLUP                      325
 #define IDB_TOOLUP_AFTER                326
-#define IDB_BITMAP9                     327
 #define IDB_TOOLUP_HOVER                327
 
 // Next default values for new objects

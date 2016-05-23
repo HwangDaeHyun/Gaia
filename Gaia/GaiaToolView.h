@@ -7,7 +7,7 @@ class GaiaToolView : public GaiaCView
 {
 	DECLARE_DYNCREATE(GaiaToolView)
 
-protected:
+public:
 	GaiaToolView();           // 동적 만들기에 사용되는 protected 생성자입니다.
 	virtual ~GaiaToolView();
 

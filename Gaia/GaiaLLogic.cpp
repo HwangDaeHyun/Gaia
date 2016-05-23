@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GaiaLLogic.h"
 
-void GaiaLLogic::SetPoint(CPoint p)	{
+void GaiaLLogic::SetPoint(CPoint p){
 	this->base_point = CPoint(p.x * 10, p.y * 10);
 	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 

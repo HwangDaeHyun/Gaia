@@ -18,7 +18,9 @@ GaiaToolView::GaiaToolView()
 GaiaToolView::~GaiaToolView()
 {
 }
-
+void GaiaToolView::DrawSplitterBar() {
+	this->OnNcPaint();
+}
 BEGIN_MESSAGE_MAP(GaiaToolView, GaiaCView)
 	ON_WM_NCPAINT()
 	ON_WM_PAINT()

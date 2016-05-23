@@ -87,6 +87,12 @@
     <ClInclude Include="GaiaFrame.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GaiaLLogic.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AndGate.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -135,6 +141,12 @@
       <Filter>소스 파일\View</Filter>
     </ClCompile>
     <ClCompile Include="GaiaFrame.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaLLogic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AndGate.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

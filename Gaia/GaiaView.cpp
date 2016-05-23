@@ -32,7 +32,8 @@ END_MESSAGE_MAP()
 GaiaView::GaiaView()
 {
 	// TODO: 여기에 생성 코드를 추가합니다.
-
+	this->m_mainview = nullptr;
+	this->m_menuview = nullptr;
 }
 
 GaiaView::~GaiaView()

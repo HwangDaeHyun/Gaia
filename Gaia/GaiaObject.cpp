@@ -4,7 +4,8 @@
 
 GaiaObject::GaiaObject()
 {
-	GaiaObject();
+	this->basic = RGB(103, 153, 255);
+	this->mv = RGB(0, 0, 0);
 
 }
 GaiaObject::~GaiaObject()

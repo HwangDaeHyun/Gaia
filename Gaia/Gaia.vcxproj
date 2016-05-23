@@ -99,12 +99,14 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AndGate.h" />
     <ClInclude Include="DblBufMaker.h" />
     <ClInclude Include="Gaia.h" />
     <ClInclude Include="GaiaCView.h" />
     <ClInclude Include="GaiaDoc.h" />
     <ClInclude Include="GaiaDrawView.h" />
     <ClInclude Include="GaiaFrame.h" />
+    <ClInclude Include="GaiaLLogic.h" />
     <ClInclude Include="GaiaMainView.h" />
     <ClInclude Include="GaiaMenuView.h" />
     <ClInclude Include="GaiaObject.h" />
@@ -121,12 +123,14 @@
     <ClInclude Include="GaiaRepo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AndGate.cpp" />
     <ClCompile Include="DblBufMaker.cpp" />
     <ClCompile Include="Gaia.cpp" />
     <ClCompile Include="GaiaCView.cpp" />
     <ClCompile Include="GaiaDoc.cpp" />
     <ClCompile Include="GaiaDrawView.cpp" />
     <ClCompile Include="GaiaFrame.cpp" />
+    <ClCompile Include="GaiaLLogic.cpp" />
     <ClCompile Include="GaiaMainView.cpp" />
     <ClCompile Include="GaiaMenuView.cpp" />
     <ClCompile Include="GaiaObject.cpp" />
