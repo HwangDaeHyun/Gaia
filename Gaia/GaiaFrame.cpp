@@ -1,19 +1,18 @@
-// GaiaFrame.cpp : 구현 파일입니다.
-//
 
 #include "stdafx.h"
 #include "Gaia.h"
 #include "GaiaFrame.h"
+#include"DBlBufMaker.h"
 
+#include<iostream>
 using namespace std;
-using namespace design_pattern;
 
+using namespace design_pattern;
 // GaiaFrame
 
 IMPLEMENT_DYNCREATE(GaiaFrame, CFrameWnd)
 
-GaiaFrame::GaiaFrame()
-{
+GaiaFrame::GaiaFrame(){
 	this->m_toolupBtnState = ToolUpBtnState::NONE;
 	this->m_mouseTracking = FALSE;
 	this->m_isClick = FALSE;
@@ -22,6 +21,10 @@ GaiaFrame::GaiaFrame()
 GaiaFrame::~GaiaFrame()
 {
 }
+/**
+*	@name : Draw bottom frame
+*	@comment : 아래쪽 프레임을 색칠 합니다.
+*/
 void GaiaFrame::DrawBottomFrame(CRect rect, CDC* pDC) {
 	COLORREF color = SingleTon<GaiaLayoutRepo>::use()->Gethighlight();
 	rect.top = rect.bottom - SingleTon<GaiaLayoutRepo>::use()->frameThickness;
@@ -30,6 +33,10 @@ void GaiaFrame::DrawBottomFrame(CRect rect, CDC* pDC) {
 	pDC->FillRect(&rect, &brush);
 	brush.DeleteObject();
 }
+/**
+*	@name : Draw left frame
+*	@comment : 왼쪽 프레임을 색칠 합니다.
+*/
 void GaiaFrame::DrawLeftFrame(CRect rect, CDC* pDC) {
 	CBrush leftBrush;	//시트 탭 배경색
 	CBrush hBrush;		//시트 탭 선택색
@@ -243,6 +250,7 @@ VOID GaiaFrame::DrawSystemButton3(CDC* dc) {
 
 	dc->SelectObject(oldBrush);
 }
+//=====================================MESSAGE MAP METHOD================================================
 
 BEGIN_MESSAGE_MAP(GaiaFrame, CFrameWnd)
 	ON_WM_NCPAINT()
@@ -334,6 +342,15 @@ void GaiaFrame::OnNcLButtonDown(UINT nHitTest, CPoint point) {
 	CFrameWnd::OnNcLButtonDown(nHitTest, point);
 }
 
+
+
+
+
+
+
+
+
+
 void GaiaFrame::OnTimer(UINT_PTR nIDEvent) {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (nIDEvent == TOOLUP_BTN_CLICK_TIMER_ID){
@@ -358,5 +375,3 @@ void GaiaFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 	lpMMI->ptMinTrackSize.y = 700;
 	CFrameWnd::OnGetMinMaxInfo(lpMMI);
 }
-
-// GaiaFrame 메시지 처리기입니다.

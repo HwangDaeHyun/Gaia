@@ -16,3 +16,6 @@ void GaiaObject::SetRadius(int r){
 	VERIFY(r < 4);
 	this->radius = r;
 }
+void GaiaObject::Draw(CDC* pDC){
+
+}

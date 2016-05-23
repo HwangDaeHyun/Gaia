@@ -110,7 +110,7 @@ void GaiaSheetView::OnSize(UINT nType, int cx, int cy)
 	}
 	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr  && cx<300){
 
-		SingleTon<GaiaSheetListRepo>::use()->Setwidth(300);
+		SingleTon<GaiaSheetListRepo>::use()->Setwidth(200);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(0, SingleTon<GaiaSheetListRepo>::use()->Getwidth() - 10, 0);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(1, SingleTon<GaiaToolListRepo>::use()->Getwidth() - 10, 0);
 		auto v = SingleTon<GaiaLayoutRepo>::use()->GetspView();

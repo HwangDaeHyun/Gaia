@@ -31,7 +31,7 @@ public:
 	virtual void SetPoint(int x, int y){}
 	virtual void SetPoint(){}
 	virtual void ClearPoint(){}
-	virtual void Draw(CDC* pDC){}
+	virtual void Draw(CDC* pDC);
 	void SetRadius(int r);
 };
 

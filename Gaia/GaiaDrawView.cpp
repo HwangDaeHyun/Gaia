@@ -66,11 +66,11 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 	brush.DeleteObject();
 
 	CPen pen;
-	pen.CreatePen(PS_DOT, 1, RGB(49, 49, 49));
+	pen.CreatePen(PS_DOT, 3, RGB(0, 0, 0));
 	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 	for (int i = rect.left; i < rect.right; i += 10){
 		for (int j = rect.top; j < rect.bottom; j += 10){
-			COLORREF color = RGB(83, 83, 83);
+			COLORREF color = RGB(18, 18, 18);
 			if (grid[i / 10][j / 10]){
 				color = RGB(255, 0, 0);
 			}
@@ -80,7 +80,6 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 			pDC->SetPixel(i, j - 1, color);
 		}
 	}
-
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	for (auto& elem : e){
 		elem->Draw(pDC);
@@ -157,6 +156,10 @@ void GaiaDrawView::OnNcPaint()
 
 void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 {
+	point.x /= 10;
+	point.y /= 10;
+	point.x *= 10;
+	point.y *= 10;
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
 	CRect rect;
@@ -213,8 +216,9 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 		}
 		e[sel]->base_point.x = clickBase.x + dx;
 		e[sel]->base_point.y = clickBase.y + dy;
-		printf("%d %d\n", dx, dy);
+		
 		this->DrawArea(&bDC);
+
 	}
 	else{
 		this->DrawArea(&bDC);
@@ -224,6 +228,8 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			way = DrawEdge(&bDC, curr, this);
 		}
 		for (auto& elem : e){
+			CBrush temp(RGB(220, 100, 200));
+			dc.SelectObject(&temp);
 			if (elem->out.PtInRect(point) == TRUE){
 				dc.Ellipse(elem->out);
 				return;
@@ -256,9 +262,6 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	p->SetPoint(10, 10);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 	p = new AndGate();
-	p->SetPoint(20, 20);
-	p->SetRadius(1);
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
 	p = new AndGate();
 	p->SetPoint(20, 40);
@@ -293,6 +296,10 @@ BOOL GaiaDrawView::OnEraseBkgnd(CDC* pDC)
 void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	point.x /= 10;
+	point.y /= 10;
+	point.x *= 10;
+	point.y *= 10;
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	CRect* rect = nullptr;
 	for (auto& elem : e){
@@ -350,7 +357,8 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 				break;
 			}
 		}
-		if (ptr != nullptr){
+		if (ptr != nullptr&&  !way.empty()){
+			
 			curr.second = ptr->CenterPoint();
 			way.pop_front();
 			way.push_front(*ptr);

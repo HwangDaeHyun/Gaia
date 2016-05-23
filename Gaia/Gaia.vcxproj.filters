@@ -143,12 +143,6 @@
     <ClCompile Include="GaiaFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GaiaLLogic.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="AndGate.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Gaia.reg" />

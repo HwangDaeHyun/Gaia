@@ -123,14 +123,12 @@
     <ClInclude Include="GaiaRepo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AndGate.cpp" />
     <ClCompile Include="DblBufMaker.cpp" />
     <ClCompile Include="Gaia.cpp" />
     <ClCompile Include="GaiaCView.cpp" />
     <ClCompile Include="GaiaDoc.cpp" />
     <ClCompile Include="GaiaDrawView.cpp" />
     <ClCompile Include="GaiaFrame.cpp" />
-    <ClCompile Include="GaiaLLogic.cpp" />
     <ClCompile Include="GaiaMainView.cpp" />
     <ClCompile Include="GaiaMenuView.cpp" />
     <ClCompile Include="GaiaObject.cpp" />

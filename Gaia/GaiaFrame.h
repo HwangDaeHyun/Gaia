@@ -1,6 +1,6 @@
 #ifndef GAIA_GAIAFRAME_H
 #define GAIA_GAIAFRAME_H
-#pragma once
+
 #include"GaiaRepo.h"
 #include"DblBufMaker.h"
 #include <iostream>
