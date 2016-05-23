@@ -3,7 +3,10 @@
 //
 
 #pragma once
+#include<algorithm>
 
+#define DRAW_SPLITTER_BAR_TIMER_ID	0x9a1a0001
+#define DRAW_SPLITTER_BAR_TIMER_TIME	50
 class MainFrame : public CFrameWnd
 {
 	

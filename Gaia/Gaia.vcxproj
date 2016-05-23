@@ -101,11 +101,19 @@
   <ItemGroup>
     <ClInclude Include="DblBufMaker.h" />
     <ClInclude Include="Gaia.h" />
+    <ClInclude Include="GaiaCView.h" />
     <ClInclude Include="GaiaDoc.h" />
+    <ClInclude Include="GaiaDrawView.h" />
+    <ClInclude Include="GaiaFrame.h" />
+    <ClInclude Include="GaiaMainView.h" />
+    <ClInclude Include="GaiaMenuView.h" />
     <ClInclude Include="GaiaObject.h" />
+    <ClInclude Include="GaiaSheetView.h" />
     <ClInclude Include="GaiaSplitterWnd.h" />
+    <ClInclude Include="GaiaToolView.h" />
     <ClInclude Include="GaiaView.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="MenuElement.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SingleTon.h" />
     <ClInclude Include="stdafx.h" />
@@ -115,11 +123,19 @@
   <ItemGroup>
     <ClCompile Include="DblBufMaker.cpp" />
     <ClCompile Include="Gaia.cpp" />
+    <ClCompile Include="GaiaCView.cpp" />
     <ClCompile Include="GaiaDoc.cpp" />
+    <ClCompile Include="GaiaDrawView.cpp" />
+    <ClCompile Include="GaiaFrame.cpp" />
+    <ClCompile Include="GaiaMainView.cpp" />
+    <ClCompile Include="GaiaMenuView.cpp" />
     <ClCompile Include="GaiaObject.cpp" />
+    <ClCompile Include="GaiaSheetView.cpp" />
     <ClCompile Include="GaiaSplitterWnd.cpp" />
+    <ClCompile Include="GaiaToolView.cpp" />
     <ClCompile Include="GaiaView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MenuEleMent.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -135,6 +151,15 @@
   <ItemGroup>
     <Image Include="res\Gaia.ico" />
     <Image Include="res\GaiaDoc.ico" />
+    <Image Include="res\icon.bmp" />
+    <Image Include="res\menu_back.bmp" />
+    <Image Include="res\menu_edit.bmp" />
+    <Image Include="res\menu_file.bmp" />
+    <Image Include="res\menu_look.bmp" />
+    <Image Include="res\menu_new.bmp" />
+    <Image Include="res\toolup-after.bmp" />
+    <Image Include="res\toolup-hover.bmp" />
+    <Image Include="res\toolup.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

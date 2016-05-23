@@ -16,6 +16,12 @@
     <Filter Include="헤더 파일\Lib">
       <UniqueIdentifier>{4334d00d-ed4e-4388-87ee-51b01ea07a21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\View">
+      <UniqueIdentifier>{26885217-feef-4016-8ab1-3fc0dbf8ff28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\View">
+      <UniqueIdentifier>{62a98858-06a0-4fba-9792-ea17ecaaff00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,9 +42,6 @@
     <ClInclude Include="GaiaDoc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GaiaView.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -57,6 +60,33 @@
     <ClInclude Include="DblBufMaker.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GaiaView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaCView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaSheetView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaMainView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaToolView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaDrawView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaMenuView.h">
+      <Filter>헤더 파일\View</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuElement.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GaiaFrame.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -71,9 +101,6 @@
     <ClCompile Include="GaiaDoc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GaiaView.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="GaiaSplitterWnd.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -81,6 +108,33 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DblBufMaker.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaCView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaMainView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaSheetView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaToolView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaDrawView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuEleMent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaMenuView.cpp">
+      <Filter>소스 파일\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,6 +154,33 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\Gaia.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\icon.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_back.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_edit.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_file.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_look.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_new.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\toolup.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\toolup-after.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\toolup-hover.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
