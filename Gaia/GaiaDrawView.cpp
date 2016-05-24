@@ -27,6 +27,7 @@ BEGIN_MESSAGE_MAP(GaiaDrawView, GaiaCView)
 	ON_WM_ERASEBKGND()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -58,7 +59,7 @@ void GaiaDrawView::Dump(CDumpContext& dc) const
 
 // GaiaDrawView 메시지 처리기입니다.
 void GaiaDrawView::DrawArea(CDC* pDC){
-	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getrightside());
+	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getmidside());
 	CRect rect;
 	this->GetClientRect(&rect);
 
@@ -92,24 +93,6 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 	//pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 }
 void GaiaDrawView::OnPaint() {
-	/*
-	CPaintDC dc(this); // device context for painting
-	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-	// 그리기 메시지에 대해서는 GaiaCView::OnPaint()을(를) 호출하지 마십시오.
-	CDC memDC;
-	memDC.CreateCompatibleDC(&dc);
-	CBitmap bmp;
-	HBITMAP hBmp = (HBITMAP)::LoadImage(AfxGetInstanceHandle(),
-	_T("hhh.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	bmp.Attach(hBmp);
-	BITMAP bmpinfo;
-	bmp.GetBitmap(&bmpinfo);
-
-	if (hBmp)
-	{
-	::SelectObject(memDC, hBmp);
-	dc.BitBlt(0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, &memDC, 0, 0, SRCCOPY);
-	}*/
 	CPaintDC dc(this); // device context for painting
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaCView::OnPaint()을(를) 호출하지 마십시오.
@@ -124,19 +107,17 @@ void GaiaDrawView::OnNcPaint()
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaCView::OnNcPaint()을(를) 호출하지 마십시오.
 	CWindowDC dc(::AfxGetMainWnd());
-	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getrightside());
+	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getmidside());
 	CRect drawRect;
 	CRect temp;
 	this->GetWindowRect(&drawRect);
 	drawRect.NormalizeRect();
 	drawRect.OffsetRect(-drawRect.left, -drawRect.top);
 	int captionHeight = ::GetSystemMetrics(SM_CYCAPTION) + ::GetSystemMetrics(SM_CYFRAME) + 5;
-	drawRect.OffsetRect(8, captionHeight);
+	int sheetWidth = SingleTon<GaiaSheetListRepo>::use()->Getwidth();
+	drawRect.OffsetRect(8 + sheetWidth, captionHeight);
 	drawRect.right += 10;
 	drawRect.bottom += 7;
-	int mvcnt = SingleTon<GaiaSheetListRepo>::use()->Getwidth() + SingleTon<GaiaToolListRepo>::use()->Getwidth();
-	drawRect.left += mvcnt;
-	drawRect.right += mvcnt;
 
 	temp = drawRect;
 	temp.bottom = temp.top + 5;
@@ -148,9 +129,10 @@ void GaiaDrawView::OnNcPaint()
 	temp.top = temp.bottom - 4;
 	dc.FillRect(&temp, &brush);		//아래쪽 스플린터바 색칠
 	temp = drawRect;
-	temp.left = temp.right - 10;
+	temp.left = temp.right - 7;
 	dc.FillRect(&temp, &brush);		//오른쪽 스플린터바 색칠
 	brush.DeleteObject();
+
 }
 
 
@@ -166,17 +148,12 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	this->GetClientRect(rect);
 	DblBufMaker dm(&dc, rect);
 	CDC& bDC = dm.GetDC();
-
 	CBrush brush(RGB(103, 153, 255));
 	CPen pen;
 	pen.CreatePen(PS_NULL, 0, RGB(0, 0, 0));
 	dc.SelectObject(&brush);
 	dc.SelectObject(&pen);
-
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-
-
-
 	if (this->sel != -1){
 		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
 
@@ -381,4 +358,21 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 		this->isLDown = FALSE;
 	}
 	GaiaCView::OnLButtonUp(nFlags, point);
+}
+
+
+void GaiaDrawView::OnSize(UINT nType, int cx, int cy)
+{
+	GaiaCView::OnSize(nType, cx, cy);
+	if (cx > 0){
+		SingleTon<GaiaDrawListRepo>::use()->Setwidth(cx + 10);
+	}
+	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr && cx<100){	
+		SingleTon<GaiaDrawListRepo>::use()->Setwidth(700);
+		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(0, SingleTon<GaiaDrawListRepo>::use()->Getwidth() - 10, 0);
+		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(1, SingleTon<GaiaToolListRepo>::use()->Getwidth() - 10, 0);
+		auto v = SingleTon<GaiaLayoutRepo>::use()->GetspView();
+		auto b = v->GetSafeHwnd();
+	}
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
