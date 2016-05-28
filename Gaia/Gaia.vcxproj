@@ -118,6 +118,7 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuElement.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SheetElement.h" />
     <ClInclude Include="SingleTon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -140,6 +141,7 @@
     <ClCompile Include="InputBtn.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuEleMent.cpp" />
+    <ClCompile Include="SheetElement.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -155,6 +157,7 @@
   <ItemGroup>
     <Image Include="res\AND.bmp" />
     <Image Include="res\AND_90.bmp" />
+    <Image Include="res\CheckCheck.bmp" />
     <Image Include="res\Gaia.ico" />
     <Image Include="res\GaiaDoc.ico" />
     <Image Include="res\icon.bmp" />

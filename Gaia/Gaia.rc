@@ -227,6 +227,7 @@ IDB_TOOLUP_AFTER        BITMAP                  "res\\toolup-after.bmp"
 IDB_TOOLUP_HOVER        BITMAP                  "res\\toolup-hover.bmp"
 IDB_AND_0               BITMAP                  "res\\AND.bmp"
 IDB_AND_90              BITMAP                  "res\\AND_90.bmp"
+IDB_CHECK               BITMAP                  "res\\CheckCheck.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -97,22 +97,39 @@ CREATE_SINGLETON(GaiaGateInfo){
 public:
 	// color -> and , or , not ¼ø
 	int size = 3;
+	CString selObj;
+	BOOL isDrawObject;
 	vector<CRect> rec;
 	vector<COLORREF> tColors;
 	vector<COLORREF> colors;// = { RGB(100, 10, 200), RGB(200, 100, 10), RGB(200, 200, 10) };
 	vector<CString> names;// = { _T("And Gate"), _T("Or Gate"), _T("Not Gate") };
 public:
 	GaiaGateInfo(){
-		colors.push_back(RGB(100, 10, 200));
+		isDrawObject = FALSE;
+		colors.push_back(RGB(0, 166, 81));
 		colors.push_back(RGB(200, 100, 10));
 		colors.push_back(RGB(200, 200, 10));
 		colors.push_back(RGB(120, 200, 122));
 		colors.push_back(RGB(222, 12, 222));
+		colors.push_back(RGB(222, 12, 222));
+		colors.push_back(RGB(200, 100, 10));
+		colors.push_back(RGB(200, 200, 10));
+		colors.push_back(RGB(120, 200, 122));
+		colors.push_back(RGB(222, 12, 222));
+		colors.push_back(RGB(222, 12, 222));
+		colors.push_back(RGB(222, 12, 22));
 		names.push_back(_T("And Gate"));
 		names.push_back(_T("Or Gate"));
 		names.push_back(_T("Not Gate"));
+		names.push_back(_T("Nand Gate"));
 		names.push_back(_T("XOR Gate"));
 		names.push_back(_T("NOR Gate"));
+		names.push_back(_T("D Flip-Flop"));
+		names.push_back(_T("T Flip-Flop"));
+		names.push_back(_T("JK Flip-Flop"));
+		names.push_back(_T("7-Segment"));
+		names.push_back(_T("Input Button"));
+		names.push_back(_T("Output Lamp"));
 	}
 };
 

@@ -109,7 +109,7 @@ void GaiaDrawView::OnPaint() {
 	DblBufMaker dm(&dc, rect);
 	CDC& bDC = dm.GetDC();
 	if (this->isLDown == FALSE){
-		this->DrawArea(&dc);
+		this->DrawArea(&bDC);
 	}
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 }
