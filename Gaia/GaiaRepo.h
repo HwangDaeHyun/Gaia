@@ -8,7 +8,7 @@
 #include"GaiaObject.h"
 #include<deque>
 #include<vector>
-
+#include<string>
 using namespace std;
 using namespace design_pattern;
 #define PRINT_POINT(PT)	printf("(%d,%d)\n",(PT).x,(PT).y)
@@ -26,10 +26,10 @@ public:
 	vector<GaiaCView*> views;
 
 	GaiaLayoutRepo() {
-		this->highlight = RGB(0, 130, 153);
-		this->leftside = RGB(49, 49, 49);
-		this->midside = RGB(199, 199, 199);
-		this->rightside = RGB(83, 83, 83); 
+		this->highlight = RGB(98, 113, 209);
+		this->leftside = RGB(34, 34, 34);
+		this->midside = RGB(207, 207, 207);
+		this->rightside = RGB(39, 39, 39);
 		this->spView = nullptr;
 	}
 };
@@ -64,26 +64,55 @@ public:
 CREATE_SINGLETON(GaiaDrawListRepo) {
 	CREATE_VALUE(GaiaDrawListRepo, int, width);
 public:
+	CRect selRect;
+	GaiaObject* selected;
+	CPoint selPoint;
 	GaiaDrawListRepo() {
+		this->selected = nullptr;
 		this->width = 700;
 	}
 };
 typedef pair<CPoint, CPoint> DblPoint;
 typedef pair<DblPoint, deque<CRect>> PDV;
-#define GSIZE 200
+#define GSIZE 150
 
 CREATE_SINGLETON(GaiaDrawGrid){
 public:
 	vector<vector<bool>> grid;
 	vector<GaiaObject*> objects;
 	vector<PDV> edges;
+	vector<CRect> inBtns;
 	int board[GSIZE][GSIZE];
+	int dBoard[GSIZE][GSIZE];
 public:
 	GaiaDrawGrid(){
 		this->grid.assign(GSIZE, vector<bool>());
 		for (auto& e : this->grid){
 			e.assign(GSIZE, false);
 		}
+	}
+};
+
+CREATE_SINGLETON(GaiaGateInfo){
+public:
+	// color -> and , or , not ¼ø
+	int size = 3;
+	vector<CRect> rec;
+	vector<COLORREF> tColors;
+	vector<COLORREF> colors;// = { RGB(100, 10, 200), RGB(200, 100, 10), RGB(200, 200, 10) };
+	vector<CString> names;// = { _T("And Gate"), _T("Or Gate"), _T("Not Gate") };
+public:
+	GaiaGateInfo(){
+		colors.push_back(RGB(100, 10, 200));
+		colors.push_back(RGB(200, 100, 10));
+		colors.push_back(RGB(200, 200, 10));
+		colors.push_back(RGB(120, 200, 122));
+		colors.push_back(RGB(222, 12, 222));
+		names.push_back(_T("And Gate"));
+		names.push_back(_T("Or Gate"));
+		names.push_back(_T("Not Gate"));
+		names.push_back(_T("XOR Gate"));
+		names.push_back(_T("NOR Gate"));
 	}
 };
 

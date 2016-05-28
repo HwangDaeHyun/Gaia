@@ -18,6 +18,13 @@ protected:
 	CPoint clickPoint;
 	CPoint clickBase;
 public:
+	vector<PDV> tempEdges;
+	deque<PDV> plusWays;
+	int inIdx1 = -1;
+	int inIdx2 = -1;
+	vector<int> prevData;
+	int sIdx1 = -1;
+	int sIdx2 = -1;
 	void DrawSplitterBar()override;
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
 #ifdef _DEBUG
@@ -42,5 +49,6 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };
 

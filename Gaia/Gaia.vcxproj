@@ -114,6 +114,7 @@
     <ClInclude Include="GaiaSplitterWnd.h" />
     <ClInclude Include="GaiaToolView.h" />
     <ClInclude Include="GaiaView.h" />
+    <ClInclude Include="InputBtn.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuElement.h" />
     <ClInclude Include="Resource.h" />
@@ -136,6 +137,7 @@
     <ClCompile Include="GaiaSplitterWnd.cpp" />
     <ClCompile Include="GaiaToolView.cpp" />
     <ClCompile Include="GaiaView.cpp" />
+    <ClCompile Include="InputBtn.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuEleMent.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -151,6 +153,8 @@
     <ResourceCompile Include="Gaia.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\AND.bmp" />
+    <Image Include="res\AND_90.bmp" />
     <Image Include="res\Gaia.ico" />
     <Image Include="res\GaiaDoc.ico" />
     <Image Include="res\icon.bmp" />

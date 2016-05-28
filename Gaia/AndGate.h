@@ -9,13 +9,15 @@ class AndGate :public GaiaLLogic
 public:
 	AndGate(){}
 	void Draw(CDC* pDC)override{
-		CRect rect(this->base_point.x - 5, this->base_point.y - 5, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 5, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 5);
+		CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 20, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 20);
 		this->baseRect = rect;
-		ior = rect.Width() / 10;
+
+
 		CBrush brush(mv == RGB(0, 0, 0) ? basic : mv);
+		CBrush *old = pDC->SelectObject(&brush);
 		CBrush brush2(RGB(241, 5, 5));
 		//pDC->FillRect(rect, &brush2);
-		 
+
 		CPen pen;
 		pen.CreatePen(PS_NULL, 1, RGB(241, 95, 95));
 		pDC->SelectObject(&pen);
@@ -29,37 +31,19 @@ public:
 		//
 		CRect elp2;
 		//
-		const int dv = 5;
+		CDC memDC;
+		memDC.CreateCompatibleDC(pDC);
+		CBitmap bmp;
 		switch (radius){
 		case 0:
-			elp = CRect(rect.left + whalf / 2, rect.top + rect.Height() / dv, rect.right - rect.Width() / dv, rect.bottom - rect.Height() / dv);
-			rec = CRect(rect.left + rect.Width() / dv, rect.top + rect.Height() / dv, elp.left + elp.Width() / 2, rect.bottom - rect.Height() / dv);
-			p1 = CPoint(rec.right - 1, rec.top + 1);
-			p2 = CPoint(rec.right - 1, rec.bottom - 3);
-			pt = CPoint(rect.right, (rect.top + rect.bottom) / 2);
-			//this->out = CRect(elp.right - this->ior, elp.top + elp.Height() / 2 - this->ior, elp.right + this->ior, elp.top + elp.Height() / 2 + this->ior);
-			this->out = CRect(pt.x - ior, pt.y - ior, pt.x + ior, pt.y + ior);
-			pt = CPoint(rect.left, rect.top + rect.Width() / 3);
-			this->in1 = CRect(pt.x - ior, pt.y - ior, pt.x + ior, pt.y + ior);
-			pt = CPoint(rect.left, rect.bottom - rect.Width() / 3);
-			this->in2 = CRect(pt.x - ior, pt.y - ior, pt.x + ior, pt.y + ior);
-			//this->in2 = CRect(rec.left - ior, rec.top + rec.Height() / 5 * 4 - ior, rec.left + ior, rec.top + rec.Height() / 5 * 4 + ior);
-			//this->in1 = CRect(rec.left - ior, rec.top + rec.Height() / 5 * 1 - ior, rec.left + ior, rec.top + rec.Height() / 5 * 1 + ior);
-			//or
-			elp2 = CRect(rect.left + rect.Width() / dv - 10, rect.top + rect.Height() / dv, rect.left + rect.Width() / dv + 10, rect.bottom - rect.Height() / dv);
+			bmp.LoadBitmapW(IDB_AND_0);
+			this->out = CRect(rect.right, (rect.bottom + rect.top) / 2 - 5, rect.right + 10, (rect.bottom + rect.top) / 2 + 5);
+			this->in1 = CRect(rect.left - 10, (rect.bottom + rect.top) / 2 - 25, rect.left, (rect.bottom + rect.top) / 2 - 15);
+			this->in2 = CRect(rect.left - 10, (rect.bottom + rect.top) / 2 + 15, rect.left, (rect.bottom + rect.top) / 2 + 25);
+			//여기
 			break;
 		case 1:
-
-			elp = CRect(rect.left + rect.Width() / 10, rect.top + hhalf / 2, rect.right - rect.Width() / 10, rect.bottom - rect.Height() / 10);
-			rec = CRect(rect.left + rect.Width() / 10, rect.top + rect.Height() / 10, rect.right - rect.Width() / 10, elp.top + elp.Height() / 2);
-			
-			
-			p1 = CPoint(rec.left + 1, rec.bottom - 1);
-			p2 = CPoint(rec.right - 3, rec.bottom - 1);
-			this->out = CRect(elp.left + elp.Width() / 2 - this->ior, elp.bottom - this->ior, elp.left + elp.Width() / 2 + this->ior, elp.bottom + this->ior);
-			this->in2 = CRect(rec.left + rec.Width() / 5 * 4 - ior, rec.top - ior, rec.left + rec.Width() / 5 * 4 + ior, rec.top + ior);
-			this->in1 = CRect(rec.left + rec.Width() / 5 * 1 - ior, rec.top - ior, rec.left + rec.Width() / 5 * 1 + ior, rec.top + ior);
-
+			bmp.LoadBitmapW(IDB_AND_90);
 			break;
 		case 2:
 
@@ -67,13 +51,20 @@ public:
 			break;
 		}
 		static_assert(sizeof(int) == sizeof(LONG), "이 플랫폼은 지원하지않습니다.");
+		BITMAP bmpinfo;
+		//CBitmap* oldbmp = memDC.SelectObject(&bmp);
+		bmp.GetBitmap(&bmpinfo);
+		memDC.SelectObject(&bmp);
+		pDC->TransparentBlt(this->base_point.x, this->base_point.y, 60, 60, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+		//memDC.SelectObject(oldbmp);
+
 
 		pDC->SelectObject(&brush);
 		pDC->Ellipse(elp);
 
 		pDC->Rectangle(rec);
 		//CBrush temp(SingleTon<GaiaLayoutRepo> ::use()->Getrightside);
-		//pDC->SelectObject();
+		//pDC->SelectObject(&temp);
 		//pDC->Ellipse(elp2);
 		pDC->SelectObject(&brush);
 		CPen pen2;
@@ -88,7 +79,24 @@ public:
 
 		pDC->MoveTo(in2.left + in2.Width() / 2, (in2.top + in2.bottom) / 2);
 		pDC->LineTo(in2.right, (in2.top + in2.bottom) / 2);
+		pDC->SelectObject(old);
 	}
+	void Calculate() override{
+		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		//if (db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y] == -1){
+		if (db[this->in1.CenterPoint().x / 10][this->in1.CenterPoint().y / 10] == 0){
+			db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 0;
+		}
+		else if (db[this->in2.CenterPoint().x / 10][this->in2.CenterPoint().y / 10] == 0){
+			db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 0;
+		}
+		else{
+			if (db[this->in1.CenterPoint().x / 10][this->in1.CenterPoint().y / 10] == 1 || db[this->in2.CenterPoint().x / 10][this->in2.CenterPoint().y / 10] == 1){
+				db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 1;
+			}
+		}
+	}
+	//}
 };
 
 #endif

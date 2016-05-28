@@ -1,13 +1,16 @@
 #pragma once
-#ifndef GAIA_LLOGIC_H_INCLUDE
-#define GAIA_LLOGIC_H INCLUDE
+#ifndef GOEUN_EDITOR_GAIA_LLOGIC_H_INCLUDE
+#define GOEUN_EDITOR_GAIA_LLOGIC_H INCLUDE
 #include"stdafx.h"
 #include"SingleTon.h"
 #include"GaiaRepo.h"
 #include"GaiaObject.h"
 typedef int BOARD[GSIZE][GSIZE];
+typedef int DBOARD[GSIZE][GSIZE];
 class GaiaLLogic : public GaiaObject {
 public:
+	//vector<int> inputs;
+	static vector<int> outputs;
 public:
 	void SetPoint(CPoint p)override{
 		this->base_point = CPoint(p.x * 10, p.y * 10);
@@ -15,8 +18,8 @@ public:
 
 		int bx = this->base_point.x / 10;
 		int by = this->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength(); i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength(); j++){
+		for (int i = by; i < by + GaiaObjectSize.GetLength() - 1; i++){
+			for (int j = bx; j < bx + GaiaObjectSize.GetLength() - 1; j++){
 				grid[j][i] = true;
 			}
 		}
@@ -24,26 +27,29 @@ public:
 	void SetPoint(int x, int y)override{
 		this->SetPoint(CPoint(x, y));
 	}
+	//여기
 	void SetPoint()override{
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		int bx = this->base_point.x / 10;
 		int by = this->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength(); i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength(); j++){
+		for (int i = by; i < by + GaiaObjectSize.GetLength() - 1; i++){
+			for (int j = bx; j < bx + GaiaObjectSize.GetLength() - 1; j++){
 				grid[j][i] = true;
 			}
 		}
 	}
+
 	void ClearPoint()override{
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		int bx = this->base_point.x / 10;
 		int by = this->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength(); i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength(); j++){
+		for (int i = by; i < by + GaiaObjectSize.GetLength() - 1; i++){
+			for (int j = bx; j < bx + GaiaObjectSize.GetLength() - 1; j++){
 				grid[j][i] = false;
 			}
 		}
 	}
+	virtual void Calculate()override{}
 	virtual void Draw(CDC* pDC)override{}
 };
 bool DblCompare(double a, double b){
@@ -57,26 +63,33 @@ bool DblCompare(double a, double b){
 }
 void DrawWay(CDC* pDC, deque<CRect>& way, bool b = true){
 	{
+		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 		CBrush brush(RGB(0, 0, 0));
 		CArray<CPoint, CPoint&> lines;
-
-		for (auto& e : way){
-			//lines.Add(e.TopLeft());
-			lines.Add(e.CenterPoint());
-			//lines.Add(e.BottomRight());
-		}
 		CPen pen;
-		pen.CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
-		
+		for (auto& e : way){
+			lines.Add(e.CenterPoint());
+		}
+		if (db[lines[0].x / 10][lines[0].y / 10] == 0 || db[lines[lines.GetSize() - 1].x / 10][lines[lines.GetSize() - 1].y / 10] == 0 || db[lines[1].x / 10][lines[1].y / 10] == 0){
+			pen.CreatePen(PS_SOLID, 4, RGB(200, 140, 150));
+		}
+		else if (db[lines[0].x / 10][lines[0].y / 10] == 1 || db[lines[lines.GetSize() - 1].x / 10][lines[lines.GetSize() - 1].y / 10] == 1 || db[lines[1].x / 10][lines[1].y / 10] == 1){
+			pen.CreatePen(PS_SOLID, 4, RGB(150, 140, 200));
+		}
+		else{
+			pen.CreatePen(PS_SOLID, 3, RGB(20, 20, 20));
+		}
+
+
 		pDC->SelectObject(&pen);
 		if (b)pDC->Polyline(lines.GetData(), lines.GetSize());
-		for (int i = 0; i < lines.GetSize() - 7; i++){
-			if (DblCompare(hypot(lines[i].x - lines[i + 2].x, lines[i].y - lines[i + 2].y), sqrt(2) * 10)){
-				SingleTon<GaiaDrawGrid>::use()->grid[lines[i + 1].x / 10][lines[i + 1].y / 10] = b;
-				SingleTon<GaiaDrawGrid>::use()->grid[lines[i + 2].x / 10][lines[i + 2].y / 10] = b;
-				SingleTon<GaiaDrawGrid>::use()->grid[lines[i].x / 10][lines[i].y / 10] = b;
-			}
+		/*for (int i = 0; i < lines.GetSize() - 7; i++){
+		if (DblCompare(hypot(lines[i].x - lines[i + 2].x, lines[i].y - lines[i + 2].y), sqrt(2) * 10)){
+		SingleTon<GaiaDrawGrid>::use()->grid[lines[i + 1].x / 10][lines[i + 1].y / 10] = b;
+		SingleTon<GaiaDrawGrid>::use()->grid[lines[i + 2].x / 10][lines[i + 2].y / 10] = b;
+		SingleTon<GaiaDrawGrid>::use()->grid[lines[i].x / 10][lines[i].y / 10] = b;
 		}
+		}*/
 	}
 }
 CPoint MediatePoint(CPoint& point){
@@ -86,13 +99,11 @@ CPoint MediatePoint(CPoint& point){
 	point.y *= 10;
 	return point;
 }
-void UpdateLines(int sel){
+void UpdateLines(){
 	vector<PDV> temp;
 	auto e = SingleTon<GaiaDrawGrid>::use()->edges;
+
 }
-/*
-*@preline 을  그려줍니다.
-*/
 deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 	CPoint mpt;
 	CRect rect;
@@ -150,15 +161,12 @@ deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 			}
 		}
 	}
-	if (deq.empty()){
-		return deque<CRect>();
-	}
 	CPoint point = deq.back();
-	CBrush brush(RGB(202, 20, 20));
+	CBrush brush(RGB(20, 110, 200));
 	deque<CRect> way;
 	while (board[point.x][point.y] != 0){
-		pDC->FillRect(CRect(point.x * 10, point.y * 10, point.x * 10 + 5, point.y * 10 + 5), &brush);
-		way.push_back(CRect(point.x * 10, point.y * 10, point.x * 10 + 10, point.y * 10 + 10));
+		pDC->FillRect(CRect(point.x * 10 - 3, point.y * 10 - 3, point.x * 10 + 3, point.y * 10 + 3), &brush);
+		way.push_back(CRect(point.x * 10 - 5, point.y * 10 - 5, point.x * 10 + 5, point.y * 10 + 5));
 		int val = board[point.x][point.y] - 1;
 		if (val == 0)break;
 		vector<CPoint> poss;
@@ -215,4 +223,41 @@ deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 
 	return way;
 }
+void PaintGrid(CPoint pt, bool b = true){
+	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
+	grid[pt.x][pt.y - 1] = b;
+	grid[pt.x][pt.y] = b;
+	grid[pt.x][pt.y + 1] = b;
+	grid[pt.x - 1][pt.y - 1] = b;
+	grid[pt.x - 1][pt.y] = b;
+	grid[pt.x - 1][pt.y + 1] = b;
+	grid[pt.x + 1][pt.y - 1] = b;
+	grid[pt.x + 1][pt.y] = b;
+	grid[pt.x + 1][pt.y + 1] = b;
+}
+void UpdateDBoard(){
+	auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
+	for (auto& obj : objs){
+		obj->Calculate();
+	}
+
+
+}
+void Update(CRect& out){
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	auto& inputs = SingleTon<GaiaDrawGrid>::use()->objects;
+	auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
+	for (int i = 0; i < inputs.size(); i++){
+		for (auto& e : edges){
+			if (inputs[i]->out.PtInRect(e.first.first)){
+				db[e.first.second.x / 10][e.first.second.y / 10] = db[inputs[i]->out.CenterPoint().x / 10][inputs[i]->out.CenterPoint().y / 10];
+			}
+			else if (inputs[i]->out.PtInRect(e.first.second)){
+				db[e.first.first.x / 10][e.first.first.y / 10] = db[inputs[i]->out.CenterPoint().x / 10][inputs[i]->out.CenterPoint().y / 10];
+			}
+		}
+	}
+	UpdateDBoard();
+}
+
 #endif

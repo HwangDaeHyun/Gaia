@@ -19,7 +19,6 @@
 #define ID_VIEW_APPLOOK_OFF_2007_AQUA   218
 #define ID_VIEW_APPLOOK_WINDOWS_7       219
 #define IDB_ICON                        319
-#define IDB_MENU_BLACK                  320
 #define IDB_MENU_BACK                   320
 #define IDB_MENU_EDIT                   321
 #define IDB_MENU_FILE                   322
@@ -28,12 +27,15 @@
 #define IDB_TOOLUP                      325
 #define IDB_TOOLUP_AFTER                326
 #define IDB_TOOLUP_HOVER                327
+#define IDB_AND_0                       329
+#define IDB_BITMAP1                     330
+#define IDB_AND_90                      330
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        328
+#define _APS_NEXT_RESOURCE_VALUE        331
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310

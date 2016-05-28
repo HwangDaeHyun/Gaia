@@ -93,6 +93,9 @@
     <ClInclude Include="AndGate.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="InputBtn.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -143,6 +146,9 @@
     <ClCompile Include="GaiaFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="InputBtn.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Gaia.reg" />
@@ -187,6 +193,12 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\toolup-hover.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\AND.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\AND_90.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

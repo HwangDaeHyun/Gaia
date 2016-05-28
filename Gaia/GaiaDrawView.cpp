@@ -3,6 +3,7 @@
 #include "GaiaDrawView.h"
 #include"DblBufMaker.h"
 #include"AndGate.h"
+#include"InputBtn.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -10,7 +11,7 @@ IMPLEMENT_DYNCREATE(GaiaDrawView, GaiaCView)
 
 GaiaDrawView::GaiaDrawView()
 {
-	GaiaObjectSize.SetLength(10);
+	GaiaObjectSize.SetLength(8);
 }
 
 GaiaDrawView::~GaiaDrawView()
@@ -28,6 +29,7 @@ BEGIN_MESSAGE_MAP(GaiaDrawView, GaiaCView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_SIZE()
+	ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -90,18 +92,27 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 		DrawWay(pDC, elem.second);
 	}
 
+	// 선택한 오브젝트의 테두리를 표시합니다
+
+	// ===
+
+
+
 	//pDC->BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 }
 void GaiaDrawView::OnPaint() {
 	CPaintDC dc(this); // device context for painting
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaCView::OnPaint()을(를) 호출하지 마십시오.
+	CRect rect;
+	this->GetClientRect(rect);
+	DblBufMaker dm(&dc, rect);
+	CDC& bDC = dm.GetDC();
 	if (this->isLDown == FALSE){
 		this->DrawArea(&dc);
 	}
+	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 }
-
-
 void GaiaDrawView::OnNcPaint()
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
@@ -142,10 +153,13 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	point.y /= 10;
 	point.x *= 10;
 	point.y *= 10;
+
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	CClientDC dc(this);
 	CRect rect;
 	this->GetClientRect(rect);
+
+
 	DblBufMaker dm(&dc, rect);
 	CDC& bDC = dm.GetDC();
 	CBrush brush(RGB(103, 153, 255));
@@ -156,45 +170,108 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	if (this->sel != -1){
 		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
-
-		for (auto& elem : edges){
-			if (e[sel]->out.CenterPoint() == elem.first.first || e[sel]->out.CenterPoint() == elem.first.second){
-				DrawWay(&bDC, elem.second, false);
-			}
-			if (e[sel]->in1.CenterPoint() == elem.first.first || e[sel]->in1.CenterPoint() == elem.first.second){
-				DrawWay(&bDC, elem.second, false);
-			}
-			if (e[sel]->in2.CenterPoint() == elem.first.first || e[sel]->in2.CenterPoint() == elem.first.second){
-				DrawWay(&bDC, elem.second, false);
-			}
-		}
 		int dx = point.x - clickPoint.x;
 		int dy = point.y - clickPoint.y;
-
-		//가능한 곳인지 검사
 		bool possible = true;
-		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
-		int bx = e[sel]->base_point.x / 10;
-		int by = e[sel]->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength(); i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength(); j++){
-				if (grid[j][i] == true){
-					possible = false;
-					goto LABEL1;
+		if (rect.left + 20 >= point.x){
+			dx = 0;
+			possible = false;
+			CPoint temp = clickPoint;
+			ClientToScreen(&temp);
+			::SetCursorPos(temp.x, temp.y);
+		}
+		if (rect.top + 20 >= point.y){
+			dy = 0;
+			possible = false;
+			CPoint temp = clickPoint;
+			ClientToScreen(&temp);
+			::SetCursorPos(temp.x, temp.y);
+		}
+		//가능한 곳인지 검사
+		if (possible == true){
+			auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
+			int bx = e[sel]->base_point.x / 10;
+			int by = e[sel]->base_point.y / 10;
+			for (int i = by; i < by + GaiaObjectSize.GetLength(); i++){
+				for (int j = bx; j < bx + GaiaObjectSize.GetLength(); j++){
+					if (grid[j][i] == true){
+						possible = false;
+						goto LABEL1;
+					}
 				}
 			}
 		}
 	LABEL1:{}
 		if (possible){
+			DblPoint dPt;
 			e[sel]->mv = RGB(178, 204, 255);
+			this->DrawArea(&bDC);
+			if (tempEdges.empty()){
+				for (int i = 0; i < edges.size(); i++){
+					if (e[sel]->out.PtInRect(edges[i].first.first)){
+						dPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { edges[i].first.second.x, edges[i].first.second.y } };
+						PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+						tempEdges.push_back(*(edges.begin() + i));
+						edges.erase(edges.begin() + i);
+						i -= 1;
+					}
+					else if (e[sel]->in1.PtInRect(edges[i].first.second)){
+						dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
+						PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+						tempEdges.push_back(*(edges.begin() + i));
+						edges.erase(edges.begin() + i);
+						this->inIdx1 = tempEdges.size() - 1;
+						i -= 1;
+					}
+					else if (e[sel]->in2.PtInRect(edges[i].first.second)){
+						dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
+						PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+						tempEdges.push_back(*(edges.begin() + i));
+						edges.erase(edges.begin() + i);
+						this->inIdx2 = tempEdges.size() - 1;
+						i -= 1;
+					}
+				}
+			}
+			else{
+				plusWays.clear();
+				for (int i = 0; i < tempEdges.size(); i++){
+					DblPoint ddPt;
+					deque<CRect> uWay;
+					if (i == this->inIdx1){
+						ddPt = { tempEdges[i].first.first, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
+						uWay = DrawEdge(&bDC, ddPt, this);
+						//PaintGrid(ddPt.second);
+						this->sIdx1 = i;
+						uWay.push_front(e[sel]->in1);
+
+					}
+					else if (i == this->inIdx2){
+						ddPt = { tempEdges[i].first.first, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
+						uWay = DrawEdge(&bDC, ddPt, this);
+						//PaintGrid(ddPt.second);
+						this->sIdx2 = i;
+						uWay.push_front(e[sel]->in2);
+
+					}
+					else{
+						ddPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { tempEdges[i].first.second } };
+						uWay = DrawEdge(&bDC, ddPt, this);
+						//PaintGrid(ddPt.second);
+						uWay.push_front(CRect(tempEdges[i].first.second.x - 10, tempEdges[i].first.second.y - 10, tempEdges[i].first.second.x + 10, tempEdges[i].first.second.y + 10));
+						uWay.push_back(e[sel]->out);
+
+					}
+					plusWays.push_back(PDV(ddPt, uWay));
+				}
+			}
 		}
 		else{
+			this->DrawArea(&bDC);
 			e[sel]->mv = RGB(255, 167, 167);
 		}
 		e[sel]->base_point.x = clickBase.x + dx;
 		e[sel]->base_point.y = clickBase.y + dy;
-		
-		this->DrawArea(&bDC);
 
 	}
 	else{
@@ -233,21 +310,22 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (GaiaCView::OnCreate(lpCreateStruct) == -1)
 		return -1;
-
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	memset(db, -1, sizeof(int)*GSIZE*GSIZE);
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
 	GaiaObject* p = new AndGate();
 	p->SetPoint(10, 10);
+	p->SetRadius();
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new AndGate();
 
 	p = new AndGate();
 	p->SetPoint(20, 40);
-	p->SetRadius(0);
+	p->SetRadius();
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
 	p = new AndGate();
 	p->SetPoint(40, 40);
-	p->SetRadius(0);
+	p->SetRadius();
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
 	p = new AndGate();
@@ -258,7 +336,18 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	p->SetPoint(60, 10);
 	p->SetRadius(0);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+
+	p = new InputBtn(20, 20);
+
+
+	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+	p = new InputBtn(30, 30);
+	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 	return 0;
+
+
+
+
 }
 
 
@@ -279,6 +368,9 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 	point.y *= 10;
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	CRect* rect = nullptr;
+	//버튼이 눌렸는지 검사합니다.
+
+	//
 	for (auto& elem : e){
 		if (elem->out.PtInRect(point) == TRUE){
 			rect = &elem->out;
@@ -294,69 +386,141 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 	sel = -1;
 	for (int i = 0; i < e.size(); i++){
 		if (e[i]->baseRect.PtInRect(point) == TRUE){
+			SingleTon<GaiaDrawListRepo>::use()->selRect = e[i]->baseRect;	//오브젝트하나를 선택합니다.
 			sel = i;
 			clickPoint = point;
 			e[i]->ClearPoint();
 			clickBase = e[i]->base_point;
+
 			break;
 		}
 	}
+
+	if (sel != -1){
+		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		prevData.push_back(db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10]);
+		prevData.push_back(db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10]);
+		prevData.push_back(db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10]);
+		db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] = -1;
+		db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10] = -1;
+		db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] = -1;
+		auto& t = SingleTon<GaiaDrawGrid>::use()->inBtns;
+		for (int i = 0; i < t.size(); i++){
+			if (t[i] == e[sel]->out){
+				t.erase(t.begin() + i);
+			}
+		}
+	}
+
+	SingleTon<GaiaDrawListRepo>::use()->selRect = nullptr;					//선택된 오브젝트가 없습니다.
 	GaiaCView::OnLButtonDown(nFlags, point);
 }
 
 
 void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+
+	CClientDC dc(this);
+	CRect rect;
+	this->GetClientRect(rect);
+	DblBufMaker dm(&dc, rect);
+	CDC& bDC = dm.GetDC();
+	////////////////////////////////////////////////
+	this->inIdx1 = -1;
+	this->inIdx2 = -1;
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	if (sel != -1){
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-
+		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
+		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		if (e[sel]->mv == RGB(255, 167, 167)){
-			auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
-
-
+			for (int i = 0; i < tempEdges.size(); i++){
+				edges.push_back(tempEdges[i]);
+			}
 			e[sel]->base_point = clickBase;
 		}
+		else{
+			/*	for (int i = 0; i < plusWays.size(); i++){
+			DblPoint ddPt;
+			deque<CRect> uWay;
+			if (i == this->sIdx1){
+			ddPt = { plusWays[i].first.first, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
+			plusWays[i].first = ddPt;
+			plusWays[i].second.push_front(e[sel]->in1);
+
+			}
+			else if (i == this->sIdx2){
+			ddPt = { plusWays[i].first.first, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
+			plusWays[i].first = ddPt;
+			plusWays[i].second.push_front(e[sel]->in2);
+			}
+			else{
+			ddPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { plusWays[i].first.second } };
+			plusWays[i].first = ddPt;
+			plusWays[i].second.push_back(e[sel]->out);
+			}
+
+			}
+			this->sIdx1 = -1;
+			this->sIdx2 = -1;
+			*/
+			if (!plusWays.empty()){
+				for_each(plusWays.begin(), plusWays.end(), [&edges](PDV& i)->void{edges.push_back(i); });
+				plusWays.clear();
+			}
+			this->isLDown = FALSE;
+		}
+		tempEdges.clear();
 		e[sel]->SetPoint();
 		e[sel]->mv = RGB(0, 0, 0);
+		///////
+		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] = prevData[0];
+		db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10] = prevData[1];
+		db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] = prevData[2];
+		auto& btn = SingleTon<GaiaDrawGrid>::use()->inBtns;
+		btn.push_back(e[sel]->out);
+		prevData.clear();
+		//
+		this->sel = -1;
 	}
-	sel = -1;
-	if (this->isLDown == TRUE){
-		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-		CRect* ptr = nullptr;
-		for (auto& elem : e){
-			if (elem->in1.PtInRect(point) == TRUE){
-				ptr = &elem->in1;
-				break;
+	else{
+		this->sel = -1;
+		if (this->isLDown == TRUE){
+			auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+			CRect* ptr = nullptr;
+			for (auto& elem : e){
+				if (elem->in1.PtInRect(point) == TRUE){
+					ptr = &elem->in1;
+					break;
+				}
+				else if (elem->in2.PtInRect(point) == TRUE){
+					ptr = &elem->in2;
+					break;
+				}
 			}
-			else if (elem->in2.PtInRect(point) == TRUE){
-				ptr = &elem->in2;
-				break;
+			if (ptr != nullptr&&  !way.empty()){
+				curr.second = ptr->CenterPoint();
+				//way.pop_front();
+				way.push_front(*ptr);
+				SingleTon<GaiaDrawGrid>::use()->edges.push_back(PDV(this->curr, way));
+				int x = curr.second.x / 10;
+				int y = curr.second.y / 10;
+				CPoint clearPoint(x, y);
+				PaintGrid(clearPoint);
 			}
+			this->isLDown = FALSE;
 		}
-		if (ptr != nullptr&&  !way.empty()){
-			
-			curr.second = ptr->CenterPoint();
-			way.pop_front();
-			way.push_front(*ptr);
-
-			SingleTon<GaiaDrawGrid>::use()->edges.push_back(PDV(this->curr, way));
-			auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
-			int x = curr.second.x / 10;
-			int y = curr.second.y / 10;
-			grid[x][y - 1] = true;
-			grid[x][y] = true;
-			grid[x][y + 1] = true;
-			grid[x - 1][y - 1] = true;
-			grid[x - 1][y] = true;
-			grid[x - 1][y + 1] = true;
-			grid[x + 1][y - 1] = true;
-			grid[x + 1][y] = true;
-			grid[x + 1][y + 1] = true;
-
-		}
-		this->isLDown = FALSE;
 	}
+	UpdateDBoard();
+	//auto& inBtns =SingleTon<GaiaDrawGrid>::use()->inBtns;
+
+	auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
+	for (int i = 0; i < objs.size(); i++){
+		Update(objs.at(i)->out);
+	}
+	DrawArea(&bDC);
+	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	GaiaCView::OnLButtonUp(nFlags, point);
 }
 
@@ -367,7 +531,7 @@ void GaiaDrawView::OnSize(UINT nType, int cx, int cy)
 	if (cx > 0){
 		SingleTon<GaiaDrawListRepo>::use()->Setwidth(cx + 10);
 	}
-	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr && cx<100){	
+	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr && cx < 100){
 		SingleTon<GaiaDrawListRepo>::use()->Setwidth(700);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(0, SingleTon<GaiaDrawListRepo>::use()->Getwidth() - 10, 0);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(1, SingleTon<GaiaToolListRepo>::use()->Getwidth() - 10, 0);
@@ -375,4 +539,49 @@ void GaiaDrawView::OnSize(UINT nType, int cx, int cy)
 		auto b = v->GetSafeHwnd();
 	}
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+}
+
+
+void GaiaDrawView::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	CClientDC dc(this);
+	CRect rect;
+	this->GetClientRect(rect);
+	DblBufMaker dm(&dc, rect);
+	CDC& bDC = dm.GetDC();
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	auto& btn = SingleTon<GaiaDrawGrid>::use()->inBtns;
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
+	int len = GaiaObjectSize.GetLength() * 10;
+	for (auto& b : btn){
+		CRect t(b.left - len, b.top - len / 2, b.right, b.bottom + len / 2);
+		if (t.PtInRect(point)){
+			for (int i = 0; i < obj.size(); i++){
+				CRect temp(obj.at(i)->in1.left, obj.at(i)->out.top - len / 2, obj.at(i)->out.right, obj.at(i)->out.bottom + len / 2);
+				if (temp.PtInRect(point)){
+					obj.at(i)->btn = !obj.at(i)->btn;
+					if (obj.at(i)->btn == true){
+						db[obj.at(i)->out.CenterPoint().x / 10][obj.at(i)->out.CenterPoint().y / 10] = 1;
+					}
+					else{
+						db[obj.at(i)->out.CenterPoint().x / 10][obj.at(i)->out.CenterPoint().y / 10] = 0;
+					}
+					goto W;
+				}
+			}
+		}
+	}
+W:{};
+
+	auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
+	UpdateDBoard();
+	for (int i = 0; i < objs.size(); i++){
+		Update(objs.at(i)->out);
+
+	}
+
+	DrawArea(&bDC);
+	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
+	GaiaCView::OnLButtonDblClk(nFlags, point);
 }
