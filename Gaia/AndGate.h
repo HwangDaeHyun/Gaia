@@ -73,7 +73,7 @@ public:
 
 		pDC->Rectangle(rec);
 		//CBrush temp(SingleTon<GaiaLayoutRepo> ::use()->Getrightside);
-		//pDC->SelectObject(&temp);
+		//pDC->SelectObject();
 		//pDC->Ellipse(elp2);
 		pDC->SelectObject(&brush);
 		CPen pen2;

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef GOEUN_EDITOR_GAIA_LLOGIC_H_INCLUDE
-#define GOEUN_EDITOR_GAIA_LLOGIC_H INCLUDE
+#ifndef GAIA_LLOGIC_H_INCLUDE
+#define GAIA_LLOGIC_H INCLUDE
 #include"stdafx.h"
 #include"SingleTon.h"
 #include"GaiaRepo.h"
@@ -24,7 +24,6 @@ public:
 	void SetPoint(int x, int y)override{
 		this->SetPoint(CPoint(x, y));
 	}
-
 	void SetPoint()override{
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		int bx = this->base_point.x / 10;
@@ -35,7 +34,6 @@ public:
 			}
 		}
 	}
-
 	void ClearPoint()override{
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		int bx = this->base_point.x / 10;
@@ -46,7 +44,6 @@ public:
 			}
 		}
 	}
-
 	virtual void Draw(CDC* pDC)override{}
 };
 bool DblCompare(double a, double b){
@@ -62,11 +59,15 @@ void DrawWay(CDC* pDC, deque<CRect>& way, bool b = true){
 	{
 		CBrush brush(RGB(0, 0, 0));
 		CArray<CPoint, CPoint&> lines;
+
 		for (auto& e : way){
+			//lines.Add(e.TopLeft());
 			lines.Add(e.CenterPoint());
+			//lines.Add(e.BottomRight());
 		}
 		CPen pen;
 		pen.CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
+		
 		pDC->SelectObject(&pen);
 		if (b)pDC->Polyline(lines.GetData(), lines.GetSize());
 		for (int i = 0; i < lines.GetSize() - 7; i++){
@@ -85,11 +86,13 @@ CPoint MediatePoint(CPoint& point){
 	point.y *= 10;
 	return point;
 }
-void UpdateLines(){
+void UpdateLines(int sel){
 	vector<PDV> temp;
 	auto e = SingleTon<GaiaDrawGrid>::use()->edges;
-
 }
+/*
+*@preline 을  그려줍니다.
+*/
 deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 	CPoint mpt;
 	CRect rect;
@@ -97,8 +100,8 @@ deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 	::GetCursorPos(&mpt);
 	mpt.x -= rect.left;
 	mpt.y -= rect.top;
-	CPoint temp=MediatePoint(_pt.first);
-	temp =MediatePoint(_pt.second);
+	//CPoint temp=MediatePoint(_pt.first);
+	//temp =MediatePoint(_pt.second);
 	auto grid = SingleTon<GaiaDrawGrid>::use()->grid;
 	BOARD& board = SingleTon<GaiaDrawGrid>::use()->board;
 	ZeroMemory(board, sizeof(int)*GSIZE*GSIZE);
@@ -147,11 +150,13 @@ deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 			}
 		}
 	}
+	if (deq.empty()){
+		return deque<CRect>();
+	}
 	CPoint point = deq.back();
 	CBrush brush(RGB(202, 20, 20));
 	deque<CRect> way;
 	while (board[point.x][point.y] != 0){
-		
 		pDC->FillRect(CRect(point.x * 10, point.y * 10, point.x * 10 + 5, point.y * 10 + 5), &brush);
 		way.push_back(CRect(point.x * 10, point.y * 10, point.x * 10 + 10, point.y * 10 + 10));
 		int val = board[point.x][point.y] - 1;
@@ -210,5 +215,4 @@ deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE){
 
 	return way;
 }
-
 #endif

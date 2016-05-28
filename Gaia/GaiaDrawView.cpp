@@ -10,7 +10,7 @@ IMPLEMENT_DYNCREATE(GaiaDrawView, GaiaCView)
 
 GaiaDrawView::GaiaDrawView()
 {
-	GaiaObjectSize.SetLength(10);
+	GaiaObjectSize.SetLength(8);
 }
 
 GaiaDrawView::~GaiaDrawView()
@@ -174,15 +174,13 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	dc.SelectObject(&pen);
 
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-
-
-
 	if (this->sel != -1){
 		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
 
 		for (auto& elem : edges){
 			if (e[sel]->out.CenterPoint() == elem.first.first || e[sel]->out.CenterPoint() == elem.first.second){
 				DrawWay(&bDC, elem.second, false);
+
 			}
 			if (e[sel]->in1.CenterPoint() == elem.first.first || e[sel]->in1.CenterPoint() == elem.first.second){
 				DrawWay(&bDC, elem.second, false);
@@ -210,15 +208,40 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	LABEL1:{}
 		if (possible){
 			e[sel]->mv = RGB(178, 204, 255);
+			int cnt=0;
+			deque<CRect> tempWay;
+			for (int i = 0; i < edges.size(); i++){
+				if (e[sel]->out.CenterPoint() == edges[i].first.first || e[sel]->out.CenterPoint() == edges[i].first.second){
+					//elem.first.first = CPoint(e[sel]->base_point.x = clickBase.x + dx, e[sel]->base_point.y = clickBase.y + dy);
+					DblPoint tempDbl(CPoint(e[sel]->base_point.x = clickBase.x + dx, e[sel]->base_point.y = clickBase.y + dy), edges[i].first.second);
+					//도착지 를 갱신 그냥 선을 한번 지워줘야함 ...;;;그럴라면 선을 찾아야함 일단.
+					e[sel]->ClearPoint();
+					tempWay = DrawEdge(&bDC, tempDbl, this,FALSE);
+					DrawWay(&bDC, edges[i].second, false);
+				}
+				if (e[sel]->in1.CenterPoint() == edges[i].first.first || e[sel]->in1.CenterPoint() == edges[i].first.second){
+					//elem.first.second = CPoint(e[sel]->base_point.x = clickBase.x + dx, e[sel]->base_point.y = clickBase.y + dy);
+					DblPoint tempDbl(edges[i].first.first, CPoint(e[sel]->base_point.x = clickBase.x + dx, e[sel]->base_point.y = clickBase.y + dy));
+					e[sel]->ClearPoint();
+					tempWay = DrawEdge(&bDC, tempDbl, this,FALSE);
+					DrawWay(&bDC, edges[i].second, false);
+				}
+				if (e[sel]->in2.CenterPoint() == edges[i].first.first || e[sel]->in2.CenterPoint() == edges[i].first.second){
+					//elem.first.second = CPoint(e[sel]->base_point.x = clickBase.x + dx, e[sel]->base_point.y = clickBase.y + dy);
+					DblPoint tempDbl(edges[i].first.first, CPoint(e[sel]->base_point.x = clickBase.x + dx, e[sel]->base_point.y = clickBase.y + dy));
+					e[sel]->ClearPoint();
+					tempWay = DrawEdge(&bDC, tempDbl, this,FALSE);
+					DrawWay(&bDC, edges[i].second, false);
+				}
+			}
+			
 		}
 		else{
 			e[sel]->mv = RGB(255, 167, 167);
 		}
 		e[sel]->base_point.x = clickBase.x + dx;
 		e[sel]->base_point.y = clickBase.y + dy;
-		
 		this->DrawArea(&bDC);
-
 	}
 	else{
 		this->DrawArea(&bDC);
@@ -261,8 +284,6 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GaiaObject* p = new AndGate();
 	p->SetPoint(10, 10);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new AndGate();
-
 	p = new AndGate();
 	p->SetPoint(20, 40);
 	p->SetRadius(0);
@@ -334,10 +355,8 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 	if (sel != -1){
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 
-		if (e[sel]->mv == RGB(255, 167, 167)){
+		if (e[sel]->mv == RGB(255, 167, 167)){	//옮기는것이 무효처리될때
 			auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
-
-
 			e[sel]->base_point = clickBase;
 		}
 		e[sel]->SetPoint();
