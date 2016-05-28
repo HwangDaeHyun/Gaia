@@ -1,6 +1,6 @@
 #pragma once
-#ifndef GOEUN_EDITOR_AND_GATE_H_7DF_INCLUDE
-#define GOEUN_EDITOR_AND_GATE_H_7DF_INCLUDE
+#ifndef AND_GATE_H_7DF_INCLUDE
+#define AND_GATE_H_7DF_INCLUDE
 #include"GaiaObject.h"
 #include"GaiaLLogic.h"
 
@@ -44,10 +44,22 @@ public:
 			break;
 		case 1:
 			bmp.LoadBitmapW(IDB_AND_90);
+			this->out = CRect((rect.left + rect.right) / 2 - 15, rect.bottom, (rect.left + rect.right) / 2 - 5, rect.bottom + 10);
+			this->in1 = CRect((rect.left + rect.right) / 2 - 25, rect.top - 10, (rect.left + rect.right) / 2 - 15, rect.top);
+			this->in2 = CRect((rect.left + rect.right) / 2 + 15, rect.top - 10, (rect.left + rect.right) / 2 + 25, rect.top);
 			break;
 		case 2:
-
+			bmp.LoadBitmapW(IDB_AND_180);
+			this->out = CRect(rect.left - 5, (rect.bottom + rect.top) / 2 - 5, rect.left + 5, (rect.bottom + rect.top) / 2 + 5);
+			this->in1 = CRect(rect.right + 5, (rect.bottom + rect.top) / 2 - 25, rect.right + 15, (rect.bottom + rect.top) / 2 - 15);
+			this->in2 = CRect(rect.right + 5, (rect.bottom + rect.top) / 2 + 15, rect.right + 15, (rect.bottom + rect.top) / 2 + 25);
+			break;
 		case 3:
+			bmp.LoadBitmapW(IDB_AND_270);
+			this->out = CRect((rect.left + rect.right) / 2 - 5, rect.top - 5, (rect.left + rect.right) / 2 + 5, rect.top + 5);
+			this->in1 = CRect((rect.left + rect.right) / 2 - 25, rect.bottom, (rect.left + rect.right) / 2 - 15, rect.bottom + 10);
+			this->in2 = CRect((rect.left + rect.right) / 2 + 15, rect.bottom, (rect.left + rect.right) / 2 + 25, rect.bottom + 10);
+
 			break;
 		}
 		static_assert(sizeof(int) == sizeof(LONG), "이 플랫폼은 지원하지않습니다.");
@@ -70,32 +82,65 @@ public:
 		CPen pen2;
 		pen2.CreatePen(PS_SOLID, 3, RGB(0, 0, 0));
 		pDC->SelectObject(pen2);
+		switch (radius){
+		case 0:
+			pDC->MoveTo(out.left, (out.top + out.bottom) / 2);
+			pDC->LineTo(out.right - out.Width() / 2, (out.top + out.bottom) / 2);
 
-		pDC->MoveTo(out.left, (out.top + out.bottom) / 2);
-		pDC->LineTo(out.right - out.Width() / 2, (out.top + out.bottom) / 2);
+			pDC->MoveTo(in1.left + in1.Width() / 2, (in1.top + in1.bottom) / 2);
+			pDC->LineTo(in1.right, (in1.top + in1.bottom) / 2);
 
-		pDC->MoveTo(in1.left + in1.Width() / 2, (in1.top + in1.bottom) / 2);
-		pDC->LineTo(in1.right, (in1.top + in1.bottom) / 2);
+			pDC->MoveTo(in2.left + in2.Width() / 2, (in2.top + in2.bottom) / 2);
+			pDC->LineTo(in2.right, (in2.top + in2.bottom) / 2);
+			break;
+		case 1:
+			pDC->MoveTo((out.left + out.right) / 2, out.top);
+			pDC->LineTo(out.right - out.Width() / 2, (out.top + out.bottom) / 2);
 
-		pDC->MoveTo(in2.left + in2.Width() / 2, (in2.top + in2.bottom) / 2);
-		pDC->LineTo(in2.right, (in2.top + in2.bottom) / 2);
+			pDC->MoveTo((in1.left + in1.right) / 2, in1.top + in1.Height() / 2);
+			pDC->LineTo((in1.left + in1.right) / 2, in1.top);
+
+			pDC->MoveTo((in2.left + in2.right) / 2, in2.top + in2.Height() / 2);
+			pDC->LineTo((in2.left + in2.right) / 2, in2.top);
+			break;
+		case 2:
+			pDC->MoveTo(out.left, (out.top + out.bottom) / 2);
+			pDC->LineTo(out.right - out.Width() / 2, (out.top + out.bottom) / 2);
+
+			pDC->MoveTo(in1.left, (in1.top + in1.bottom) / 2);
+			pDC->LineTo(in1.right - in1.Width() / 2, (in1.top + in1.bottom) / 2);
+
+			pDC->MoveTo(in2.left, (in2.top + in2.bottom) / 2);
+			pDC->LineTo(in2.right - in2.Width() / 2, (in2.top + in2.bottom) / 2);
+			break;
+		case 3:
+			pDC->MoveTo((out.left + out.right) / 2, out.top);
+			pDC->LineTo(out.right - out.Width() / 2, (out.top + out.bottom) / 2);
+
+			pDC->MoveTo((in1.left + in1.right) / 2, in1.top + in1.Height() / 2);
+			pDC->LineTo((in1.left + in1.right) / 2, in1.top);
+
+			pDC->MoveTo((in2.left + in2.right) / 2, in2.top + in2.Height() / 2);
+			pDC->LineTo((in2.left + in2.right) / 2, in2.top);
+		}
 		pDC->SelectObject(old);
 	}
 	void Calculate() override{
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-		//if (db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y] == -1){
 		if (db[this->in1.CenterPoint().x / 10][this->in1.CenterPoint().y / 10] == 0){
 			db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 0;
 		}
 		else if (db[this->in2.CenterPoint().x / 10][this->in2.CenterPoint().y / 10] == 0){
 			db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 0;
 		}
+		else if (db[this->in1.CenterPoint().x / 10][this->in1.CenterPoint().y / 10] == 1 && db[this->in2.CenterPoint().x / 10][this->in2.CenterPoint().y / 10] == 1){
+			db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 1;
+		}
 		else{
-			if (db[this->in1.CenterPoint().x / 10][this->in1.CenterPoint().y / 10] == 1 || db[this->in2.CenterPoint().x / 10][this->in2.CenterPoint().y / 10] == 1){
-				db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = 1;
-			}
+			db[this->out.CenterPoint().x / 10][this->out.CenterPoint().y / 10] = -1;
 		}
 	}
+
 	//}
 };
 

@@ -156,6 +156,8 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\AND.bmp" />
+    <Image Include="res\AND_180.bmp" />
+    <Image Include="res\AND_270.bmp" />
     <Image Include="res\AND_90.bmp" />
     <Image Include="res\CheckCheck.bmp" />
     <Image Include="res\Gaia.ico" />
