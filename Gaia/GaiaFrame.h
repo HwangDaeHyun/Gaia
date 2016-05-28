@@ -32,7 +32,7 @@ private:
 	void DrawToolUpBtn(CDC* pDC, int begin, UINT id);
 	void DrawSysBtns(CDC* pDC);
 	void DrawSystemButton1(CDC* dc);
-	void DrawSystemButton2(CDC* dc, BOOL redraw);
+	void DrawSystemButton2(CDC* dc);
 	void DrawSystemButton3(CDC* dc);
 protected:
 	CRect sys_btns[3];	//min,max,exit

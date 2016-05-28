@@ -67,8 +67,8 @@ int GaiaMainView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	SingleTon<GaiaLayoutRepo>::use()->views.push_back(this->m_gaiaToolView);
 	SingleTon<GaiaLayoutRepo>::use()->views.push_back(this->m_gaiaDrawView);
 	this->m_gaiaSheetView->Create(nullptr, _T("sheetview"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &this->m_wndSplitter, m_wndSplitter.IdFromRowCol(0, 0), (CCreateContext*)&context);
-	this->m_gaiaToolView->Create(nullptr, _T("toolview"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &this->m_wndSplitter, m_wndSplitter.IdFromRowCol(0, 1), (CCreateContext*)&context);
-	this->m_gaiaDrawView->Create(nullptr, _T("drawview"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &this->m_wndSplitter, m_wndSplitter.IdFromRowCol(0, 2), (CCreateContext*)&context);
+	this->m_gaiaToolView->Create(nullptr, _T("toolview"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &this->m_wndSplitter, m_wndSplitter.IdFromRowCol(0, 2), (CCreateContext*)&context);
+	this->m_gaiaDrawView->Create(nullptr, _T("drawview"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), &this->m_wndSplitter, m_wndSplitter.IdFromRowCol(0, 1), (CCreateContext*)&context);
 	this->m_gaiaSheetView->SendMessage(WM_INITIALUPDATE);
 	this->m_gaiaToolView->SendMessage(WM_INITIALUPDATE);
 	this->m_gaiaDrawView->SendMessage(WM_INITIALUPDATE);

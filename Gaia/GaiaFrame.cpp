@@ -94,11 +94,11 @@ void GaiaFrame::DrawTopFrame(CRect rect, CDC* pDC) {
 	bDC.FillRect(&rect, &leftBrush);	//왼쪽(시트바) 를 색칠 합니다.
 	this->DrawIcon(&bDC);
 	rect.left = rect.right;
-	rect.right += SingleTon<GaiaToolListRepo>::use()->Getwidth();
+	rect.right += SingleTon<GaiaDrawListRepo>::use()->Getwidth();
 	bDC.FillRect(&rect, &midBrush);	//가운데(툴리스트)를 색칠 합니다.
 
 
-
+	//==버튼구성
 	CPoint point;
 	CRect wRect;
 	::GetCursorPos(&point);
@@ -159,6 +159,7 @@ void GaiaFrame::DrawToolUpBtn(CDC* pDC, int begin, UINT id) {
 	}
 }
 void GaiaFrame::DrawSysBtns(CDC* pDC){
+	//우측상단 버튼을 그립니다(최소화,최대화,종료).
 	CRect r;
 	int captionHeight = ::GetSystemMetrics(SM_CYCAPTION) + ::GetSystemMetrics(SM_CYFRAME) + 5;
 	this->GetWindowRect(&r);
@@ -174,81 +175,90 @@ void GaiaFrame::DrawSysBtns(CDC* pDC){
 		e = r;
 		e.right -= m;
 		e.left = e.right - e.Height();
-		//pDC->FillRect(e, &b);
+		//		pDC->FillRect(e, &b);
 		m += e.Height() + 2;
 	}
 	this->DrawSystemButton1(pDC);
+	this->DrawSystemButton2(pDC);
 	this->DrawSystemButton3(pDC);
 }
 VOID GaiaFrame::DrawSystemButton1(CDC* dc) {
-	CBrush b(RGB(255, 0, 0));     //종료버튼을 그립니다.
-	CBrush* old = dc->SelectObject(&b);
+	//종료버튼을 그립니다.
 	CPen pen;
 	pen.CreatePen(PS_SOLID, 2, RGB(49, 49, 49));
-	dc->SelectObject(&pen);
+	CPen* old = dc->SelectObject(&pen);
+	CPoint point;
+	CRect wRect;
+	::GetCursorPos(&point);
+	this->GetWindowRect(&wRect);
+	point.x -= wRect.left;
+	point.y -= wRect.top;
+	CBrush r = RGB(140, 140, 140);
+	if (this->sys_btns[0].PtInRect(point) == TRUE){
+		dc->FillRect(this->sys_btns[0], &r);
+	}
 	dc->MoveTo(this->sys_btns[0].left + 5, this->sys_btns[0].top + 5);
-	dc->LineTo(this->sys_btns[0].right - 7, this->sys_btns[0].bottom - 7);
-	dc->MoveTo(this->sys_btns[0].left + 5, this->sys_btns[0].bottom - 7);
-	dc->LineTo(this->sys_btns[0].right - 7, this->sys_btns[0].top + 5);
+	dc->LineTo(this->sys_btns[0].right - 5, this->sys_btns[0].bottom - 5);
+	dc->MoveTo(this->sys_btns[0].left + 5, this->sys_btns[0].bottom - 5);
+	dc->LineTo(this->sys_btns[0].right - 5, this->sys_btns[0].top + 5);
 	dc->SelectObject(old);
 }
 
-VOID GaiaFrame::DrawSystemButton2(CDC* dc, BOOL reDraw) {
-	/*
-	CBrush* oldBrush;
-	CPen* oldPen;
-	CBrush b(RGB(0, 0, 255));
+VOID GaiaFrame::DrawSystemButton2(CDC* dc) {
+	// 최대화/복원 버튼을 그립니다.
 	CPen pen;
-	pen.CreatePen(PS_SOLID, 2, RGB(255, 255, 255));
-	oldBrush = dc->SelectObject(&b);
-	if (reDraw == TRUE) {
-	oldPen = dc->SelectObject(&pen);
-	dc->Rectangle(this->sys_btns[1]);
-	oldPen = dc->SelectObject(&pen);
+	pen.CreatePen(PS_SOLID, 2, RGB(49, 49, 49));
+	CPen* old = dc->SelectObject(&pen);
+	CPoint point;
+	CRect wRect;
+	::GetCursorPos(&point);
+	this->GetWindowRect(&wRect);
+	point.x -= wRect.left;
+	point.y -= wRect.top;
+	CBrush r = RGB(140, 140, 140);
+	if (this->sys_btns[1].PtInRect(point) == TRUE){
+		dc->FillRect(this->sys_btns[1], &r);
 	}
-	if (this->m_isMaximize == TRUE) {   //최대화 일때
-	oldPen = dc->SelectObject(&this->m_frameSystemButtonLinePenSharp);
-	dc->MoveTo(this->sys_btns[1].left + 4, this->sys_btns[1].top + 7);
-	dc->LineTo(this->sys_btns[1].left + 4, this->sys_btns[1].bottom - 5);
-	dc->LineTo(this->sys_btns[1].right - 7, this->sys_btns[1].bottom - 5);
-	dc->LineTo(this->sys_btns[1].right - 7, this->sys_btns[1].top + 7);
-	oldPen = dc->SelectObject(&this->m_frameSystemButtonLinePen);
-	dc->LineTo(this->sys_btns[1].left + 4, this->sys_btns[1].top + 6);
-	oldPen = dc->SelectObject(&this->m_frameSystemButtonLinePenSharp);
-	dc->MoveTo(this->sys_btns[1].left + 7, this->sys_btns[1].top + 3);
-	dc->LineTo(this->sys_btns[1].right - 4, this->sys_btns[1].top + 3);
-	dc->LineTo(this->sys_btns[1].right - 4, this->sys_btns[1].bottom - 7);
-	oldPen = dc->SelectObject(&this->m_frameSystemButtonLinePen);
+	if (this->m_isMaximize == TRUE){
+		dc->MoveTo(this->sys_btns[1].left + 4, this->sys_btns[1].top + 9);
+		dc->LineTo(this->sys_btns[1].left + 4, this->sys_btns[1].bottom - 3);
+		dc->LineTo(this->sys_btns[1].right - 7, this->sys_btns[1].bottom - 3);
+		dc->LineTo(this->sys_btns[1].right - 7, this->sys_btns[1].top + 9);
+		dc->LineTo(this->sys_btns[1].left + 4, this->sys_btns[1].top + 8);
+		dc->MoveTo(this->sys_btns[1].left + 7, this->sys_btns[1].top + 5);
+		dc->LineTo(this->sys_btns[1].right - 4, this->sys_btns[1].top + 5);
+		dc->LineTo(this->sys_btns[1].right - 4, this->sys_btns[1].bottom - 5);
 	}
-	else {
-	//윗 모서리
-	dc->MoveTo(this->sys_btns[1].left + 6, this->sys_btns[1].top + 6);
-	dc->LineTo(this->sys_btns[1].right - 6, this->sys_btns[1].top + 6);
-	oldPen = dc->SelectObject(&this->m_frameSystemButtonLinePenSharp);
-	//왼쪽 모서리
-	dc->MoveTo(this->sys_btns[1].left + 6, this->sys_btns[1].top + 5);
-	dc->LineTo(this->sys_btns[1].left + 6, this->sys_btns[1].bottom - 7);
-	//오른쪽 모서리
-	dc->MoveTo(this->sys_btns[1].right - 6, this->sys_btns[1].top + 6);
-	dc->LineTo(this->sys_btns[1].right - 6, this->sys_btns[1].bottom - 6);
-	//아래쪽 모서리
-	dc->MoveTo(this->sys_btns[1].left + 6, this->sys_btns[1].bottom - 7);
-	dc->LineTo(this->sys_btns[1].right - 6, this->sys_btns[1].bottom - 7);
-	oldPen = dc->SelectObject(&this->m_frameSystemButtonLinePen);
+	else{
+		dc->MoveTo(this->sys_btns[1].left + 5, this->sys_btns[1].top + 5);
+		dc->LineTo(this->sys_btns[1].left + 5, this->sys_btns[1].bottom - 5);
+		dc->LineTo(this->sys_btns[1].right - 5, this->sys_btns[1].bottom - 5);
+		dc->LineTo(this->sys_btns[1].right - 5, this->sys_btns[1].top + 5);
+		dc->LineTo(this->sys_btns[1].left + 4, this->sys_btns[1].top + 6);
+		dc->MoveTo(this->sys_btns[1].left + 5, this->sys_btns[1].top + 8);
+		dc->LineTo(this->sys_btns[1].right - 5, this->sys_btns[1].top + 8);
 	}
-	dc->SelectObject(oldPen);
-	dc->SelectObject(oldBrush);
-	*/
+	dc->SelectObject(old);
 }
 
 VOID GaiaFrame::DrawSystemButton3(CDC* dc) {
-	CBrush b(RGB(0, 255, 0));
-	CBrush* oldBrush;
-	oldBrush = dc->SelectObject(&b);   //최소화버튼을 그립니다.
+	//최소화버튼을 그립니다.
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 2, RGB(49, 49, 49));
+	CPen* old = dc->SelectObject(&pen);
+	CPoint point;
+	CRect wRect;
+	::GetCursorPos(&point);
+	this->GetWindowRect(&wRect);
+	point.x -= wRect.left;
+	point.y -= wRect.top;
+	CBrush r = RGB(140, 140, 140);
+	if (this->sys_btns[2].PtInRect(point) == TRUE){
+		dc->FillRect(this->sys_btns[2], &r);
+	}
 	dc->MoveTo(this->sys_btns[2].left + 5, this->sys_btns[2].bottom - 8);
 	dc->LineTo(this->sys_btns[2].right - 5, this->sys_btns[2].bottom - 8);
-
-	dc->SelectObject(oldBrush);
+	dc->SelectObject(old);
 }
 //=====================================MESSAGE MAP METHOD================================================
 
@@ -317,6 +327,9 @@ void GaiaFrame::OnNcLButtonDown(UINT nHitTest, CPoint point) {
 		this->SetTimer(TOOLUP_BTN_CLICK_TIMER_ID, TOOLUP_BTN_CLICK_TIMER_TIME, nullptr);
 		MessageBox(L"ToolUp");
 		return;
+	}
+	else if (this->sys_btns[2].PtInRect(point) == TRUE){
+		this->SendMessage(WM_SYSCOMMAND, (WPARAM)SC_MINIMIZE);
 	}
 	else if (this->sys_btns[1].PtInRect(point) == TRUE){
 		WINDOWPLACEMENT place;

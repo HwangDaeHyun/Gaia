@@ -28,8 +28,8 @@ public:
 	GaiaLayoutRepo() {
 		this->highlight = RGB(0, 130, 153);
 		this->leftside = RGB(49, 49, 49);
-		this->midside = RGB(83, 83, 83);
-		this->rightside = RGB(199, 199, 199);
+		this->midside = RGB(199, 199, 199);
+		this->rightside = RGB(83, 83, 83); 
 		this->spView = nullptr;
 	}
 };
@@ -59,6 +59,13 @@ CREATE_SINGLETON(GaiaToolListRepo) {
 public:
 	GaiaToolListRepo() {
 		this->width = 300;
+	}
+};
+CREATE_SINGLETON(GaiaDrawListRepo) {
+	CREATE_VALUE(GaiaDrawListRepo, int, width);
+public:
+	GaiaDrawListRepo() {
+		this->width = 700;
 	}
 };
 typedef pair<CPoint, CPoint> DblPoint;

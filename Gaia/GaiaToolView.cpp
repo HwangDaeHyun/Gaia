@@ -62,17 +62,19 @@ void GaiaToolView::OnNcPaint()
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaCView::OnNcPaint()을(를) 호출하지 마십시오.
 	CWindowDC dc(::AfxGetMainWnd());
-	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getmidside());
+	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getrightside());
 	CRect toolRect;
 	CRect temp;
 	this->GetWindowRect(&toolRect);
 	toolRect.NormalizeRect();
 	toolRect.OffsetRect(-toolRect.left, -toolRect.top);
 	int captionHeight = ::GetSystemMetrics(SM_CYCAPTION) + ::GetSystemMetrics(SM_CYFRAME) + 5;
-	int sheetWidth = SingleTon<GaiaSheetListRepo>::use()->Getwidth();
-	toolRect.OffsetRect(8 + sheetWidth, captionHeight);
+	toolRect.OffsetRect(8, captionHeight);
 	toolRect.right += 10;
 	toolRect.bottom += 7;
+	int mvcnt = SingleTon<GaiaSheetListRepo>::use()->Getwidth() + SingleTon<GaiaDrawListRepo>::use()->Getwidth();
+	toolRect.left += mvcnt;
+	toolRect.right += mvcnt;
 
 	temp = toolRect;
 	temp.bottom = temp.top + 5;
@@ -84,7 +86,7 @@ void GaiaToolView::OnNcPaint()
 	temp.top = temp.bottom - 4;
 	dc.FillRect(&temp, &brush);		//아래쪽 스플린터바 색칠
 	temp = toolRect;
-	temp.left = temp.right - 7;
+	temp.left = temp.right - 10;
 	dc.FillRect(&temp, &brush);		//오른쪽 스플린터바 색칠
 	brush.DeleteObject();
 }
@@ -95,7 +97,7 @@ void GaiaToolView::OnPaint()
 	CPaintDC dc(this); // device context for painting
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaCView::OnPaint()을(를) 호출하지 마십시오.
-	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getmidside());
+	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getrightside());
 	CRect rect;
 	this->GetClientRect(&rect);
 	dc.FillRect(&rect, &brush);
@@ -110,18 +112,12 @@ void GaiaToolView::OnSize(UINT nType, int cx, int cy)
 	if (cx > 0){
 		SingleTon<GaiaToolListRepo>::use()->Setwidth(cx + 10);
 	}
-	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr && cx<300){
-		SingleTon<GaiaToolListRepo>::use()->Setwidth(300);
+	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr && cx<100){
+		SingleTon<GaiaToolListRepo>::use()->Setwidth(250);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(0, SingleTon<GaiaSheetListRepo>::use()->Getwidth() - 10, 0);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(1, SingleTon<GaiaToolListRepo>::use()->Getwidth() - 10, 0);
 		auto v = SingleTon<GaiaLayoutRepo>::use()->GetspView();
 		auto b = v->GetSafeHwnd();
-		static int i = 0;
-		i++;
-		if (i > 1){
-			v->RecalcLayout();
-		}
-		printf("%d\n", i);
 	}
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
