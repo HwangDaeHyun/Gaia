@@ -97,7 +97,7 @@ CREATE_SINGLETON(GaiaGateInfo){
 public:
 	// color -> and , or , not ¼ø
 	int size = 3;
-	CString selObj;
+	int selObj;
 	BOOL isDrawObject;
 	vector<CRect> rec;
 	vector<COLORREF> tColors;

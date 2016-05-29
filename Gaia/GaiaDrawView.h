@@ -11,6 +11,7 @@ public:
 	GaiaDrawView();           // 동적 만들기에 사용되는 protected 생성자입니다.
 	virtual ~GaiaDrawView();
 protected:
+	GaiaObject* drawObj;
 	BOOL isLDown = FALSE;
 	DblPoint curr;
 	deque<CRect> way;

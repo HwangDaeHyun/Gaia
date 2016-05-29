@@ -263,11 +263,15 @@ void GaiaSheetView::OnLButtonDown(UINT nFlags, CPoint point)
 				}
 			}
 			else{
-				sel = (*it)->name;
-				MessageBox(SingleTon<GaiaGateInfo>::use()->selObj);
+				sel = (*it)->myID;
+				CString str;
+				str.Format(_T("%d"), sel);
+				MessageBox(str);
 			}
 			selNum = id;
-			SingleTon<GaiaGateInfo>::use()->isDrawObject = TRUE;
+			if ((*it)->topID != 1){
+				SingleTon<GaiaGateInfo>::use()->isDrawObject = TRUE;
+			}
 			break;
 		}
 		else{

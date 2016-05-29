@@ -298,6 +298,61 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			}
 		}
 	}
+
+	//== 선택한 오브젝트 이미지가 마우스를 따라옵니다.
+	//== AND 오브젝트만 있고 나머지는 추가해야함
+	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE && SingleTon<GaiaGateInfo>::use()->selObj != -1){
+		CDC memDC;
+		memDC.CreateCompatibleDC(&bDC);
+		CBitmap bmp;
+		switch (SingleTon<GaiaGateInfo>::use()->selObj){
+		case 10:
+			drawObj = new AndGate();
+			bmp.LoadBitmapW(IDB_AND_0);
+			break;
+			//case 11:
+			//	drawObj = new OrGate();
+			//	drawObj->SetRadius();
+			//	break;
+			//case 12:	//Not
+			//	drawObj = new NotGate();
+			//	drawObj->SetRadius();
+			//	break;
+			//case 13:	//Nand
+			//	drawObj = new NandGate();
+			//	drawObj->SetRadius();
+			//	break;
+			//case 14:	//Nor
+			//	drawObj = new NorGate();
+			//	drawObj->SetRadius();
+			//	break;
+			//case 15:	//Xor
+			//	drawObj = new XorGate();
+			//	drawObj->SetRadius();
+			//	break;
+			//case 26:	//D FF
+			//	break;
+			//case 27:	//T FF
+			//	break;
+			//case 28:	//JK FF
+			//	break;
+
+			//case 39:	//7 Seg
+			//	break;
+			//case 40:	//input
+			//	break;
+			//case 41:	//output
+			//	break;
+		}
+		BITMAP bmpinfo;
+		CBitmap* oldbmp = memDC.SelectObject(&bmp);
+		bmp.GetBitmap(&bmpinfo);
+		memDC.SelectObject(&bmp);
+		bDC.TransparentBlt(point.x - 30, point.y - 30, 60, 60, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+		memDC.SelectObject(oldbmp);
+	}
+	//==
+
 	brush.DeleteObject();
 	pen.DeleteObject();
 	SetCursor(LoadCursor(NULL, IDC_ARROW));
@@ -411,7 +466,13 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 			}
 		}
 	}
-
+	//== Object를 그립니다
+	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE){
+		e.push_back(drawObj);
+		e.back()->SetPoint((point.x - 30) / 10, (point.y - 30) / 10);
+		SingleTon < GaiaGateInfo>::use()->isDrawObject = FALSE;
+	}
+	//==
 	SingleTon<GaiaDrawListRepo>::use()->selRect = nullptr;					//선택된 오브젝트가 없습니다.
 	GaiaCView::OnLButtonDown(nFlags, point);
 }
