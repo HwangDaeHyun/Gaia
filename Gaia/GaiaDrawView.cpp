@@ -5,6 +5,7 @@
 #include"AndGate.h"
 #include"OrGate.h"
 #include"InputBtn.h"
+#include"OutLamp.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -398,6 +399,10 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 	p = new InputBtn(30, 30);
+	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+	p = new OutLamp();
+	p->SetPoint(60, 50);
+	p->SetRadius(0);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 	return 0;
 
