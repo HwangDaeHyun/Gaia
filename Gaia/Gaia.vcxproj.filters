@@ -22,6 +22,12 @@
     <Filter Include="헤더 파일\View">
       <UniqueIdentifier>{62a98858-06a0-4fba-9792-ea17ecaaff00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\gate">
+      <UniqueIdentifier>{d1d889ec-1733-4c08-9f7d-161db475daae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\menu_btn">
+      <UniqueIdentifier>{5db9deef-6242-4aeb-a5aa-c71102db965e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -177,6 +183,66 @@
     <Image Include="res\icon.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\toolup.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\toolup-after.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\toolup-hover.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\CheckCheck.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\AND.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\AND_90.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\AND_180.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\AND_270.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\OR_0.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\OR_90.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\OR_180.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\OR_270.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_COPY.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_CUT.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_DELETE.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_UNDO.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_SAVE.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_REDO.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_PASTE.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_NEW.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
     <Image Include="res\menu_back.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
@@ -192,28 +258,7 @@
     <Image Include="res\menu_new.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\toolup.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\toolup-after.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\toolup-hover.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\AND.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\AND_90.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\CheckCheck.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\AND_180.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\AND_270.bmp">
+    <Image Include="res\menu_btn\BTN_OPEN.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

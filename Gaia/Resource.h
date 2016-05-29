@@ -34,12 +34,27 @@
 #define IDB_AND_180                     334
 #define IDB_BITMAP3                     335
 #define IDB_AND_270                     335
+#define IDB_OR_0                        336
+#define IDB_OR_90                       337
+#define IDB_OR_180                      338
+#define IDB_OR_270                      339
+#define IDB_BTN_COPY                    340
+#define IDB_BTN_CUT                     341
+#define IDB_BTN_DELETE                  342
+#define IDB_BTN_NEW                     343
+#define IDB_BTN_PASTE                   344
+#define IDB_BITMAP9                     345
+#define IDB_BTN_REDO                    345
+#define IDB_BTN_SAVE                    346
+#define IDB_BTN_UNDO                    347
+#define IDB_BITMAP2                     348
+#define IDB_BTN_OPEN                    348
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        336
+#define _APS_NEXT_RESOURCE_VALUE        349
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310

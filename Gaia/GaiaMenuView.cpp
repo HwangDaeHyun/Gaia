@@ -128,13 +128,9 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 		int y = 40;
 		double distance = hypot(point.x - x, point.y - y);
 		if (distance <= 30.0){
-			if (idx == 0 && this->currentID != 0){
-				this->currentID = (*it)->parentID;
-			}
-			else{
-				MessageBox(L"menu click!!");
-				this->currentID = (*it)->myID;
-			}
+			CString str;
+			str.Format(_T("%d"), (*it)->myID);
+			MessageBox(str);
 			this->Invalidate();
 			break;
 		}
@@ -187,12 +183,16 @@ int GaiaMenuView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	this->ModifyStyle(WS_BORDER, NULL);
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	this->InsertMenuElement(0, 1, IDB_MENU_FILE);
-	{
-		this->InsertMenuElement(1, 11, IDB_MENU_NEW);
-	}
-	this->InsertMenuElement(0, 2, IDB_MENU_EDIT);
-	this->InsertMenuElement(0, 3, IDB_MENU_LOOK);
+	this->InsertMenuElement(0, 1, IDB_BTN_NEW);
+	this->InsertMenuElement(0, 2, IDB_BTN_OPEN);
+	this->InsertMenuElement(0, 3, IDB_BTN_SAVE);
+	this->InsertMenuElement(0, 4, IDB_BTN_DELETE);
+	this->InsertMenuElement(0, 5, IDB_BTN_COPY);
+	this->InsertMenuElement(0, 6, IDB_BTN_CUT);
+	this->InsertMenuElement(0, 7, IDB_BTN_PASTE);
+	this->InsertMenuElement(0, 8, IDB_BTN_UNDO);
+	this->InsertMenuElement(0, 9, IDB_BTN_REDO);
+
 
 	return 0;
 }

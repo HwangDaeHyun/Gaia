@@ -155,15 +155,28 @@
     <ResourceCompile Include="Gaia.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\AND.bmp" />
-    <Image Include="res\AND_180.bmp" />
-    <Image Include="res\AND_270.bmp" />
-    <Image Include="res\AND_90.bmp" />
     <Image Include="res\CheckCheck.bmp" />
     <Image Include="res\Gaia.ico" />
     <Image Include="res\GaiaDoc.ico" />
+    <Image Include="res\gate\AND.bmp" />
+    <Image Include="res\gate\AND_180.bmp" />
+    <Image Include="res\gate\AND_270.bmp" />
+    <Image Include="res\gate\AND_90.bmp" />
+    <Image Include="res\gate\OR_0.bmp" />
+    <Image Include="res\gate\OR_180.bmp" />
+    <Image Include="res\gate\OR_270.bmp" />
+    <Image Include="res\gate\OR_90.bmp" />
     <Image Include="res\icon.bmp" />
     <Image Include="res\menu_back.bmp" />
+    <Image Include="res\menu_btn\BTN_COPY.bmp" />
+    <Image Include="res\menu_btn\BTN_CUT.bmp" />
+    <Image Include="res\menu_btn\BTN_DELETE.bmp" />
+    <Image Include="res\menu_btn\BTN_NEW.bmp" />
+    <Image Include="res\menu_btn\BTN_OPEN.bmp" />
+    <Image Include="res\menu_btn\BTN_PASTE.bmp" />
+    <Image Include="res\menu_btn\BTN_REDO.bmp" />
+    <Image Include="res\menu_btn\BTN_SAVE.bmp" />
+    <Image Include="res\menu_btn\BTN_UNDO.bmp" />
     <Image Include="res\menu_edit.bmp" />
     <Image Include="res\menu_file.bmp" />
     <Image Include="res\menu_look.bmp" />
