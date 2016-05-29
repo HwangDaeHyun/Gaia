@@ -117,6 +117,7 @@
     <ClInclude Include="InputBtn.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuElement.h" />
+    <ClInclude Include="OrGate.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SheetElement.h" />
     <ClInclude Include="SingleTon.h" />

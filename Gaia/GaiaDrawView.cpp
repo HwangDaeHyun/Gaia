@@ -3,6 +3,7 @@
 #include "GaiaDrawView.h"
 #include"DblBufMaker.h"
 #include"AndGate.h"
+#include"OrGate.h"
 #include"InputBtn.h"
 // GaiaDrawView
 using namespace design_pattern;
@@ -310,10 +311,10 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			drawObj = new AndGate();
 			bmp.LoadBitmapW(IDB_AND_0);
 			break;
-			//case 11:
-			//	drawObj = new OrGate();
-			//	drawObj->SetRadius();
-			//	break;
+		case 11:
+			drawObj = new OrGate();
+			bmp.LoadBitmapW(IDB_OR_0);
+			break;
 			//case 12:	//Not
 			//	drawObj = new NotGate();
 			//	drawObj->SetRadius();
@@ -368,7 +369,7 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	memset(db, -1, sizeof(int)*GSIZE*GSIZE);
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	GaiaObject* p = new AndGate();
+	GaiaObject* p = new OrGate();
 	p->SetPoint(10, 10);
 	p->SetRadius();
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);

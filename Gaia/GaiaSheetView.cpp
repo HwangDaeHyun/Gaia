@@ -206,14 +206,8 @@ void GaiaSheetView::OnPaint()
 		temp.top = temp.top + m - 20;
 		temp.bottom = temp.top + 20;
 		btnRect.push_back(temp);
-		if (velem[i]->topID == 0){
-			m = temp.Height() + m + 10;
-			bDC.SelectObject(&cfont);
-		}
-		else{
-			bDC.SelectObject(&hfont);
-			m = temp.Height() + m + 20;
-		}
+		m = temp.Height() + m + 20;
+
 		if (flag != -1 && seln == i){
 			bDC.SetTextColor(velem[i]->color);
 			flag = -1;

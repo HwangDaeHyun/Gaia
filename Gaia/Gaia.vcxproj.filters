@@ -28,6 +28,9 @@
     <Filter Include="리소스 파일\menu_btn">
       <UniqueIdentifier>{5db9deef-6242-4aeb-a5aa-c71102db965e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Gate">
+      <UniqueIdentifier>{5a906489-669b-4c9b-a060-780052dd0826}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -96,14 +99,17 @@
     <ClInclude Include="GaiaLLogic.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="AndGate.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="InputBtn.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="SheetElement.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AndGate.h">
+      <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="OrGate.h">
+      <Filter>헤더 파일\Gate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
