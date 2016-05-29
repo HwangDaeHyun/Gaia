@@ -28,7 +28,7 @@ public:
 	GaiaLayoutRepo() {
 		this->highlight = RGB(0, 122, 204);
 		this->leftside = RGB(34, 34, 34);
-		this->midside = RGB(207, 207, 207);
+		this->midside = RGB(255, 255, 255);
 		this->rightside = RGB(39, 39, 39);
 		this->spView = nullptr;
 	}

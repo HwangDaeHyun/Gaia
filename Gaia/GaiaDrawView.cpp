@@ -75,9 +75,9 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 	for (int i = rect.left; i < rect.right; i += 10){
 		for (int j = rect.top; j < rect.bottom; j += 10){
-			COLORREF color = RGB(18, 18, 18);
+			COLORREF color = RGB(200, 198, 220);
 			if (grid[i / 10][j / 10]){
-				color = RGB(255, 0, 0);
+				color = RGB(225, 135, 135);
 			}
 			pDC->SetPixel(i + 1, j, color);
 			pDC->SetPixel(i, j + 1, color);

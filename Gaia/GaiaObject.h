@@ -24,6 +24,7 @@ public:
 	CString arrow;
 public:
 	CRect out, in1, in2;
+	CRect clk;			//Å¬·°
 	//vector<CRect> inputs;
 	//	vector<int> inValues;
 	int outValue = -1;
