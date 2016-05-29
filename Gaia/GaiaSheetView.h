@@ -29,12 +29,13 @@ protected:
 private:
 	int sprd = -1;
 	int flag = -1;
-	int selNum = -1;
+	int& selNum = SingleTon<GaiaSheetListRepo>::use()->sel_btn;
 	int seln = -1;
 	vector<CRect> btnRect;
 	int currentID;
 	vector<SheetElement> elems;
 	vector<const SheetElement*> velem;
+	void creatTree();
 	void InsertSheetElement(int tid, int pid, int mid, CString name, COLORREF col);
 	void AddSheetElement(int tid, int pid, int mid, CString name, COLORREF col);
 public:

@@ -21,6 +21,28 @@ GaiaSheetView::~GaiaSheetView()
 void GaiaSheetView::DrawSplitterBar() {
 	this->OnNcPaint();
 }
+void GaiaSheetView::creatTree(){
+	auto& names = SingleTon<GaiaGateInfo>::use()->names;
+	auto& lnames = SingleTon<GaiaGateInfo>::use()->libName;
+	this->InsertSheetElement(1, 0, 3000, _T("Library"), RGB(40, 40, 40));
+	static int i = 0;
+	for (int i = 0; i < lnames.size(); i++){
+		this->InsertSheetElement(0, 3000, i, lnames[i], RGB(40, 40, 40));
+	}
+
+	this->InsertSheetElement(1, 0, 100, _T("Gates"), RGB(240, 0, 0));
+	for (int i = 0; i < 6; i++){
+		this->InsertSheetElement(0, 100, i + 10, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
+	}
+	this->InsertSheetElement(1, 0, 200, _T("Memmory"), RGB(240, 240, 0));
+	for (int i = 6; i < 9; i++){
+		this->InsertSheetElement(0, 200, i + 20, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
+	}
+	this->InsertSheetElement(1, 0, 300, _T("Button"), RGB(0, 0, 240));
+	for (int i = 9; i < 12; i++){
+		this->InsertSheetElement(0, 300, i + 30, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
+	}
+}
 void GaiaSheetView::InsertSheetElement(int tid, int pid, int mid, CString name, COLORREF col) {
 	SheetElement me;
 	me.topID = tid;
@@ -108,6 +130,7 @@ void GaiaSheetView::OnNcPaint()
 //elems.erase(elems.begin() + selNum);								LibraryBox 삭제
 void GaiaSheetView::OnPaint()
 {
+	this->creatTree();
 	CPaintDC dc(this); // device context for painting
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaGaiaCView::OnPaint()을(를) 호출하지 마십시오.
@@ -120,8 +143,9 @@ void GaiaSheetView::OnPaint()
 	this->GetClientRect(&rect);
 	bDC.FillRect(&rect, &brush);
 	/////////////////////////
-	CFont font;
-	font.CreateFont(20,                     // 글자높이
+	CFont hfont;
+	CFont cfont;
+	hfont.CreateFont(20,                     // 글자높이
 		8,                     // 글자너비
 		0,                      // 출력각도
 		0,                      // 기준 선에서의각도
@@ -136,8 +160,22 @@ void GaiaSheetView::OnPaint()
 		DEFAULT_PITCH,         // 글꼴Pitch
 		_T("Time New Romans")           // 글꼴
 		);
+	cfont.CreateFont(15,                     // 글자높이
+		7,                     // 글자너비
+		0,                      // 출력각도
+		0,                      // 기준 선에서의각도
+		FW_HEAVY,              // 글자굵기
+		FALSE,                  // Italic 적용여부
+		FALSE,                  // 밑줄적용여부
+		FALSE,                  // 취소선적용여부
+		DEFAULT_CHARSET,       // 문자셋종류
+		OUT_DEFAULT_PRECIS,    // 출력정밀도
+		CLIP_DEFAULT_PRECIS,   // 클리핑정밀도
+		DEFAULT_QUALITY,       // 출력문자품질
+		DEFAULT_PITCH,         // 글꼴Pitch
+		_T("Time New Romans")           // 글꼴
+		);
 	bDC.SetTextColor(RGB(222, 200, 200));
-	bDC.SelectObject(&font);
 	bDC.SetBkMode(TRANSPARENT);
 	bDC.SelectStockObject(NULL_PEN);
 	/////////////////////////
@@ -167,8 +205,15 @@ void GaiaSheetView::OnPaint()
 		CRect temp = velem[i]->topID != 1 ? a : b;
 		temp.top = temp.top + m - 20;
 		temp.bottom = temp.top + 20;
-		m = temp.Height() + m + 20;
 		btnRect.push_back(temp);
+		if (velem[i]->topID == 0){
+			m = temp.Height() + m + 10;
+			bDC.SelectObject(&cfont);
+		}
+		else{
+			bDC.SelectObject(&hfont);
+			m = temp.Height() + m + 20;
+		}
 		if (flag != -1 && seln == i){
 			bDC.SetTextColor(velem[i]->color);
 			flag = -1;
@@ -189,6 +234,7 @@ void GaiaSheetView::OnPaint()
 		bDC.RoundRect(btnRect[i].left - 30, btnRect[i].top, btnRect[i].left - 10, btnRect[i].bottom, 5, 5);
 		_brush.DeleteObject();
 	}
+	this->elems.clear();
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	brush.DeleteObject();
 }
@@ -211,7 +257,6 @@ void GaiaSheetView::OnSize(UINT nType, int cx, int cy)
 			v->RecalcLayout();
 		}
 	}
-
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
 void GaiaSheetView::OnMouseMove(UINT nFlags, CPoint point)
@@ -266,6 +311,7 @@ void GaiaSheetView::OnLButtonDown(UINT nFlags, CPoint point)
 				sel = (*it)->myID;
 				CString str;
 				str.Format(_T("%d"), sel);
+				SingleTon<GaiaSheetListRepo>::use()->sel_lib = (*it)->myID;
 				MessageBox(str);
 			}
 			selNum = id;
@@ -275,6 +321,9 @@ void GaiaSheetView::OnLButtonDown(UINT nFlags, CPoint point)
 			break;
 		}
 		else{
+			if ((*it)->topID == 0){
+				sel = -2;
+			}
 			SingleTon<GaiaGateInfo>::use()->isDrawObject = FALSE;
 			selNum = -1;
 		}
@@ -289,21 +338,4 @@ int GaiaSheetView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	auto& names = SingleTon<GaiaGateInfo>::use()->names;
-	this->InsertSheetElement(1, 0, 2012, _T("Library"), RGB(40, 40, 40));
-	this->InsertSheetElement(0, 2012, 2016, _T("Main"), RGB(40, 40, 40));
-	this->InsertSheetElement(1, 0, 1, _T("Gates"), RGB(240, 0, 0));
-	for (int i = 0; i < 6; i++){
-		this->InsertSheetElement(0, 1, i + 10, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
-	}
-	this->InsertSheetElement(1, 0, 100, _T("Memmory"), RGB(240, 240, 0));
-	for (int i = 6; i < 9; i++){
-		this->InsertSheetElement(0, 100, i + 20, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
-	}
-	this->InsertSheetElement(1, 0, 200, _T("Button"), RGB(0, 0, 240));
-	for (int i = 9; i < 12; i++){
-		this->InsertSheetElement(0, 200, i + 30, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
-	}
-	return 0;
-	return 0;
 }

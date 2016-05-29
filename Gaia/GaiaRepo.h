@@ -39,6 +39,8 @@ CREATE_SINGLETON(GaiaSheetListRepo) {
 private:
 	int index;
 public:
+	int sel_btn = -1;
+	int sel_lib = -1;
 	vector<HBITMAP> images;
 
 	const int sheetTabHeight = 50;	//시트 선택 블럭의 높이입니다.
@@ -103,6 +105,7 @@ public:
 	vector<COLORREF> tColors;
 	vector<COLORREF> colors;// = { RGB(100, 10, 200), RGB(200, 100, 10), RGB(200, 200, 10) };
 	vector<CString> names;// = { _T("And Gate"), _T("Or Gate"), _T("Not Gate") };
+	vector<CString> libName;
 public:
 	GaiaGateInfo(){
 		isDrawObject = FALSE;
@@ -130,6 +133,7 @@ public:
 		names.push_back(_T("7-Segment"));
 		names.push_back(_T("Input Button"));
 		names.push_back(_T("Output Lamp"));
+		libName.push_back(_T("Main"));
 	}
 };
 typedef pair<CRect, CRect> RPAIR; //rect pair

@@ -122,6 +122,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	PRINT_POINT(point);
+	auto& n = SingleTon<GaiaGateInfo>::use()->libName;
 	for (auto it = this->vme.begin(); it != this->vme.end(); it++){
 		int idx = it - this->vme.begin();
 		int x = idx * 80 + 30;
@@ -131,10 +132,33 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 			CString str;
 			str.Format(_T("%d"), (*it)->myID);
 			MessageBox(str);
+			switch ((*it)->myID){
+			case 1:		// 라이브러리 박스 추가
+				n.push_back(_T("ADD"));
+				break;
+			case 2:		// 라이브러리 박스 삭제
+				if (SingleTon<GaiaSheetListRepo>::use()->sel_lib > 0){
+					n.erase(n.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib);
+					SingleTon<GaiaSheetListRepo>::use()->sel_lib = -1;
+					SingleTon<GaiaGateInfo>::use()->selObj = -1;
+					SingleTon<GaiaGateInfo>::use()->isDrawObject = FALSE;
+					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
+					printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
+				}
+				break;
+			case 3:
+
+				break;
+			case 4:
+
+				break;
+			}
+
 			this->Invalidate();
 			break;
 		}
 	}
+	SingleTon<GaiaLayoutRepo>::use()->views[2]->Invalidate();
 	GaiaCView::OnLButtonDown(nFlags, point);
 }
 
