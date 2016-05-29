@@ -114,6 +114,15 @@
     <ClInclude Include="OutLamp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="NandGate.h">
+      <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="NorGate.h">
+      <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="XorGate.h">
+      <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -268,6 +277,42 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\menu_btn\BTN_OPEN.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_0.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_90.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_180.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_270.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_0.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_90.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_180.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_270.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\XOR_0.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\XOR_90.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\XOR_180.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\XOR_270.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

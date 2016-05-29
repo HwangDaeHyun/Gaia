@@ -117,6 +117,8 @@
     <ClInclude Include="InputBtn.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuElement.h" />
+    <ClInclude Include="NandGate.h" />
+    <ClInclude Include="NorGate.h" />
     <ClInclude Include="OrGate.h" />
     <ClInclude Include="OutLamp.h" />
     <ClInclude Include="Resource.h" />
@@ -125,6 +127,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="GaiaRepo.h" />
+    <ClInclude Include="XorGate.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DblBufMaker.cpp" />
@@ -164,10 +167,22 @@
     <Image Include="res\gate\AND_180.bmp" />
     <Image Include="res\gate\AND_270.bmp" />
     <Image Include="res\gate\AND_90.bmp" />
+    <Image Include="res\gate\NAND_0.bmp" />
+    <Image Include="res\gate\NAND_180.bmp" />
+    <Image Include="res\gate\NAND_270.bmp" />
+    <Image Include="res\gate\NAND_90.bmp" />
+    <Image Include="res\gate\NOR_0.bmp" />
+    <Image Include="res\gate\NOR_180.bmp" />
+    <Image Include="res\gate\NOR_270.bmp" />
+    <Image Include="res\gate\NOR_90.bmp" />
     <Image Include="res\gate\OR_0.bmp" />
     <Image Include="res\gate\OR_180.bmp" />
     <Image Include="res\gate\OR_270.bmp" />
     <Image Include="res\gate\OR_90.bmp" />
+    <Image Include="res\gate\XOR_0.bmp" />
+    <Image Include="res\gate\XOR_180.bmp" />
+    <Image Include="res\gate\XOR_270.bmp" />
+    <Image Include="res\gate\XOR_90.bmp" />
     <Image Include="res\icon.bmp" />
     <Image Include="res\menu_back.bmp" />
     <Image Include="res\menu_btn\BTN_COPY.bmp" />

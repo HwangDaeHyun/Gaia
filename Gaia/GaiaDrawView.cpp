@@ -4,6 +4,9 @@
 #include"DblBufMaker.h"
 #include"AndGate.h"
 #include"OrGate.h"
+#include"XorGate.h"
+#include"NandGate.h"
+#include"NorGate.h"
 #include"InputBtn.h"
 #include"OutLamp.h"
 // GaiaDrawView
@@ -307,6 +310,8 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
 		CBitmap bmp;
+		int w = 60;
+		int h = 60;
 		switch (SingleTon<GaiaGateInfo>::use()->selObj){
 		case 10:
 			drawObj = new AndGate();
@@ -320,18 +325,19 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			//	drawObj = new NotGate();
 			//	drawObj->SetRadius();
 			//	break;
-			//case 13:	//Nand
-			//	drawObj = new NandGate();
-			//	drawObj->SetRadius();
-			//	break;
-			//case 14:	//Nor
-			//	drawObj = new NorGate();
-			//	drawObj->SetRadius();
-			//	break;
-			//case 15:	//Xor
-			//	drawObj = new XorGate();
-			//	drawObj->SetRadius();
-			//	break;
+		case 13:	//Nand
+			drawObj = new NandGate();
+			bmp.LoadBitmapW(IDB_NAND_0);
+			w = 70;
+			break;
+		case 14:	//Nor
+			drawObj = new NorGate();
+			bmp.LoadBitmapW(IDB_NOR_0);
+			break;
+		case 15:	//Xor
+			drawObj = new XorGate();
+			bmp.LoadBitmapW(IDB_XOR_0);
+			break;
 			//case 26:	//D FF
 			//	break;
 			//case 27:	//T FF
@@ -350,7 +356,7 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 		CBitmap* oldbmp = memDC.SelectObject(&bmp);
 		bmp.GetBitmap(&bmpinfo);
 		memDC.SelectObject(&bmp);
-		bDC.TransparentBlt(point.x - 30, point.y - 30, 60, 60, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+		bDC.TransparentBlt(point.x - 30, point.y - 30, w, h, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
 		memDC.SelectObject(oldbmp);
 	}
 	//==
@@ -377,17 +383,17 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	p = new AndGate();
 	p->SetPoint(20, 40);
-	p->SetRadius();
+	p->SetRadius(2);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
 	p = new AndGate();
 	p->SetPoint(40, 40);
-	p->SetRadius();
+	p->SetRadius(1);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
 	p = new AndGate();
 	p->SetPoint(60, 40);
-	p->SetRadius(0);
+	p->SetRadius(3);
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 	p = new AndGate();
 	p->SetPoint(60, 10);

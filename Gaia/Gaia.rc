@@ -238,6 +238,18 @@ IDB_BTN_REDO            BITMAP                  "res\\menu_btn\\BTN_REDO.bmp"
 IDB_BTN_SAVE            BITMAP                  "res\\menu_btn\\BTN_SAVE.bmp"
 IDB_BTN_UNDO            BITMAP                  "res\\menu_btn\\BTN_UNDO.bmp"
 IDB_BTN_OPEN            BITMAP                  "res\\menu_btn\\BTN_OPEN.bmp"
+IDB_NAND_0              BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NAND_0.bmp"
+IDB_NAND_90             BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NAND_90.bmp"
+IDB_NAND_180            BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NAND_180.bmp"
+IDB_NAND_270            BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NAND_270.bmp"
+IDB_NOR_0               BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NOR_0.bmp"
+IDB_NOR_90              BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NOR_90.bmp"
+IDB_NOR_180             BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NOR_180.bmp"
+IDB_NOR_270             BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\NOR_270.bmp"
+IDB_XOR_0               BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\XOR_0.bmp"
+IDB_XOR_90              BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\XOR_90.bmp"
+IDB_XOR_180             BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\XOR_180.bmp"
+IDB_XOR_270             BITMAP                  "C:\\Users\\ghkdeoek\\Source\\Repos\\Gaia7\\Gaia\\res\\gate\\XOR_270.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
