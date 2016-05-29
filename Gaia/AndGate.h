@@ -7,7 +7,10 @@
 class AndGate :public GaiaLLogic
 {
 public:
-	AndGate(){}
+	AndGate(){
+		this->name = _T("AND");
+		this->arrow = this->GetArrow();
+	}
 	void Draw(CDC* pDC)override{
 		CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 20, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 20);
 		this->baseRect = rect;
@@ -124,6 +127,27 @@ public:
 			pDC->LineTo((in2.left + in2.right) / 2, in2.top);
 		}
 		pDC->SelectObject(old);
+		//글자를 그립니다
+		CFont font;
+		font.CreateFont(15,                     // 글자높이
+			8,                     // 글자너비
+			0,                      // 출력각도
+			0,                      // 기준 선에서의각도
+			FW_HEAVY,              // 글자굵기
+			FALSE,                  // Italic 적용여부
+			FALSE,                  // 밑줄적용여부
+			FALSE,                  // 취소선적용여부
+			DEFAULT_CHARSET,       // 문자셋종류
+			OUT_DEFAULT_PRECIS,    // 출력정밀도
+			CLIP_DEFAULT_PRECIS,   // 클리핑정밀도
+			DEFAULT_QUALITY,       // 출력문자품질
+			DEFAULT_PITCH,         // 글꼴Pitch
+			_T("Time New Romans")           // 글꼴
+			);
+		pDC->SelectObject(&font);
+		pDC->SetTextColor(RGB(200, 250, 200));
+		pDC->SetBkMode(TRANSPARENT);
+		pDC->DrawText(this->name, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
 	void Calculate() override{
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
@@ -141,7 +165,6 @@ public:
 		}
 	}
 
-	//}
 };
 
 #endif

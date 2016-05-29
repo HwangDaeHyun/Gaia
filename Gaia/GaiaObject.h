@@ -13,14 +13,15 @@ public:
 		return this->length;
 	}
 }GaiaObjectSize = {};
-enum ObjKind{ AND, OR, NOT, INBTN, OUTBTN, XOR, NOR, D, T, JK, SEG };
+
 class GaiaObject{
 public:
 	CPoint base_point;
 	int radius = 0; //{0,1,2,3};
-	ObjKind kind;
 	bool btn = false;
 	int outCnt = 0; // out 에 연결된 선들의 수;
+	CString name;
+	CString arrow;
 public:
 	CRect out, in1, in2;
 	//vector<CRect> inputs;
@@ -40,6 +41,26 @@ public:
 	virtual void Calculate(){}
 	virtual void Draw(CDC* pDC);
 	void SetRadius(int r = 0);
+	CString GetArrow(){
+		CString temp;
+		switch (this->radius){
+		case 0:
+			temp = _T("EAST");
+			break;
+		case 1:
+			temp = _T("DOWN");
+			break;
+		case 2:
+			temp = _T("LEFT");
+			break;
+		case 3:
+			temp = _T("UP");
+			break;
+		default:
+			break;
+		}
+		return temp;
+	}
 };
 
 

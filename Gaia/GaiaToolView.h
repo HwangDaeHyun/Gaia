@@ -10,7 +10,7 @@ class GaiaToolView : public GaiaCView
 public:
 	GaiaToolView();           // 동적 만들기에 사용되는 protected 생성자입니다.
 	virtual ~GaiaToolView();
-
+	int lighting = -1;
 public:
 	void DrawSplitterBar()override;
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
@@ -27,6 +27,8 @@ public:
 	afx_msg void OnNcPaint();
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 

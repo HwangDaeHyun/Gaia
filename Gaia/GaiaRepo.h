@@ -26,7 +26,7 @@ public:
 	vector<GaiaCView*> views;
 
 	GaiaLayoutRepo() {
-		this->highlight = RGB(98, 113, 209);
+		this->highlight = RGB(0, 122, 204);
 		this->leftside = RGB(34, 34, 34);
 		this->midside = RGB(207, 207, 207);
 		this->rightside = RGB(39, 39, 39);
@@ -130,6 +130,30 @@ public:
 		names.push_back(_T("7-Segment"));
 		names.push_back(_T("Input Button"));
 		names.push_back(_T("Output Lamp"));
+	}
+};
+typedef pair<CRect, CRect> RPAIR; //rect pair
+typedef pair<CString, CString> SPAIR; // string pair
+CREATE_SINGLETON(GaiaTableInfo){
+public:
+	bool isSel = false;
+	int selNum = -1;
+	CString title;
+	vector<CRect> invenRect;
+	vector<SPAIR> contents;
+public:
+	GaiaTableInfo(){
+		int width = SingleTon<GaiaToolListRepo>::use()->Getwidth();
+		SPAIR temp(_T("Facing"), _T(""));
+		contents.push_back(temp);
+
+		SPAIR temp2(_T("Label"), _T(""));
+		contents.push_back(temp2);
+
+		SPAIR temp3(_T("BIts"), _T(""));
+		contents.push_back(temp3);
+
+
 	}
 };
 

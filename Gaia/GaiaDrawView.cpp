@@ -452,6 +452,22 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 
 	if (sel != -1){
+		auto& tbl = SingleTon<GaiaTableInfo>::use()->contents;
+		SingleTon<GaiaTableInfo>::use()->title = e[sel]->name;
+		tbl[0].second = e[sel]->arrow;
+		tbl[1].second = e[sel]->name;
+		auto& tdb = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 0){
+			tbl[2].second = _T("0");
+		}
+		else if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 1){
+			tbl[2].second = _T("1");
+		}
+		else{
+			tbl[2].second = _T("-1");
+		}
+		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate(false);
+		////
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 		prevData.push_back(db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10]);
 		prevData.push_back(db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10]);

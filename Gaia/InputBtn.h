@@ -14,12 +14,15 @@ public:
 	InputBtn(int x, int y){
 		this->SetPoint(x, y);
 		this->SetRadius(0);
+		this->name = _T("¹öÆ°");
+		this->arrow = this->GetArrow();
 		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 25, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 25);
 		this->out = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
 		SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->out);
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 		db[out.CenterPoint().x / 10][out.CenterPoint().y / 10] = 0;
 		Update(this->out);
+
 	}
 public:
 	void Draw(CDC* pDC)override{
