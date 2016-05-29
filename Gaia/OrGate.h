@@ -70,7 +70,7 @@ public:
 		//CBitmap* oldbmp = memDC.SelectObject(&bmp);
 		bmp.GetBitmap(&bmpinfo);
 		memDC.SelectObject(&bmp);
-		pDC->TransparentBlt(this->base_point.x, this->base_point.y, 60, 60, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(255, 255, 255));
+		pDC->TransparentBlt(this->base_point.x, this->base_point.y, 60, 60, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
 		//memDC.SelectObject(oldbmp);
 
 

@@ -488,6 +488,8 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 		e.push_back(drawObj);
 		e.back()->SetPoint((point.x - 30) / 10, (point.y - 30) / 10);
 		SingleTon < GaiaGateInfo>::use()->isDrawObject = FALSE;
+		SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
+		SingleTon<GaiaLayoutRepo>::use()->views[2]->Invalidate();
 	}
 	//==
 	SingleTon<GaiaDrawListRepo>::use()->selRect = nullptr;					//선택된 오브젝트가 없습니다.

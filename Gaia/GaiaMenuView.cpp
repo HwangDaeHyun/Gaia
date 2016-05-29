@@ -136,7 +136,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 			case 1:		// 라이브러리 박스 추가
 				n.push_back(_T("ADD"));
 				break;
-			case 2:		// 라이브러리 박스 삭제
+			case 4: // 라이브러리 박스 삭제
 				if (SingleTon<GaiaSheetListRepo>::use()->sel_lib > 0){
 					n.erase(n.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib);
 					SingleTon<GaiaSheetListRepo>::use()->sel_lib = -1;
@@ -145,12 +145,6 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
 					printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
 				}
-				break;
-			case 3:
-
-				break;
-			case 4:
-
 				break;
 			}
 
