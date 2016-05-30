@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="AndGate.h" />
     <ClInclude Include="DblBufMaker.h" />
+    <ClInclude Include="DFF.h" />
     <ClInclude Include="Gaia.h" />
     <ClInclude Include="GaiaCView.h" />
     <ClInclude Include="GaiaDoc.h" />

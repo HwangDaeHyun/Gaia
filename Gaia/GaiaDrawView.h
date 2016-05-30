@@ -23,9 +23,13 @@ public:
 	deque<PDV> plusWays;
 	int inIdx1 = -1;
 	int inIdx2 = -1;
+	int clkIdx = -1;
 	vector<int> prevData;
 	int sIdx1 = -1;
 	int sIdx2 = -1;
+	int sClkIdx = -1;
+	void MoveLogic(CDC& bDC , bool& possible);
+	void AddingLogic(CDC& bDC, CPoint point);
 	void DrawSplitterBar()override;
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
 #ifdef _DEBUG

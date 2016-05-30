@@ -24,7 +24,8 @@ public:
 	CString arrow;
 public:
 	CRect out, in1, in2;
-	CRect clk;			//클럭
+	CRect clk = CRect();			//클럭
+	int prevC = -1;
 	//vector<CRect> inputs;
 	//	vector<int> inValues;
 	int outValue = -1;
