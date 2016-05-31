@@ -3,8 +3,11 @@
 #include<algorithm>
 #include"SingleTon.h"
 using namespace design_pattern;
+enum ObjectSize{SMALL, MID, BIG};
 static class{
 	int length;
+	int sLen;		//small length
+	int bLen;		//big length
 public:
 	void SetLength(int l){
 		this->length = l;
@@ -12,10 +15,23 @@ public:
 	int GetLength(){
 		return this->length;
 	}
+	void SetSmallLength(int l){
+		this->sLen = l;
+	}
+	int GetSmallLength(){
+		return this->sLen;
+	}
+	void SetBigLength(int l){
+		this->bLen = l;
+	}
+	int GetBigLength(){
+		return this->bLen;
+	}
 }GaiaObjectSize = {};
 
 class GaiaObject{
 public:
+	ObjectSize objSize = MID;
 	CPoint base_point;
 	int radius = 0; //{0,1,2,3};
 	bool btn = false;
@@ -43,6 +59,23 @@ public:
 	virtual void Calculate(){}
 	virtual void Draw(CDC* pDC);
 	void SetRadius(int r = 0);
+	int GetLength(){
+		int len = 0;
+		switch (this->objSize){
+		case SMALL:
+			return len = GaiaObjectSize.GetSmallLength();
+			
+		case MID:
+			return len = GaiaObjectSize.GetLength();
+			
+		case BIG:
+			return len = GaiaObjectSize.GetBigLength();
+		
+		default:
+			return 0;
+		}
+		
+	}
 	CString GetArrow(){
 		CString temp;
 		switch (this->radius){

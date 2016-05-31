@@ -18,6 +18,8 @@ IMPLEMENT_DYNCREATE(GaiaDrawView, GaiaCView)
 GaiaDrawView::GaiaDrawView()
 {
 	GaiaObjectSize.SetLength(8);
+	GaiaObjectSize.SetSmallLength(6);
+	GaiaObjectSize.SetBigLength(12);
 }
 
 GaiaDrawView::~GaiaDrawView()
@@ -155,6 +157,8 @@ void GaiaDrawView::OnNcPaint()
 
 void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 {
+	point.x += 5;
+	point.y += 5;
 	point.x /= 10;
 	point.y /= 10;
 	point.x *= 10;
@@ -197,8 +201,9 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 			int bx = e[sel]->base_point.x / 10;
 			int by = e[sel]->base_point.y / 10;
-			for (int i = by; i < by + GaiaObjectSize.GetLength(); i++){
-				for (int j = bx; j < bx + GaiaObjectSize.GetLength(); j++){
+
+			for (int i = by; i < by +e[sel]->GetLength(); i++){
+				for (int j = bx; j < bx +e[sel]->GetLength(); j++){
 					if (grid[j][i] == true){
 						possible = false;
 						goto LABEL1;
@@ -431,6 +436,8 @@ BOOL GaiaDrawView::OnEraseBkgnd(CDC* pDC)
 void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	point.x += 5;
+	point.y += 5;
 	point.x /= 10;
 	point.y /= 10;
 	point.x *= 10;
@@ -571,7 +578,6 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 		this->sel = -1;
 	}
 	else{
-		this->sel = -1;
 		if (this->isLDown == TRUE){
 			auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 			CRect* ptr = nullptr;
@@ -643,7 +649,7 @@ void GaiaDrawView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	auto& btn = SingleTon<GaiaDrawGrid>::use()->inBtns;
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
-	int len = GaiaObjectSize.GetLength() * 10;
+	int len = GaiaObjectSize.GetSmallLength() * 10;
 	for (auto& b : btn){
 		CRect t(b.left - len, b.top - len / 2, b.right, b.bottom + len / 2);
 		if (t.PtInRect(point)){

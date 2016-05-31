@@ -12,7 +12,7 @@ public:
 		this->arrow = this->GetArrow();
 	}
 	void Draw(CDC* pDC)override{
-		CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 20, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 20);
+		CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + this->GetLength() * 10 - 20, this->base_point.y + this->GetLength() * 10 - 20);
 		this->baseRect = rect;
 
 

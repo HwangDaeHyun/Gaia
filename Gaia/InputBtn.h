@@ -9,14 +9,16 @@ class InputBtn :
 {
 public:
 	InputBtn(){
-
+		
 	}
 	InputBtn(int x, int y){
+		this->objSize = SMALL;
 		this->SetPoint(x, y);
 		this->SetRadius(0);
 		this->name = _T("¹öÆ°");
 		this->arrow = this->GetArrow();
-		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 25, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 25);
+		
+		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + this->GetLength() * 10 - 25, this->base_point.y + this->GetLength() * 10 - 25);
 		this->out = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
 		SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->out);
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
@@ -26,8 +28,9 @@ public:
 	}
 public:
 	void Draw(CDC* pDC)override{
-		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 25, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 25);
-		CRect rect2(this->base_point.x + 9, this->base_point.y + 9, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 29, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 29);
+		
+		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + GaiaObjectSize.GetSmallLength() * 10 - 25, this->base_point.y + GaiaObjectSize.GetSmallLength() * 10 - 25);
+		CRect rect2(this->base_point.x + 9, this->base_point.y + 9, this->base_point.x + GaiaObjectSize.GetSmallLength() * 10 - 29, this->base_point.y + GaiaObjectSize.GetSmallLength() * 10 - 29);
 		this->baseRect = rect;
 		CBrush brush(RGB(200, 11, 211));
 		CPen pen;

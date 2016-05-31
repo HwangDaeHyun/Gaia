@@ -1,6 +1,6 @@
 #pragma once
-#ifndef GOEUN_EDITOR_GAIA_LLOGIC_H_INCLUDE
-#define GOEUN_EDITOR_GAIA_LLOGIC_H INCLUDE
+#ifndef GAIA_LLOGIC_H_INCLUDE
+#define GAIA_LLOGIC_H INCLUDE
 #include"stdafx.h"
 #include"SingleTon.h"
 #include"GaiaRepo.h"
@@ -10,16 +10,30 @@ typedef int DBOARD[GSIZE][GSIZE];
 class GaiaLLogic : public GaiaObject {
 public:
 	//vector<int> inputs;
+
 	static vector<int> outputs;
 public:
 	void SetPoint(CPoint p)override{
 		this->base_point = CPoint(p.x * 10, p.y * 10);
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
-
+		int len=0;
+		switch (this->objSize){
+		case SMALL :
+			len =GaiaObjectSize.GetSmallLength();
+			break;
+		case MID:
+			len =GaiaObjectSize.GetLength();
+			break;
+		case BIG:
+			len =GaiaObjectSize.GetBigLength();
+			break;
+		default :
+			break;
+		}
 		int bx = this->base_point.x / 10;
 		int by = this->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength() - 1; i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength() - 1; j++){
+		for (int i = by; i < by + len-1; i++){
+			for (int j = bx; j < bx + len-1; j++){
 				grid[j][i] = true;
 			}
 		}
@@ -32,8 +46,22 @@ public:
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		int bx = this->base_point.x / 10;
 		int by = this->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength() - 1; i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength() - 1; j++){
+		int len = 0;
+		switch (this->objSize){
+		case SMALL:
+			len = GaiaObjectSize.GetSmallLength();
+			break;
+		case MID:
+			len = GaiaObjectSize.GetLength();
+			break;
+		case BIG:
+			len = GaiaObjectSize.GetBigLength();
+			break;
+		default:
+			break;
+		}
+		for (int i = by; i < by + len - 1; i++){
+			for (int j = bx; j < bx + len - 1; j++){
 				grid[j][i] = true;
 			}
 		}
@@ -43,8 +71,22 @@ public:
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		int bx = this->base_point.x / 10;
 		int by = this->base_point.y / 10;
-		for (int i = by; i < by + GaiaObjectSize.GetLength() - 1; i++){
-			for (int j = bx; j < bx + GaiaObjectSize.GetLength() - 1; j++){
+		int len = 0;
+		switch (this->objSize){
+		case SMALL:
+			len = GaiaObjectSize.GetSmallLength();
+			break;
+		case MID:
+			len = GaiaObjectSize.GetLength();
+			break;
+		case BIG:
+			len = GaiaObjectSize.GetBigLength();
+			break;
+		default:
+			break;
+		}
+		for (int i = by; i < by + len- 1; i++){
+			for (int j = bx; j < bx + len - 1; j++){
 				grid[j][i] = false;
 			}
 		}
