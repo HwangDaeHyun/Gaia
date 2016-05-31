@@ -8,6 +8,7 @@ public:
 	int parentID;
 	int myID;
 	CBitmap* image;
+	CBitmap* hover_image;
 	bool operator<(const MenuElement& e)const;
 };
 

@@ -279,44 +279,71 @@
     <Image Include="res\menu_new.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\menu_btn\BTN_COPY_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_CUT_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_DELETE_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_NEW_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
+    </Image>
     <Image Include="res\menu_btn\BTN_OPEN.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\menu_btn</Filter>
     </Image>
-    <Image Include="res\gate\NAND_0.bmp">
-      <Filter>리소스 파일</Filter>
+    <Image Include="res\menu_btn\BTN_OPEN_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
     </Image>
-    <Image Include="res\gate\NAND_90.bmp">
-      <Filter>리소스 파일</Filter>
+    <Image Include="res\menu_btn\BTN_PASTE_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
     </Image>
-    <Image Include="res\gate\NAND_180.bmp">
-      <Filter>리소스 파일</Filter>
+    <Image Include="res\menu_btn\BTN_REDO_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
     </Image>
-    <Image Include="res\gate\NAND_270.bmp">
-      <Filter>리소스 파일</Filter>
+    <Image Include="res\menu_btn\BTN_SAVE_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
     </Image>
-    <Image Include="res\gate\NOR_0.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\gate\NOR_90.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\gate\NOR_180.bmp">
-      <Filter>리소스 파일</Filter>
+    <Image Include="res\menu_btn\BTN_UNDO_HOVER.bmp">
+      <Filter>리소스 파일\menu_btn</Filter>
     </Image>
     <Image Include="res\gate\NOR_270.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_180.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_90.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NOR_0.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_270.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_180.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_90.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NAND_0.bmp">
+      <Filter>리소스 파일\gate</Filter>
     </Image>
     <Image Include="res\gate\XOR_0.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\gate</Filter>
     </Image>
     <Image Include="res\gate\XOR_90.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\gate</Filter>
     </Image>
     <Image Include="res\gate\XOR_180.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\gate</Filter>
     </Image>
     <Image Include="res\gate\XOR_270.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\gate</Filter>
     </Image>
   </ItemGroup>
 </Project>

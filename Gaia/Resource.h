@@ -60,12 +60,22 @@
 #define IDB_XOR_90                      358
 #define IDB_XOR_180                     359
 #define IDB_XOR_270                     360
+#define IDB_BTN_COPY_HOVER              373
+#define IDB_BTN_CUT_HOVER               374
+#define IDB_BTN_DELETE_HOVER            375
+#define IDB_BTN_NEW_HOVER               376
+#define IDB_BTN_OPEN_HOVER              377
+#define IDB_BITMAP8                     378
+#define IDB_BTN_PASTE_HOVER             378
+#define IDB_BTN_REDO_HOVER              379
+#define IDB_BTN_SAVE_HOVER              380
+#define IDB_BTN_UNDO_HOVER              381
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        373
+#define _APS_NEXT_RESOURCE_VALUE        382
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310

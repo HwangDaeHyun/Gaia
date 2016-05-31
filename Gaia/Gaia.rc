@@ -250,6 +250,15 @@ IDB_XOR_0               BITMAP                  "res\\gate\\XOR_0.bmp"
 IDB_XOR_90              BITMAP                  "res\\gate\\XOR_90.bmp"
 IDB_XOR_180             BITMAP                  "res\\gate\\XOR_180.bmp"
 IDB_XOR_270             BITMAP                  "res\\gate\\XOR_270.bmp"
+IDB_BTN_COPY_HOVER      BITMAP                  "res\\menu_btn\\BTN_COPY_HOVER.bmp"
+IDB_BTN_CUT_HOVER       BITMAP                  "res\\menu_btn\\BTN_CUT_HOVER.bmp"
+IDB_BTN_DELETE_HOVER    BITMAP                  "res\\menu_btn\\BTN_DELETE_HOVER.bmp"
+IDB_BTN_NEW_HOVER       BITMAP                  "res\\menu_btn\\BTN_NEW_HOVER.bmp"
+IDB_BTN_OPEN_HOVER      BITMAP                  "res\\menu_btn\\BTN_OPEN_HOVER.bmp"
+IDB_BTN_PASTE_HOVER     BITMAP                  "res\\menu_btn\\BTN_PASTE_HOVER.bmp"
+IDB_BTN_REDO_HOVER      BITMAP                  "res\\menu_btn\\BTN_REDO_HOVER.bmp"
+IDB_BTN_SAVE_HOVER      BITMAP                  "res\\menu_btn\\BTN_SAVE_HOVER.bmp"
+IDB_BTN_UNDO_HOVER      BITMAP                  "res\\menu_btn\\BTN_UNDO_HOVER.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

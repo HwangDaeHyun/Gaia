@@ -21,12 +21,14 @@ GaiaMenuView::~GaiaMenuView()
 void GaiaMenuView::DrawSplitterBar() {
 	this->OnNcPaint();
 }
-void GaiaMenuView::InsertMenuElement(int pid, int mid, UINT bitmapID) {
+void GaiaMenuView::InsertMenuElement(int pid, int mid, UINT bitmapID1, UINT bitmapID2) {
 	MenuElement me;
 	me.parentID = pid;
 	me.myID = mid;
 	me.image = new CBitmap;
-	VERIFY(me.image->LoadBitmapW(bitmapID) == TRUE);
+	me.hover_image = new CBitmap;
+	VERIFY(me.image->LoadBitmapW(bitmapID1) == TRUE);
+	VERIFY(me.hover_image->LoadBitmapW(bitmapID2) == TRUE);
 	this->menus.insert(me);
 }
 BEGIN_MESSAGE_MAP(GaiaMenuView, GaiaCView)
@@ -34,6 +36,8 @@ BEGIN_MESSAGE_MAP(GaiaMenuView, GaiaCView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_NCPAINT()
 	ON_WM_CREATE()
+	ON_WM_MOUSEMOVE()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -91,16 +95,31 @@ void GaiaMenuView::OnPaint()
 			cvme.push_back(&e);
 		}
 	});
-	for (auto it = vme.begin(); it != vme.end(); it++){
-		int idx = it - vme.begin();
+	for (int i = 0; i < vme.size(); i++){
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
 		BITMAP bmpinfo;
-		(*it)->image->GetBitmap(&bmpinfo);
-		CBitmap* oldbmp = memDC.SelectObject((*it)->image);
-		bDC.TransparentBlt(idx * 80, 8, bmpinfo.bmWidth, bmpinfo.bmHeight, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+		//	CBitmap img = sel == i ? vme[sel]->image : vme[i]->image;
+		vme[i]->hover_image->GetBitmap(&bmpinfo);
+		vme[i]->image->GetBitmap(&bmpinfo);
+		CBitmap* oldbmp;
+		if (sel == i)
+			oldbmp = memDC.SelectObject(vme[i]->hover_image);
+		else
+			oldbmp = memDC.SelectObject(vme[i]->image);
+		bDC.TransparentBlt(i * 80, 8, bmpinfo.bmWidth, bmpinfo.bmHeight, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
 		memDC.SelectObject(oldbmp);
-	}
+	}/*
+	 for (auto it = vme.begin(); it != vme.end(); it++){
+	 int idx = it - vme.begin();
+	 CDC memDC;
+	 memDC.CreateCompatibleDC(&bDC);
+	 BITMAP bmpinfo;
+	 (*it)->image->GetBitmap(&bmpinfo);
+	 CBitmap* oldbmp = memDC.SelectObject((*it)->image);
+	 bDC.TransparentBlt(idx * 80, 8, bmpinfo.bmWidth, bmpinfo.bmHeight, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+	 memDC.SelectObject(oldbmp);
+	 }*/
 	if (currID != 0){
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
@@ -201,16 +220,41 @@ int GaiaMenuView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	this->ModifyStyle(WS_BORDER, NULL);
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	this->InsertMenuElement(0, 1, IDB_BTN_NEW);
-	this->InsertMenuElement(0, 2, IDB_BTN_OPEN);
-	this->InsertMenuElement(0, 3, IDB_BTN_SAVE);
-	this->InsertMenuElement(0, 4, IDB_BTN_DELETE);
-	this->InsertMenuElement(0, 5, IDB_BTN_COPY);
-	this->InsertMenuElement(0, 6, IDB_BTN_CUT);
-	this->InsertMenuElement(0, 7, IDB_BTN_PASTE);
-	this->InsertMenuElement(0, 8, IDB_BTN_UNDO);
-	this->InsertMenuElement(0, 9, IDB_BTN_REDO);
+	this->InsertMenuElement(0, 1, IDB_BTN_NEW, IDB_BTN_NEW_HOVER);
+	this->InsertMenuElement(0, 2, IDB_BTN_OPEN, IDB_BTN_OPEN_HOVER);
+	this->InsertMenuElement(0, 3, IDB_BTN_SAVE, IDB_BTN_SAVE_HOVER);
+	this->InsertMenuElement(0, 4, IDB_BTN_DELETE, IDB_BTN_DELETE_HOVER);
+	this->InsertMenuElement(0, 5, IDB_BTN_COPY, IDB_BTN_COPY_HOVER);
+	this->InsertMenuElement(0, 6, IDB_BTN_CUT, IDB_BTN_CUT_HOVER);
+	this->InsertMenuElement(0, 7, IDB_BTN_PASTE, IDB_BTN_PASTE_HOVER);
+	this->InsertMenuElement(0, 8, IDB_BTN_UNDO, IDB_BTN_UNDO_HOVER);
+	this->InsertMenuElement(0, 9, IDB_BTN_REDO, IDB_BTN_REDO_HOVER);
 
 
 	return 0;
+}
+
+
+
+void GaiaMenuView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	auto& n = SingleTon<GaiaGateInfo>::use()->libName;
+	for (auto it = this->vme.begin(); it != this->vme.end(); it++){
+		int idx = it - this->vme.begin();
+		int x = idx * 80 + 30;
+		int y = 40;
+		double distance = hypot(point.x - x, point.y - y);
+		if (distance <= 30.0){
+			sel = (*it)->myID - 1;
+			SetCursor(LoadCursor(NULL, IDC_HAND));
+			break;
+		}
+		else{
+			sel = -1;
+			SetCursor(LoadCursor(NULL, IDC_ARROW));
+		}
+	}
+	this->Invalidate(FALSE);
+	GaiaCView::OnMouseMove(nFlags, point);
 }

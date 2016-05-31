@@ -25,10 +25,11 @@ public:
 #endif
 #endif
 private:
+	int sel = -1;
 	int currentID;
 	set<MenuElement> menus;
 	vector<const MenuElement*> vme;
-	void InsertMenuElement(int pid, int mid, UINT bitmapID);
+	void InsertMenuElement(int pid, int mid, UINT bitmapID1, UINT bitmapID2);
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
@@ -36,6 +37,7 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnNcPaint();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 
