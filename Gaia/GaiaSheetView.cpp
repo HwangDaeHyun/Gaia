@@ -24,21 +24,21 @@ void GaiaSheetView::DrawSplitterBar() {
 void GaiaSheetView::creatTree(){
 	auto& names = SingleTon<GaiaGateInfo>::use()->names;
 	auto& lnames = SingleTon<GaiaGateInfo>::use()->libName;
-	this->InsertSheetElement(1, 0, 3000, _T("Library"), RGB(40, 40, 40));
+	this->InsertSheetElement(1, 0, 3000, _T("Library"), RGB(41, 98, 255));
 	static int i = 0;
 	for (int i = 0; i < lnames.size(); i++){
-		this->InsertSheetElement(0, 3000, i, lnames[i], RGB(40, 40, 40));
+		this->InsertSheetElement(0, 3000, i, lnames[i], RGB(0, 188, 212));
 	}
 
-	this->InsertSheetElement(1, 0, 100, _T("Gates"), RGB(240, 0, 0));
+	this->InsertSheetElement(1, 0, 100, _T("Gates"), RGB(63, 138, 255));
 	for (int i = 0; i < 6; i++){
-		this->InsertSheetElement(0, 100, i + 10, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
+		this->InsertSheetElement(0, 100, i + 10, names[i], RGB(33, 150, 243));		//SingleTon<GaiaGateInfo>::use()->colors[i]);
 	}
-	this->InsertSheetElement(1, 0, 200, _T("Memmory"), RGB(240, 240, 0));
+	this->InsertSheetElement(1, 0, 200, _T("Memmory"), RGB(100, 181, 246));
 	for (int i = 6; i < 9; i++){
 		this->InsertSheetElement(0, 200, i + 20, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
 	}
-	this->InsertSheetElement(1, 0, 300, _T("Button"), RGB(0, 0, 240));
+	this->InsertSheetElement(1, 0, 300, _T("Button"), RGB(187, 222, 251));
 	for (int i = 9; i < 12; i++){
 		this->InsertSheetElement(0, 300, i + 30, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
 	}
@@ -126,8 +126,6 @@ void GaiaSheetView::OnNcPaint()
 	dc.FillRect(&temp, &brush);		//오른쪽 스플린터바 색칠
 	brush.DeleteObject();
 }
-//this->AddSheetElement(0, 2012, 2017, _T("eee"), RGB(40,40,40));	LibraryBox 추가
-//elems.erase(elems.begin() + selNum);								LibraryBox 삭제
 void GaiaSheetView::OnPaint()
 {
 	this->creatTree();
@@ -160,7 +158,7 @@ void GaiaSheetView::OnPaint()
 		DEFAULT_PITCH,         // 글꼴Pitch
 		_T("Time New Romans")           // 글꼴
 		);
-	cfont.CreateFont(15,                     // 글자높이
+	cfont.CreateFont(17,                     // 글자높이
 		7,                     // 글자너비
 		0,                      // 출력각도
 		0,                      // 기준 선에서의각도
@@ -179,6 +177,19 @@ void GaiaSheetView::OnPaint()
 	bDC.SetBkMode(TRANSPARENT);
 	bDC.SelectStockObject(NULL_PEN);
 	/////////////////////////
+	CRect title(15, 15, 160, 50);
+	CPen pen;
+	bDC.SetTextColor(RGB(0, 122, 204));
+	bDC.SelectObject(&hfont);
+	//bDC.SetBkMode(TRANSPARENT);
+	pen.CreatePen(PS_DOT, 2, RGB(0, 122, 204));
+	CPen* op = bDC.SelectObject(&pen);
+	bDC.MoveTo(title.left, title.bottom);
+	bDC.LineTo(title.right, title.bottom);
+	bDC.DrawText(_T("LIST"), &title, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	bDC.SelectObject(op);
+	bDC.SetTextColor(RGB(222, 200, 200));
+	/////////////////////////
 	this->btnRect.clear();
 	this->velem.clear();
 	vector<const SheetElement*>& cvme = this->velem;
@@ -195,9 +206,9 @@ void GaiaSheetView::OnPaint()
 				cvme.push_back(&(*iter));
 		}
 	}
-	CRect myRect(CPoint(5, 10), CPoint(25, 30));
-	CRect a(CPoint(55, 10), CPoint(135, 30));
-	CRect b(CPoint(35, 10), CPoint(115, 30));
+	CRect myRect(CPoint(5, 85), CPoint(25, 105));
+	CRect a(CPoint(55, 85), CPoint(135, 105));
+	CRect b(CPoint(35, 85), CPoint(115, 105));
 	int m = 20;
 	for (int i = 0; i < velem.size(); i++){
 		CBrush _brush(velem[i]->color);
@@ -207,25 +218,31 @@ void GaiaSheetView::OnPaint()
 		temp.bottom = temp.top + 20;
 		btnRect.push_back(temp);
 		m = temp.Height() + m + 20;
-
-		if (flag != -1 && seln == i){
+		bDC.SelectObject(&hfont);
+		if (flag != -1 && seln == i){// 커서가 영역안에 들어오면
 			bDC.SetTextColor(velem[i]->color);
 			flag = -1;
 		}
-		if (selNum == i&& velem[i]->topID != 1){
-			CDC memDC;
-			memDC.CreateCompatibleDC(&bDC);
-			CBitmap bmp;
-			bmp.LoadBitmapW(IDB_CHECK);
-			BITMAP bmpinfo;
-			bmp.GetBitmap(&bmpinfo);
-			memDC.SelectObject(&bmp);
-			bDC.TransparentBlt(btnRect[selNum].right + 25, btnRect[selNum].top - 10, 25, 25, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
-			bDC.SetTextColor(velem[i]->color);
+		if (velem[i]->topID != 1){	// 자식이면
+			if (selNum == i){		// 선택되었을떄 체크그림을 찍는다
+				CDC memDC;
+				memDC.CreateCompatibleDC(&bDC);
+				CBitmap bmp;
+				bmp.LoadBitmapW(IDB_CHECK);
+				BITMAP bmpinfo;
+				bmp.GetBitmap(&bmpinfo);
+				memDC.SelectObject(&bmp);
+				bDC.TransparentBlt(btnRect[selNum].right + 25, btnRect[selNum].top - 10, 25, 25, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+				bDC.SetTextColor(velem[i]->color);
+			}
+			bDC.SelectObject(&cfont);
+			bDC.RoundRect(btnRect[i].left - 25, btnRect[i].top, btnRect[i].left - 10, btnRect[i].bottom - 5, 5, 5);
+		}
+		else{
+			bDC.RoundRect(btnRect[i].left - 30, btnRect[i].top, btnRect[i].left - 10, btnRect[i].bottom, 5, 5);
 		}
 		bDC.TextOutW(btnRect[i].left, btnRect[i].top, velem[i]->name);
 		bDC.SetTextColor(RGB(222, 200, 200));
-		bDC.RoundRect(btnRect[i].left - 30, btnRect[i].top, btnRect[i].left - 10, btnRect[i].bottom, 5, 5);
 		_brush.DeleteObject();
 	}
 	this->elems.clear();
@@ -280,12 +297,12 @@ void GaiaSheetView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	auto& sel = SingleTon<GaiaGateInfo>::use()->selObj;
-	CRect a(CPoint(55, 30), CPoint(135, 50));
-	CRect b(CPoint(35, 30), CPoint(115, 50));
-	int m = 0;
+	CRect a(CPoint(55, 85), CPoint(135, 105));
+	CRect b(CPoint(35, 85), CPoint(115, 105));
+	int m = 20;
 	int id = 0;
 	for (auto it = this->velem.begin(); it != this->velem.end(); it++){
-		CRect index = a;
+		CRect index = (*it)->topID != 1 ? a : b;
 		CBrush b((*it)->color);
 		index.top = index.top + m - 20;
 		index.bottom = index.top + 20;
