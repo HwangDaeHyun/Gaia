@@ -8,6 +8,7 @@ class DFF :public GaiaLLogic
 {
 public:
 	DFF(){
+		this->objKind = FF;
 		this->name = _T("D-FlipFlop");
 		this->arrow = this->GetArrow();
 	}

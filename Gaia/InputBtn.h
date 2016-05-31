@@ -12,6 +12,7 @@ public:
 		
 	}
 	InputBtn(int x, int y){
+		this->objKind = INBUTTON;
 		this->objSize = SMALL;
 		this->SetPoint(x, y);
 		this->SetRadius(0);

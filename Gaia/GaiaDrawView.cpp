@@ -572,7 +572,9 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 		db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] = prevData[2];
 		db[e[sel]->clk.CenterPoint().x / 10][e[sel]->clk.CenterPoint().y / 10] = prevData[3];
 		auto& btn = SingleTon<GaiaDrawGrid>::use()->inBtns;
-		btn.push_back(e[sel]->out);
+		if (e[sel]->objKind == INBUTTON){
+			btn.push_back(e[sel]->out);
+		}
 		prevData.clear();
 		//
 		this->sel = -1;

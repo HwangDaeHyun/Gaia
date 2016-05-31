@@ -4,6 +4,7 @@
 #include"SingleTon.h"
 using namespace design_pattern;
 enum ObjectSize{SMALL, MID, BIG};
+enum ObjectKind{NOTTHING,GATE, FF, INBUTTON, OUTPUT};
 static class{
 	int length;
 	int sLen;		//small length
@@ -32,6 +33,7 @@ public:
 class GaiaObject{
 public:
 	ObjectSize objSize = MID;
+	ObjectKind objKind = NOTTHING;
 	CPoint base_point;
 	int radius = 0; //{0,1,2,3};
 	bool btn = false;
