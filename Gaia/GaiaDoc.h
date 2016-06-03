@@ -4,6 +4,7 @@
 
 
 #pragma once
+#include "SingleTon.h"
 
 
 class GaiaDoc : public CDocument
@@ -12,13 +13,13 @@ protected: // serialization에서만 만들어집니다.
 	GaiaDoc();
 	DECLARE_DYNCREATE(GaiaDoc)
 
-// 특성입니다.
+	// 특성입니다.
 public:
 
-// 작업입니다.
+	// 작업입니다.
 public:
 
-// 재정의입니다.
+	// 재정의입니다.
 public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
@@ -27,7 +28,7 @@ public:
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
 #endif // SHARED_HANDLERS
 
-// 구현입니다.
+	// 구현입니다.
 public:
 	virtual ~GaiaDoc();
 #ifdef _DEBUG
@@ -37,7 +38,7 @@ public:
 
 protected:
 
-// 생성된 메시지 맵 함수
+	// 생성된 메시지 맵 함수
 protected:
 	DECLARE_MESSAGE_MAP()
 
@@ -45,4 +46,7 @@ protected:
 	// 검색 처리기에 대한 검색 콘텐츠를 설정하는 도우미 함수
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+	virtual BOOL OnSaveDocument();
+	virtual BOOL OnOpenDocument();
 };

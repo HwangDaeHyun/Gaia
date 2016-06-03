@@ -13,6 +13,8 @@
 
 #include <propkey.h>
 
+#include"GaiaDrawView.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -57,11 +59,40 @@ void GaiaDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: 여기에 저장 코드를 추가합니다.
+		printf("AR <<<<<<< \n");
+		// TODO: 여기에 저장 코드를 추가합니다.	
+		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+
+		for (int i = 0; i < e.size(); i++){
+			GaiaObject* obj = e[i];
+			ar << 10;
+			ar << obj;
+
+		}
 	}
 	else
 	{
 		// TODO: 여기에 로딩 코드를 추가합니다.
+		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+		e.clear();
+		printf("ARRR >> \n");
+		POSITION pos = GetFirstViewPosition();
+		GaiaDrawView* dr = (GaiaDrawView*)m_viewList.GetHead();
+
+		int sz;
+		int x, y;
+		GaiaObject* obj;
+		ar >> sz;
+		printf("sz : %d", sz);
+		int tp;
+		for (int i = 0; i < sz; i++){
+			ar >> tp;
+//			ar >> obj;
+			ar >> x;
+			ar >> y;
+
+		}
+
 	}
 }
 
@@ -76,7 +107,7 @@ void GaiaDoc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 	CString strText = _T("TODO: implement thumbnail drawing here");
 	LOGFONT lf;
 
-	CFont* pDefaultGUIFont = CFont::FromHandle((HFONT) GetStockObject(DEFAULT_GUI_FONT));
+	CFont* pDefaultGUIFont = CFont::FromHandle((HFONT)GetStockObject(DEFAULT_GUI_FONT));
 	pDefaultGUIFont->GetLogFont(&lf);
 	lf.lfHeight = 36;
 
@@ -135,3 +166,56 @@ void GaiaDoc::Dump(CDumpContext& dc) const
 
 
 // GaiaDoc 명령
+
+
+BOOL GaiaDoc::OnSaveDocument()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	printf("SAAAAAAAAAVE\n");
+	CFileDialog fileDlg(FALSE);
+	CFile f;
+	CFileException e;
+	CString strPathName;
+	if (fileDlg.DoModal() == IDOK){
+		strPathName = fileDlg.GetPathName();
+		CString temp;
+		temp.Format(L"%s%s", fileDlg.GetPathName(), L".gaia");
+		if (!f.Open(temp, CFile::modeReadWrite | CFile::modeCreate, &e)){
+			e.ReportError();
+		}
+		else{
+			CArchive ar(&f, CArchive::store);
+			printf("%s  \n", temp);
+			Serialize(ar);
+		}
+	}
+
+
+	return FALSE;
+}
+
+
+BOOL GaiaDoc::OnOpenDocument()
+{
+	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
+	printf("DDDDDOCN\n");
+	CFileDialog fileDlg(TRUE);
+	if (fileDlg.DoModal() == IDOK){
+		auto& o = SingleTon<GaiaDrawGrid>::use()->objects;
+		o.clear();
+		CString strPath = fileDlg.GetPathName();
+		CFile f;
+		CFileException e;
+		if (!f.Open(strPath, CFile::modeRead, &e)){
+			e.ReportError();
+		}
+		else{
+			CArchive ar(&f, CArchive::load);
+			printf("%s\n", strPath);
+			Serialize(ar);
+			SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+		}
+
+	}
+	return TRUE;
+}

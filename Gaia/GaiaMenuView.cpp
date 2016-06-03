@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "Gaia.h"
+#include"GaiaDoc.h"
 #include "GaiaMenuView.h"
 
 
@@ -109,17 +110,7 @@ void GaiaMenuView::OnPaint()
 			oldbmp = memDC.SelectObject(vme[i]->image);
 		bDC.TransparentBlt(i * 80, 8, bmpinfo.bmWidth, bmpinfo.bmHeight, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
 		memDC.SelectObject(oldbmp);
-	}/*
-	 for (auto it = vme.begin(); it != vme.end(); it++){
-	 int idx = it - vme.begin();
-	 CDC memDC;
-	 memDC.CreateCompatibleDC(&bDC);
-	 BITMAP bmpinfo;
-	 (*it)->image->GetBitmap(&bmpinfo);
-	 CBitmap* oldbmp = memDC.SelectObject((*it)->image);
-	 bDC.TransparentBlt(idx * 80, 8, bmpinfo.bmWidth, bmpinfo.bmHeight, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
-	 memDC.SelectObject(oldbmp);
-	 }*/
+	}
 	if (currID != 0){
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
@@ -132,6 +123,33 @@ void GaiaMenuView::OnPaint()
 			memDC.SelectObject(oldbmp);
 		}
 	}
+	////
+	CFont font;
+	font.CreateFont(8,                     // 글자높이
+		7,                     // 글자너비
+		0,                      // 출력각도
+		0,                      // 기준 선에서의각도
+		FW_HEAVY,              // 글자굵기
+		FALSE,                  // Italic 적용여부
+		FALSE,                  // 밑줄적용여부
+		FALSE,                  // 취소선적용여부
+		DEFAULT_CHARSET,       // 문자셋종류
+		OUT_DEFAULT_PRECIS,    // 출력정밀도
+		CLIP_DEFAULT_PRECIS,   // 클리핑정밀도
+		DEFAULT_QUALITY,       // 출력문자품질
+		DEFAULT_PITCH,         // 글꼴Pitch
+		_T("Time New Romans")           // 글꼴
+		);
+	CRect r;
+	this->GetClientRect(&r);
+	CRect cr(r.right - 350, r.bottom - 50, r.right, r.bottom);
+	CBrush b(RGB(255, 255, 0));
+	//bDC.FillRect(cr, &b);
+	bDC.SetBkMode(TRANSPARENT);
+	bDC.SetTextColor(RGB(200, 200, 222));
+	bDC.DrawText(_T("@Created by DaeHyun, JaeChan On 2016. ??. ??...\n@Copyright (C) 2016 DaeHyun, JaeChan.\n@All rights reserved."),
+		&cr, DT_LEFT | DT_BOTTOM | DT_WORDBREAK);
+	////
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	brush.DeleteObject();
 }
@@ -151,11 +169,25 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 			CString str;
 			str.Format(_T("%d"), (*it)->myID);
 			MessageBox(str);
-			switch ((*it)->myID){
-			case 1:		// 라이브러리 박스 추가
+			if ((*it)->myID == 1){ // 라이브러리 박스 추가
 				n.push_back(_T("ADD"));
-				break;
-			case 4: // 라이브러리 박스 삭제
+				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+				e.clear();
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+			}
+			else if ((*it)->myID == 2){	//저장
+				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+				pDoc->OnSaveDocument();
+			}
+			else if ((*it)->myID == 3){			//불러오기
+				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+				e.clear();
+				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+				pDoc->OnOpenDocument();
+				printf("size : %d", e.size());
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+			}
+			else if ((*it)->myID == 4){		// 라이브러리 박스 삭제
 				if (SingleTon<GaiaSheetListRepo>::use()->sel_lib > 0){
 					n.erase(n.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib);
 					SingleTon<GaiaSheetListRepo>::use()->sel_lib = -1;
@@ -164,9 +196,27 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
 					printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
 				}
-				break;
 			}
+			else if ((*it)->myID == 5){
 
+
+			}
+			else if ((*it)->myID == 6){
+
+
+			}
+			else if ((*it)->myID == 7){
+
+
+			}
+			else if ((*it)->myID == 8){
+
+
+			}
+			else if ((*it)->myID == 9){
+
+
+			}
 			this->Invalidate();
 			break;
 		}
