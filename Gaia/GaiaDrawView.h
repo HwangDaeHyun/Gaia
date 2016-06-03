@@ -2,6 +2,7 @@
 #include "GaiaCView.h"
 #include "SingleTon.h"
 #include "GaiaRepo.h"
+
 class GaiaDrawView :
 	public GaiaCView
 {
@@ -16,19 +17,23 @@ protected:
 	DblPoint curr;
 	deque<CRect> way;
 	int sel = -1;
+	bool isDrag = false;
 	CPoint clickPoint;
+	CRect draggedRect;
 	CPoint clickBase;
 public:
 	vector<PDV> tempEdges;
 	deque<PDV> plusWays;
-	int inIdx1 = -1;
-	int inIdx2 = -1;
+	vector<int> inIdx, s_inIdx;
+	vector<int> outIdx, s_outIdx;
+	vector<pair<int, int>> tempOut;
+	vector<pair<int, int>> s_tempOut;
 	int clkIdx = -1;
 	vector<int> prevData;
-	int sIdx1 = -1;
-	int sIdx2 = -1;
-	int sClkIdx = -1;
-	void MoveLogic(CDC& bDC , bool& possible);
+	CPoint dragSrc;
+	//CRect& draggedRect;
+	CRect DrawDragRect(CDC& bDC, CPoint leftTop, CPoint rightBottm);
+	void MoveLogic(CDC& bDC, bool& possible);
 	void AddingLogic(CDC& bDC, CPoint point);
 	void DrawSplitterBar()override;
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.

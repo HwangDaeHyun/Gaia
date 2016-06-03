@@ -2,6 +2,7 @@
 #include "Gaia.h"
 #include "GaiaDrawView.h"
 #include"DblBufMaker.h"
+#include"GaiaObject.h"
 #include"AndGate.h"
 #include"OrGate.h"
 #include"XorGate.h"
@@ -10,6 +11,7 @@
 #include"InputBtn.h"
 #include"OutLamp.h"
 #include"DFF.h"
+#include "SevenSegment.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -17,9 +19,9 @@ IMPLEMENT_DYNCREATE(GaiaDrawView, GaiaCView)
 
 GaiaDrawView::GaiaDrawView()
 {
-	GaiaObjectSize.SetLength(8);
-	GaiaObjectSize.SetSmallLength(6);
-	GaiaObjectSize.SetBigLength(12);
+	SingleTon<GaiaObjectSizeInfo>::use()->SetLength(8);
+	SingleTon<GaiaObjectSizeInfo>::use()->SetSmallLength(6);
+	SingleTon<GaiaObjectSizeInfo>::use()->SetBigLength(10);
 }
 
 GaiaDrawView::~GaiaDrawView()
@@ -137,7 +139,6 @@ void GaiaDrawView::OnNcPaint()
 	drawRect.OffsetRect(8 + sheetWidth, captionHeight);
 	drawRect.right += 10;
 	drawRect.bottom += 7;
-
 	temp = drawRect;
 	temp.bottom = temp.top + 5;
 	dc.FillRect(&temp, &brush);		//위쪽 스플린터바 색칠
@@ -153,7 +154,6 @@ void GaiaDrawView::OnNcPaint()
 	brush.DeleteObject();
 
 }
-
 
 void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 {
@@ -202,8 +202,8 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			int bx = e[sel]->base_point.x / 10;
 			int by = e[sel]->base_point.y / 10;
 
-			for (int i = by; i < by +e[sel]->GetLength(); i++){
-				for (int j = bx; j < bx +e[sel]->GetLength(); j++){
+			for (int i = by; i < by + e[sel]->GetLength(); i++){
+				for (int j = bx; j < bx + e[sel]->GetLength(); j++){
 					if (grid[j][i] == true){
 						possible = false;
 						goto LABEL1;
@@ -229,25 +229,29 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 		for (auto& elem : e){
 			CBrush temp(RGB(220, 100, 200));
 			dc.SelectObject(&temp);
-			if (elem->out.PtInRect(point) == TRUE){
-				dc.Ellipse(elem->out);
-				return;
+			auto& out = elem->outs;
+			for (int i = 0; i < out.size(); i++){
+				if (out[i].PtInRect(point) == TRUE){
+					dc.Ellipse(out[i]);
+					return;
+				}
 			}
-			else if (elem->in1.PtInRect(point) == TRUE){
-				dc.Ellipse(elem->in1);
-				return;
+			auto& in = elem->ins;
+			for (int i = 0; i < in.size(); i++){
+				if (in[i].PtInRect(point) == TRUE){
+					dc.Ellipse(in[i]);
+					return;
+				}
 			}
-			else if (elem->in2.PtInRect(point) == TRUE){
-				dc.Ellipse(elem->in2);
-				return;
-			}
-			else if (elem->clk.PtInRect(point) == TRUE){
+			if (elem->clk.PtInRect(point) == TRUE){
 				dc.Ellipse(elem->clk);
 				return;
 			}
 		}
 	}
-
+	if (this->isDrag){
+		this->draggedRect = DrawDragRect(bDC, this->dragSrc, point);
+	}
 	//== 선택한 오브젝트 이미지가 마우스를 따라옵니다.
 	//== AND 오브젝트만 있고 나머지는 추가해야함
 	this->AddingLogic(bDC, point);
@@ -259,7 +263,15 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	GaiaCView::OnMouseMove(nFlags, point);
 }
 
-void GaiaDrawView::AddingLogic(CDC& bDC ,CPoint point){
+CRect GaiaDrawView::DrawDragRect(CDC& bDC, CPoint leftTop, CPoint rightBottom){
+	Graphics graphics(bDC);
+	SolidBrush  semiTransBrush(Color(100, 100, 100, 255));
+	CRect tempRect(leftTop, rightBottom);
+	CBrush brush(RGB(200, 200, 255));
+	graphics.FillRectangle(&semiTransBrush, leftTop.x, leftTop.y, rightBottom.x - leftTop.x, rightBottom.y - leftTop.y);
+	return tempRect;
+}
+void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE && SingleTon<GaiaGateInfo>::use()->selObj != -1){
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
@@ -319,73 +331,161 @@ void GaiaDrawView::MoveLogic(CDC& bDC, bool& possible){
 	auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
 	if (possible){
 		DblPoint dPt;
+
 		e[sel]->mv = RGB(178, 204, 255);
+		if (inIdx.empty() && outIdx.empty()){
+			inIdx.assign(e[sel]->ins.size(), -1);
+			outIdx.assign(e[sel]->outs.size(), -1);
+		}
 		this->DrawArea(&bDC);
 		if (tempEdges.empty()){
 			for (int i = 0; i < edges.size(); i++){
-				if (e[sel]->out.PtInRect(edges[i].first.first)){
-					dPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { edges[i].first.second.x, edges[i].first.second.y } };
-					PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
-					tempEdges.push_back(*(edges.begin() + i));
-					edges.erase(edges.begin() + i);
-					i -= 1;
+				for (int j = 0; j < e[sel]->outs.size(); j++){
+					if (e[sel]->outs[j].PtInRect(edges[i].first.first)){
+						if (outIdx[j] != -1){
+							dPt = { { e[sel]->outs[j].CenterPoint().x, e[sel]->outs[j].CenterPoint().y }, { edges[i].first.second.x, edges[i].first.second.y } };
+							PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+							tempEdges.push_back(*(edges.begin() + i));
+							edges.erase(edges.begin() + i);
+							tempOut.push_back(pair<int, int>(tempEdges.size() - 1, j));
+							i -= 1;
+							goto L;
+						}
+						else{
+							dPt = { { e[sel]->outs[j].CenterPoint().x, e[sel]->outs[j].CenterPoint().y }, { edges[i].first.second.x, edges[i].first.second.y } };
+							PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+							tempEdges.push_back(*(edges.begin() + i));
+							edges.erase(edges.begin() + i);
+							outIdx[j] = tempEdges.size() - 1;
+							i -= 1;
+							goto L;
+						}
+					}
 				}
-				else if (e[sel]->in1.PtInRect(edges[i].first.second)){
-					dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
-					PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
-					tempEdges.push_back(*(edges.begin() + i));
-					edges.erase(edges.begin() + i);
-					this->inIdx1 = tempEdges.size() - 1;
-					i -= 1;
+				for (int j = 0; j < e[sel]->ins.size(); j++){
+					if (e[sel]->ins[j].PtInRect(edges[i].first.second)){
+						dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->ins[j].CenterPoint().x, e[sel]->ins[j].CenterPoint().y } };
+						PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+						tempEdges.push_back(*(edges.begin() + i));
+						edges.erase(edges.begin() + i);
+						inIdx[j] = tempEdges.size() - 1;
+						i -= 1;
+						goto L;
+					}
 				}
-				else if (e[sel]->in2.PtInRect(edges[i].first.second)){
-					dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
-					PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
-					tempEdges.push_back(*(edges.begin() + i));
-					edges.erase(edges.begin() + i);
-					this->inIdx2 = tempEdges.size() - 1;
-					i -= 1;
-				}
-				else if (e[sel]->clk.PtInRect(edges[i].first.second)){
+				if (e[sel]->clk.PtInRect(edges[i].first.second)){
 					dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->clk.CenterPoint().x, e[sel]->clk.CenterPoint().y } };
 					PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
 					tempEdges.push_back(*(edges.begin() + i));
 					edges.erase(edges.begin() + i);
 					this->clkIdx = tempEdges.size() - 1;
 					i -= 1;
-				}	
+				}
+			L:{};
+				/*if (e[sel]->out.PtInRect(edges[i].first.first)){
+				dPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { edges[i].first.second.x, edges[i].first.second.y } };
+				PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+				tempEdges.push_back(*(edges.begin() + i));
+				edges.erase(edges.begin() + i);
+				i -= 1;
+				}
+				else if (e[sel]->in1.PtInRect(edges[i].first.second)){
+				dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
+				PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+				tempEdges.push_back(*(edges.begin() + i));
+				edges.erase(edges.begin() + i);
+				this->inIdx1 = tempEdges.size() - 1;
+				i -= 1;
+				}
+				else if (e[sel]->in2.PtInRect(edges[i].first.second)){
+				dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
+				PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+				tempEdges.push_back(*(edges.begin() + i));
+				edges.erase(edges.begin() + i);
+				this->inIdx2 = tempEdges.size() - 1;
+				i -= 1;
+				}
+				else if (e[sel]->clk.PtInRect(edges[i].first.second)){
+				dPt = { { edges[i].first.first.x, edges[i].first.first.y }, { e[sel]->clk.CenterPoint().x, e[sel]->clk.CenterPoint().y } };
+				PaintGrid({ dPt.second.x / 10, dPt.second.y / 10 }, false);
+				tempEdges.push_back(*(edges.begin() + i));
+				edges.erase(edges.begin() + i);
+				this->clkIdx = tempEdges.size() - 1;
+				i -= 1;
+				}*/
 			}
 		}
 		else{
 			plusWays.clear();
+			if (s_outIdx.empty() && s_inIdx.empty()){
+				s_outIdx.assign(outIdx.size(), -1);
+				s_inIdx.assign(inIdx.size(), -1);
+				s_tempOut.assign(tempOut.size(), pair<int, int>(-1, -1));
+			}
+
 			for (int i = 0; i < tempEdges.size(); i++){
 				DblPoint ddPt;
 				deque<CRect> uWay;
-				if (i == this->inIdx1){
-					ddPt = { tempEdges[i].first.first, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
-					uWay = DrawEdge(&bDC, ddPt, this);
-					this->sIdx1 = i;
-					uWay.push_front(e[sel]->in1);
+				for (int j = 0; j < this->inIdx.size(); j++){
+					if (i == inIdx[j]){
+						ddPt = { tempEdges[i].first.first, { e[sel]->ins[j].CenterPoint().x, e[sel]->ins[j].CenterPoint().y } };
+						uWay = DrawEdge(&bDC, ddPt, this);
+						//this->s_inIdx[j] = i;
+						uWay.push_front(e[sel]->ins[j]);
+						goto L2;
+					}
 				}
-				else if (i == this->inIdx2){
-					ddPt = { tempEdges[i].first.first, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
-					uWay = DrawEdge(&bDC, ddPt, this);
-					this->sIdx2 = i;
-					uWay.push_front(e[sel]->in2);
+				for (int j = 0; j < this->outIdx.size(); j++){
+					if (i == outIdx[j]){
+						ddPt = { { e[sel]->outs[j].CenterPoint().x, e[sel]->outs[j].CenterPoint().y }, { tempEdges[i].first.second } };
+						uWay = DrawEdge(&bDC, ddPt, this);
+						//this->s_outIdx[j] = i; 
+						uWay.push_back(e[sel]->outs[j]);
+						goto L2;
+					}
 				}
-				else if (i == this->clkIdx){
+				for (int j = 0; j < this->tempOut.size(); j++){
+					if (i == tempOut[j].first){
+						ddPt = { { e[sel]->outs[tempOut[j].second].CenterPoint().x, e[sel]->outs[tempOut[j].second].CenterPoint().y }, { tempEdges[i].first.second } };
+						uWay = DrawEdge(&bDC, ddPt, this);
+						this->s_tempOut.push_back(pair<int, int>(j, i));
+						uWay.push_back(e[sel]->outs[tempOut[j].second]);
+						goto L2;
+					}
+				}
+				if (i == this->clkIdx){
 					ddPt = { tempEdges[i].first.first, { e[sel]->clk.CenterPoint().x, e[sel]->clk.CenterPoint().y } };
 					uWay = DrawEdge(&bDC, ddPt, this);
 					//PaintGrid(ddPt.second);
-					this->sClkIdx = i;
+					//	this->sClkIdx = i;
 					uWay.push_front(e[sel]->clk);
 				}
-				else{
-					ddPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { tempEdges[i].first.second } };
-					uWay = DrawEdge(&bDC, ddPt, this);
-					uWay.push_front(CRect(tempEdges[i].first.second.x - 10, tempEdges[i].first.second.y - 10, tempEdges[i].first.second.x + 10, tempEdges[i].first.second.y + 10));
-					uWay.push_back(e[sel]->out);
-				}
+				//if (i == this->inIdx1)  {
+				//	ddPt = { tempEdges[i].first.first, { e[sel]->in1.CenterPoint().x, e[sel]->in1.CenterPoint().y } };
+				//	uWay = DrawEdge(&bDC, ddPt, this);
+				//	this->sIdx1 = i;
+				//	uWay.push_front(e[sel]->in1);
+				//}
+				//else if (i == this->inIdx2){
+				//	ddPt = { tempEdges[i].first.first, { e[sel]->in2.CenterPoint().x, e[sel]->in2.CenterPoint().y } };
+				//	uWay = DrawEdge(&bDC, ddPt, this);
+				//	this->sIdx2 = i;
+				//	uWay.push_front(e[sel]->in2);
+				//}
+				//else if (i == this->clkIdx){
+				//	ddPt = { tempEdges[i].first.first, { e[sel]->clk.CenterPoint().x, e[sel]->clk.CenterPoint().y } };
+				//	uWay = DrawEdge(&bDC, ddPt, this);
+				//	//PaintGrid(ddPt.second);
+				//	this->sClkIdx = i;
+				//	uWay.push_front(e[sel]->clk);
+				//}
+				//else{
+				//	ddPt = { { e[sel]->out.CenterPoint().x, e[sel]->out.CenterPoint().y }, { tempEdges[i].first.second } };
+				//	uWay = DrawEdge(&bDC, ddPt, this);
+				//	uWay.push_front(CRect(tempEdges[i].first.second.x - 10, tempEdges[i].first.second.y - 10, tempEdges[i].first.second.x + 10, tempEdges[i].first.second.y + 10));
+				//	uWay.push_back(e[sel]->out);
+				//}
+			L2:{};
 				plusWays.push_back(PDV(ddPt, uWay));
 			}
 		}
@@ -417,6 +517,19 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	p->SetPoint(20, 20);
 	p->SetRadius();
 	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+	p = new SevenSegment();
+	p->SetPoint(40, 40);
+
+	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+	p = new SevenSegment();
+	p->SetPoint(60, 60);
+
+	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+	p = new SevenSegment();
+	p->SetPoint(40, 60);
+
+	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
+
 	return 0;
 
 
@@ -448,11 +561,14 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	//
 	for (auto& elem : e){
-		if (elem->out.PtInRect(point) == TRUE){
-			rect = &elem->out;
-			break;
+		for (int i = 0; i < elem->outs.size(); i++){
+			if (elem->outs[i].PtInRect(point) == TRUE){
+				rect = &elem->outs[i];
+				goto R;
+			}
 		}
 	}
+R:{};
 	if (rect != nullptr){
 		CPoint p = rect->CenterPoint();
 		this->curr = { { p.x, p.y }, { 0, 0 } };
@@ -467,7 +583,6 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 			clickPoint = point;
 			e[i]->ClearPoint();
 			clickBase = e[i]->base_point;
-
 			break;
 		}
 	}
@@ -478,45 +593,56 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 		tbl[0].second = e[sel]->arrow;
 		tbl[1].second = e[sel]->name;
 		auto& tdb = SingleTon<GaiaDrawGrid>::use()->dBoard;
-		if (e[sel]->out != CRect()){
-			if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 0){
-				tbl[2].second = _T("0");
-			}
-			else if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 1){
-				tbl[2].second = _T("1");
-			}
-			else{
-				tbl[2].second = _T("-1");
-			}
+		// 여기
+		/*if (e[sel]->out != CRect()){
+		if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 0){
+		tbl[2].second = _T("0");
+		}
+		else if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 1){
+		tbl[2].second = _T("1");
 		}
 		else{
-			if (tdb[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] == 0){
-				tbl[2].second = _T("0");
-			}
-			else if (tdb[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] == 1){
-				tbl[2].second = _T("1");
-			}
-			else{
-				tbl[2].second = _T("-1");
-			}
+		tbl[2].second = _T("-1");
 		}
+		}
+		else{
+		if (tdb[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] == 0){
+		tbl[2].second = _T("0");
+		}
+		else if (tdb[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] == 1){
+		tbl[2].second = _T("1");
+		}
+		else{
+		tbl[2].second = _T("-1");
+		}
+		}*/
 		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate(false);
 		////
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-		prevData.push_back(db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10]);
-		prevData.push_back(db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10]);
-		prevData.push_back(db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10]);
+		// ?? 무슨처리를 해놓은걵지 명시할것 옮기기전에 데이터 값들을 저장해놓습니다 . in -> out -> clk 순으로
+		for (int i = 0; i < e[sel]->ins.size(); i++){
+			prevData.push_back(db[e[sel]->ins[i].CenterPoint().x / 10][e[sel]->ins[i].CenterPoint().y / 10]);
+			db[e[sel]->ins[i].CenterPoint().x / 10][e[sel]->ins[i].CenterPoint().y / 10] = -1;
+		}
+		for (int i = 0; i < e[sel]->outs.size(); i++){
+			prevData.push_back(db[e[sel]->outs[i].CenterPoint().x / 10][e[sel]->outs[i].CenterPoint().y / 10]);
+			db[e[sel]->outs[i].CenterPoint().x / 10][e[sel]->outs[i].CenterPoint().y / 10] = -1;
+		}
 		prevData.push_back(db[e[sel]->clk.CenterPoint().x / 10][e[sel]->clk.CenterPoint().y / 10]);
-		db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] = -1;
-		db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10] = -1;
-		db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] = -1;
 		db[e[sel]->clk.CenterPoint().x / 10][e[sel]->clk.CenterPoint().y / 10] = -1;
+
 		auto& t = SingleTon<GaiaDrawGrid>::use()->inBtns;
 		for (int i = 0; i < t.size(); i++){
-			if (t[i] == e[sel]->out){
-				t.erase(t.begin() + i);
+			for (int j = 0; j < e[sel]->outs.size(); j++){
+				if (t[i] == e[sel]->outs[j]){
+					t.erase(t.begin() + i);
+				}
 			}
 		}
+	}
+	else{
+		this->isDrag = true;
+		this->dragSrc = point;
 	}
 	//== Object를 그립니다
 	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE){
@@ -535,16 +661,31 @@ void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 
+	point.x += 5;
+	point.y += 5;
+	point.x /= 10;
+	point.y /= 10;
+	point.x *= 10;
+	point.y *= 10;
 	CClientDC dc(this);
 	CRect rect;
 	this->GetClientRect(rect);
 	DblBufMaker dm(&dc, rect);
 	CDC& bDC = dm.GetDC();
 	////////////////////////////////////////////////
-	this->inIdx1 = -1;
-	this->inIdx2 = -1;
+	fill(this->inIdx.begin(), this->inIdx.end(), -1);
+	fill(this->outIdx.begin(), this->outIdx.end(), -1);
 	this->clkIdx = -1;
+	this->tempOut.clear();
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if (this->isDrag){
+		this->isDrag = false;
+		vector<int>* datas = SearchObjects(&bDC, this->draggedRect);
+		for (int i = 0; i < datas->size(); i++){
+			printf("%d\n", datas->at(i));
+		}
+		datas->~vector();
+	}
 	if (sel != -1){
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
@@ -567,13 +708,20 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 		e[sel]->mv = RGB(0, 0, 0);
 		///////
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-		db[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] = prevData[0];
-		db[e[sel]->in2.CenterPoint().x / 10][e[sel]->in2.CenterPoint().y / 10] = prevData[1];
-		db[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] = prevData[2];
-		db[e[sel]->clk.CenterPoint().x / 10][e[sel]->clk.CenterPoint().y / 10] = prevData[3];
+		int tCnt = 0;
+		// in -> out -> clock 순
+		for (int i = 0; i < e[sel]->ins.size(); i++){
+			db[e[sel]->ins[i].CenterPoint().x / 10][e[sel]->ins[i].CenterPoint().y / 10] = prevData[tCnt];
+			tCnt++;
+		}
+		for (int i = 0; i < e[sel]->outs.size(); i++){
+			db[e[sel]->outs[i].CenterPoint().x / 10][e[sel]->outs[i].CenterPoint().y / 10] = prevData[tCnt];
+			tCnt++;
+		}
+		db[e[sel]->clk.CenterPoint().x / 10][e[sel]->clk.CenterPoint().y / 10] = prevData[tCnt];
 		auto& btn = SingleTon<GaiaDrawGrid>::use()->inBtns;
 		if (e[sel]->objKind == INBUTTON){
-			btn.push_back(e[sel]->out);
+			btn.push_back(e[sel]->outs[0]);
 		}
 		prevData.clear();
 		//
@@ -584,19 +732,18 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 			auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 			CRect* ptr = nullptr;
 			for (auto& elem : e){
-				if (elem->in1.PtInRect(point) == TRUE){
-					ptr = &elem->in1;
-					break;
+				for (int i = 0; i < elem->ins.size(); i++){
+					if (elem->ins[i].PtInRect(point) == TRUE){
+						ptr = &elem->ins[i];
+						goto SPOT;
+					}
 				}
-				else if (elem->in2.PtInRect(point) == TRUE){
-					ptr = &elem->in2;
-					break;
-				}
-				else if (elem->clk.PtInRect(point) == TRUE){
+				if (elem->clk.PtInRect(point) == TRUE){
 					ptr = &elem->clk;
 					break;
 				}
 			}
+		SPOT:{};
 			if (ptr != nullptr&&  !way.empty()){
 				curr.second = ptr->CenterPoint();
 				//way.pop_front();
@@ -615,7 +762,9 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 
 	auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
 	for (int i = 0; i < objs.size(); i++){
-		Update(objs.at(i)->out);
+		for (int j = 0; j < objs[i]->outs.size(); j++){
+			Update(objs[i]->outs[j]);
+		}
 	}
 	DrawArea(&bDC);
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
@@ -650,20 +799,21 @@ void GaiaDrawView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	auto& btn = SingleTon<GaiaDrawGrid>::use()->inBtns;
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
-	int len = GaiaObjectSize.GetSmallLength() * 10;
+	auto& objects = SingleTon<GaiaDrawGrid>::use()->objects;
+	int len = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() * 10;
 	for (auto& b : btn){
 		CRect t(b.left - len, b.top - len / 2, b.right, b.bottom + len / 2);
 		if (t.PtInRect(point)){
-			for (int i = 0; i < obj.size(); i++){
-				CRect temp(obj.at(i)->in1.left, obj.at(i)->out.top - len / 2, obj.at(i)->out.right, obj.at(i)->out.bottom + len / 2);
+			for (auto& obj : objects){
+				CRect& temp = obj->baseRect;
+				//CRect temp(obj.at(i)->in1.left, obj.at(i)->out.top - len / 2, obj.at(i)->out.right, obj.at(i)->out.bottom + len / 2);
 				if (temp.PtInRect(point)){
-					obj.at(i)->btn = !obj.at(i)->btn;
-					if (obj.at(i)->btn == true){
-						db[obj.at(i)->out.CenterPoint().x / 10][obj.at(i)->out.CenterPoint().y / 10] = 1;
+					obj->btn = !obj->btn;
+					if (obj->btn == true){
+						db[obj->outs[0].CenterPoint().x / 10][obj->outs[0].CenterPoint().y / 10] = 1;
 					}
 					else{
-						db[obj.at(i)->out.CenterPoint().x / 10][obj.at(i)->out.CenterPoint().y / 10] = 0;
+						db[obj->outs[0].CenterPoint().x / 10][obj->outs[0].CenterPoint().y / 10] = 0;
 					}
 					goto W;
 				}
@@ -675,8 +825,9 @@ W:{};
 	auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
 	UpdateDBoard();
 	for (int i = 0; i < objs.size(); i++){
-		Update(objs.at(i)->out);
-
+		for (int j = 0; j < objs[i]->outs.size(); j++){
+			Update(objs.at(i)->outs[j]);
+		}
 	}
 
 	DrawArea(&bDC);

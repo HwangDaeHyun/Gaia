@@ -29,7 +29,7 @@ public:
 		this->highlight = RGB(0, 122, 204);
 		this->leftside = RGB(34, 34, 34);
 		this->midside = RGB(255, 255, 255);
-		this->rightside = RGB(39, 39, 39);
+		this->rightside = RGB(60, 60, 60);
 		this->spView = nullptr;
 	}
 };
@@ -160,5 +160,27 @@ public:
 
 	}
 };
-
+CREATE_SINGLETON(GaiaObjectSizeInfo){
+	int length;
+	int sLen;		//small length
+	int bLen;		//big length
+	void SetLength(int l){
+		this->length = l;
+	}
+	int GetLength(){
+		return this->length;
+	}
+	void SetSmallLength(int l){
+		this->sLen = l;
+	}
+	int GetSmallLength(){
+		return this->sLen;
+	}
+	void SetBigLength(int l){
+		this->bLen = l;
+	}
+	int GetBigLength(){
+		return this->bLen;
+	}
+};
 #endif

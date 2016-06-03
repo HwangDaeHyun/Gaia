@@ -5,42 +5,43 @@ class OutLamp : public GaiaLLogic
 {
 public:
 	OutLamp(){
+		this->outs.assign(1, CRect());
+		this->ins.assign(1, CRect());
 		this->name = _T("LAMP");
 		this->arrow = this->GetArrow();
 	}
 	void Draw(CDC* pDC)override{
-		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + GaiaObjectSize.GetLength() * 10 - 25, this->base_point.y + GaiaObjectSize.GetLength() * 10 - 25);
+		CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + SingleTon<GaiaObjectSizeInfo>::use()->GetLength() * 10 - 25, this->base_point.y + SingleTon<GaiaObjectSizeInfo>::use()->GetLength() * 10 - 25);
 		this->baseRect = rect;
 		VERIFY(radius >= 0);
 		VERIFY(radius <= 3);
 		switch (radius){
 		case 3:
-			this->out = CRect();
-			this->in1 = CRect((rect.left + rect.right) / 2 - 5, rect.bottom + 5, (rect.left + rect.right) / 2 + 5, rect.bottom + 15);
-			this->in2 = CRect();
+			this->ins[0] = CRect((rect.left + rect.right) / 2 - 5, rect.bottom + 5, (rect.left + rect.right) / 2 + 5, rect.bottom + 15);
+
 			break;
 		case 0:
-			this->out = CRect();
-			this->in1 = CRect(rect.left - 15, (rect.top + rect.bottom) / 2 - 5, rect.left - 5, (rect.top + rect.bottom) / 2 + 5);
-			this->in2 = CRect();
+
+			this->ins[0] = CRect(rect.left - 15, (rect.top + rect.bottom) / 2 - 5, rect.left - 5, (rect.top + rect.bottom) / 2 + 5);
+
 			break;
 		case 1:
-			this->out = CRect();
-			this->in1 = CRect((rect.left + rect.right) / 2 - 5, rect.top - 15, (rect.left + rect.right) / 2 + 5, rect.top - 5);
-			this->in2 = CRect();
+
+			this->ins[0] = CRect((rect.left + rect.right) / 2 - 5, rect.top - 15, (rect.left + rect.right) / 2 + 5, rect.top - 5);
+
 		case 2:
-			this->out = CRect();
-			this->in1 = CRect(rect.right + 5, (rect.top + rect.bottom) / 2 - 5, rect.right + 15, (rect.top + rect.bottom) / 2 + 5);
-			this->in2 = CRect();
+
+			this->ins[0] = CRect(rect.right + 5, (rect.top + rect.bottom) / 2 - 5, rect.right + 15, (rect.top + rect.bottom) / 2 + 5);
+
 			break;
 		}
-		pDC->Ellipse(this->in1);
+		pDC->Ellipse(this->ins[0]);
 		CBrush onB(RGB(220, 250, 0));
 		CPen pen;
 		pen.CreatePen(PS_SOLID, 2, RGB(15, 15, 0));
 		pDC->SelectObject(&pen);
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-		if (db[this->in1.CenterPoint().x / 10][this->in1.CenterPoint().y / 10] == 1){
+		if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
 			pDC->SelectObject(&onB);
 		}
 		else{
@@ -53,7 +54,7 @@ public:
 		CRect brTemp;
 		switch (radius){
 		case 0:
-			/*brTemp.SetRect(this->in1.right, this->in1.top - 5, rect2.left, this->in1.bottom + 5);
+			/*brTemp.SetRect(this->ins[0].right, this->ins[0].top - 5, rect2.left, this->ins[0].bottom + 5);
 			pDC->SelectObject(&br);
 			pDC->Rectangle(&brTemp);*/
 			break;

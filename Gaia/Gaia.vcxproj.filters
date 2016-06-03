@@ -31,6 +31,9 @@
     <Filter Include="헤더 파일\Gate">
       <UniqueIdentifier>{5a906489-669b-4c9b-a060-780052dd0826}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Gate">
+      <UniqueIdentifier>{ae51b9c7-138e-4474-8592-34cfe8ae8802}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -126,6 +129,9 @@
     <ClInclude Include="DFF.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SevenSegment.h">
+      <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -180,6 +186,30 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SheetElement.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AndGate.cpp">
+      <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="OrGate.cpp">
+      <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="NandGate.cpp">
+      <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="NorGate.cpp">
+      <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="SevenSegment.cpp">
+      <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="XorGate.cpp">
+      <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="GaiaLLogic.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DFF.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

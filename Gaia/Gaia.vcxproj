@@ -123,6 +123,7 @@
     <ClInclude Include="OrGate.h" />
     <ClInclude Include="OutLamp.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SevenSegment.h" />
     <ClInclude Include="SheetElement.h" />
     <ClInclude Include="SingleTon.h" />
     <ClInclude Include="stdafx.h" />
@@ -131,12 +132,15 @@
     <ClInclude Include="XorGate.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AndGate.cpp" />
     <ClCompile Include="DblBufMaker.cpp" />
+    <ClCompile Include="DFF.cpp" />
     <ClCompile Include="Gaia.cpp" />
     <ClCompile Include="GaiaCView.cpp" />
     <ClCompile Include="GaiaDoc.cpp" />
     <ClCompile Include="GaiaDrawView.cpp" />
     <ClCompile Include="GaiaFrame.cpp" />
+    <ClCompile Include="GaiaLLogic.cpp" />
     <ClCompile Include="GaiaMainView.cpp" />
     <ClCompile Include="GaiaMenuView.cpp" />
     <ClCompile Include="GaiaObject.cpp" />
@@ -147,11 +151,16 @@
     <ClCompile Include="InputBtn.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuEleMent.cpp" />
+    <ClCompile Include="NandGate.cpp" />
+    <ClCompile Include="NorGate.cpp" />
+    <ClCompile Include="OrGate.cpp" />
+    <ClCompile Include="SevenSegment.cpp" />
     <ClCompile Include="SheetElement.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="XorGate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Gaia.reg" />
