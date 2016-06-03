@@ -158,6 +158,7 @@ void GaiaMenuView::OnPaint()
 void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+
 	PRINT_POINT(point);
 	auto& n = SingleTon<GaiaGateInfo>::use()->libName;
 	for (auto it = this->vme.begin(); it != this->vme.end(); it++){
@@ -168,23 +169,29 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 		if (distance <= 30.0){
 			CString str;
 			str.Format(_T("%d"), (*it)->myID);
-			MessageBox(str);
+			//MessageBox(str);
 			if ((*it)->myID == 1){ // 라이브러리 박스 추가
-				n.push_back(_T("ADD"));
-				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-				e.clear();
-				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+				if (IDYES == AfxMessageBox(L"현재 내용을 저장하시겠습니까 ?", MB_YESNO)){
+					GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+					pDoc->OnSaveDocument();
+				}
+				SingleTon<GaiaDrawGrid>::use()->edges.clear();
+				SingleTon<GaiaDrawGrid>::use()->objects.clear();
+				memset(SingleTon<GaiaDrawGrid>::use()->dBoard, -1, sizeof(GSIZE*GSIZE));
+				SingleTon<GaiaDrawGrid>::use()->grid.assign(GSIZE, vector<bool>(GSIZE, false));
+				SingleTon<GaiaDrawGrid>::use()->inBtns.clear();
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
 			}
-			else if ((*it)->myID == 2){	//저장
+			else if ((*it)->myID == 3){	//저장
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnSaveDocument();
 			}
-			else if ((*it)->myID == 3){			//불러오기
+			else if ((*it)->myID == 2){			//불러오기
 				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 				e.clear();
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
-				printf("size : %d", e.size());
+				//printf("size : %d", e.size());
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			else if ((*it)->myID == 4){		// 라이브러리 박스 삭제
@@ -194,7 +201,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					SingleTon<GaiaGateInfo>::use()->selObj = -1;
 					SingleTon<GaiaGateInfo>::use()->isDrawObject = FALSE;
 					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
-					printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
+					//printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
 				}
 			}
 			else if ((*it)->myID == 5){
