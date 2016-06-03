@@ -502,33 +502,7 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	memset(db, -1, sizeof(int)*GSIZE*GSIZE);
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	GaiaObject* p = new DFF();
-	p->SetPoint(10, 10);
-	p->SetRadius();
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
-	p = new InputBtn(30, 30);
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-
-	p = new InputBtn(50, 30);
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-
-	p = new OutLamp();
-	p->SetPoint(20, 20);
-	p->SetRadius();
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new SevenSegment();
-	p->SetPoint(40, 40);
-
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new SevenSegment();
-	p->SetPoint(60, 60);
-
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
-	p = new SevenSegment();
-	p->SetPoint(40, 60);
-
-	SingleTon<GaiaDrawGrid>::use()->objects.push_back(p);
 
 	return 0;
 
@@ -682,7 +656,7 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 		this->isDrag = false;
 		vector<int>* datas = SearchObjects(&bDC, this->draggedRect);
 		for (int i = 0; i < datas->size(); i++){
-			printf("%d\n", datas->at(i));
+			//printf("%d\n", datas->at(i));
 		}
 		datas->~vector();
 	}
