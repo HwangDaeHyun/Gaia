@@ -5,7 +5,7 @@
 DFF::DFF(){
 	this->ins.assign(1, CRect());
 	this->outs.assign(1, CRect());
-	this->objKind = FF;
+	this->objKind = DFLIP;
 
 	this->name = _T("D-FlipFlop");
 	this->arrow = this->GetArrow();

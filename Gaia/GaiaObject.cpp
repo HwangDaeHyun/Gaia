@@ -54,3 +54,70 @@ CString GaiaObject::GetArrow(){
 void GaiaObject::Draw(CDC* pDC){
 
 }
+IMPLEMENT_SERIAL(GaiaObject, CObject, 1)
+void GaiaObject::Serialize(CArchive& ar){
+	CObject::Serialize(ar);
+	if (ar.IsStoring()){
+		ar << (int)this->objSize;
+		ar << (int)this->objKind;
+		ar << this->base_point;
+		ar << this->name;
+		ar << this->arrow;
+		ar << this->btn;
+		ar << this->radius;
+		ar << this->baseRect;
+		ar << this->clk;
+		ar << this->basic;
+		ar << this->mv;
+		int outSize = this->outs.size();
+		ar << outSize;
+		for (int i = 0; i < outSize; i++){
+			ar << this->outs[i];
+		}
+		int insSize = this->ins.size();
+		ar << insSize;
+		for (int i = 0; i < insSize; i++){
+			ar << this->ins[i];
+		}
+		ar << this->prevC;
+	}
+	else{
+		int o_S;	//objectSize
+		int o_K;	//objectKind
+		ar >> o_S;
+		this->objSize = (ObjectSize)o_S;
+		ar >> o_K;
+		this->objKind = (ObjectKind)o_K;
+		CPoint point;
+		ar >> this->base_point;
+
+		ar >> this->name;
+		ar >> this->arrow;
+		ar >> this->btn;
+		ar >> this->radius;
+		
+		ar >> this->baseRect;
+		ar >> this->clk;
+
+		ar >> this->basic;
+
+		ar >> this->mv;
+		int outSize;
+		ar >> outSize;
+		CRect tempOut;
+		for (int i = 0; i < outSize; i++){
+			ar >> tempOut;
+			this->outs.push_back(tempOut);
+		}
+		int insSize;
+		ar >> insSize;
+		CRect tempIn;
+		for (int i = 0; i < insSize; i++){
+			ar >> tempIn;
+			this->ins.push_back(tempIn);
+		}
+
+		ar >> prevC;
+
+	}
+}

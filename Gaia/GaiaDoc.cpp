@@ -14,7 +14,7 @@
 #include <propkey.h>
 
 #include"GaiaDrawView.h"
-
+#include"AndGate.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -59,39 +59,120 @@ void GaiaDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		printf("AR <<<<<<< \n");
 		// TODO: 여기에 저장 코드를 추가합니다.	
+
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-
+		auto&edges = SingleTon<GaiaDrawGrid>::use()->edges;
+		auto&inBtns = SingleTon<GaiaDrawGrid>::use()->inBtns;
+		auto&db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		auto&grid = SingleTon<GaiaDrawGrid>::use()->grid;
+		//object
+		ar << e.size();
 		for (int i = 0; i < e.size(); i++){
-			GaiaObject* obj = e[i];
-			ar << 10;
-			ar << obj;
+			ar << e.at(i)->objKind;
+			ar << e[i];
+		}
+		//edges
+		ar << edges.size();
+		for (int i = 0; i < edges.size(); i++){
+			ar << edges[i].first.first;
+			ar << edges[i].first.second;
+			ar << edges[i].second.size();
+			for (int j = 0; j < edges[i].second.size(); j++){
+				ar << edges[i].second[j];
+			}
+		}
+		//inBtn
+		ar << inBtns.size();
+		for (int i = 0; i < inBtns.size(); i++){
+			ar << inBtns[i];
+		}
+		//dBoard
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j < GSIZE; j++){
+				ar << db[i][j];
+			}
+		}
+		//grid
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j < GSIZE; j++){
+				ar << (int)grid[i][j];
 
+			}
 		}
 	}
-	else
-	{
+	else{
 		// TODO: 여기에 로딩 코드를 추가합니다.
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
+		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
+		auto& inBtns = SingleTon<GaiaDrawGrid>::use()->inBtns;
+		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		//grid.~vector();
 		e.clear();
-		printf("ARRR >> \n");
-		POSITION pos = GetFirstViewPosition();
-		GaiaDrawView* dr = (GaiaDrawView*)m_viewList.GetHead();
-
-		int sz;
-		int x, y;
+		edges.clear();
+		inBtns.clear();
+		grid.assign(GSIZE, vector<bool>(GSIZE, false));
+		int size;
+		int tempKind;
+		ar >> size;
 		GaiaObject* obj;
-		ar >> sz;
-		printf("sz : %d", sz);
-		int tp;
-		for (int i = 0; i < sz; i++){
-			ar >> tp;
-//			ar >> obj;
-			ar >> x;
-			ar >> y;
-
+		ObjectKind objKind;
+		//objets
+		for (int i = 0; i < size; i++){
+			ar >> tempKind;
+			objKind = (ObjectKind)tempKind;
+			switch (objKind){
+			case ObjectKind::AND:
+				obj = new AndGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			}
 		}
+		//edges
+		PDV tempEdge;
+		int edgeSize;
+		int wayCnt;
+		ar >> edgeSize;
+		for (int i = 0; i < edgeSize; i++){
+			ar >> tempEdge.first.first;
+			ar >> tempEdge.first.second;
+			ar >> wayCnt;
+			for (int j = 0; j < wayCnt; j++){
+				CRect tempWay;
+				ar >> tempWay;
+				tempEdge.second.push_back(tempWay);
+			}
+			edges.push_back(tempEdge);
+		}
+		//btn
+		int btnCnt;
+		ar >> btnCnt;
+		CRect tempBtn;
+		for (int i = 0; i < btnCnt; i++){
+			ar >> tempBtn;
+			inBtns.push_back(tempBtn);
+		}
+		//dboard
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j < GSIZE; j++){
+				ar >> (int)db[i][j];
+			}
+		}
+		//grid
+		int temp;
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j < GSIZE; j++){
+				ar >> temp;
+				grid[i][j] = (bool)temp;
+			}
+		}
+
+		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+		SingleTon<GaiaLayoutRepo>::use()->views[1]->Invalidate();
+		SingleTon<GaiaLayoutRepo>::use()->views[2]->Invalidate();
+		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate();
 
 	}
 }
@@ -171,7 +252,6 @@ void GaiaDoc::Dump(CDumpContext& dc) const
 BOOL GaiaDoc::OnSaveDocument()
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	printf("SAAAAAAAAAVE\n");
 	CFileDialog fileDlg(FALSE);
 	CFile f;
 	CFileException e;
@@ -198,7 +278,6 @@ BOOL GaiaDoc::OnSaveDocument()
 BOOL GaiaDoc::OnOpenDocument()
 {
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
-	printf("DDDDDOCN\n");
 	CFileDialog fileDlg(TRUE);
 	if (fileDlg.DoModal() == IDOK){
 		auto& o = SingleTon<GaiaDrawGrid>::use()->objects;
@@ -213,9 +292,10 @@ BOOL GaiaDoc::OnOpenDocument()
 			CArchive ar(&f, CArchive::load);
 			printf("%s\n", strPath);
 			Serialize(ar);
-			SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+
 		}
 
 	}
+	
 	return TRUE;
 }

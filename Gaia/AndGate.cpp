@@ -6,6 +6,7 @@ AndGate::AndGate(){
 	this->outs.assign(1, CRect());
 	this->name = _T("AND");
 	this->arrow = this->GetArrow();
+	this->objKind = AND;
 }
 void AndGate::Draw(CDC* pDC){
 	CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + this->GetLength() * 10 - 20, this->base_point.y + this->GetLength() * 10 - 20);
@@ -158,4 +159,8 @@ void AndGate::Calculate(){
 	else{
 		db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = -1;
 	}
+}
+IMPLEMENT_SERIAL(AndGate, GaiaLLogic, 2)
+void AndGate::Serialize(CArchive& ar){
+	GaiaLLogic::Serialize(ar);
 }

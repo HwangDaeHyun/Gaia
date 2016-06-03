@@ -300,3 +300,7 @@ vector<int>* SearchObjects(CDC* pDC, CRect bound){
 	brush.DeleteObject();
 	return temp;
 }
+IMPLEMENT_SERIAL(GaiaLLogic, GaiaObject, 1)
+void GaiaLLogic::Serialize(CArchive& ar){
+	GaiaObject::Serialize(ar);
+}

@@ -8,19 +8,19 @@
 typedef int BOARD[GSIZE][GSIZE];
 typedef int DBOARD[GSIZE][GSIZE];
 class GaiaLLogic : public GaiaObject {
+	DECLARE_SERIAL(GaiaLLogic)
 public:
-	//vector<int> inputs;
+	virtual void Serialize(CArchive& ar);
+public:
 
-	static vector<int> outputs;
-public:
 	virtual void SetPoint(CPoint p)override;
 	virtual void SetPoint(int x, int y)override;
-	//¿©±â
 	virtual void SetPoint()override;
-
 	virtual void ClearPoint() override;
 	virtual void Calculate()override{}
-	virtual void Draw(CDC* pDC)override{}
+	virtual void Draw(CDC* pDC)override{
+
+	}
 };
 
 bool DblCompare(double a, double b);

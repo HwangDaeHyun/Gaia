@@ -6,9 +6,12 @@
 
 using namespace design_pattern;
 enum ObjectSize{ SMALL, MID, BIG };
-enum ObjectKind{ NOTTHING, GATE, FF, INBUTTON, OUTPUT };
+enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND,XOR,NOR , DFLIP,TFLIP,JKFLIP, INBUTTON, OUTLAMP, SEVENSEG };
 
-class GaiaObject{
+class GaiaObject : public CObject{
+	DECLARE_SERIAL(GaiaObject)
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	ObjectSize objSize = MID;
 	ObjectKind objKind = NOTTHING;
@@ -16,7 +19,6 @@ public:
 	CString name;
 	CString arrow;
 	bool btn = false;
-	int outCnt = 0; // out 에 연결된 선들의 수;
 	int radius = 0; //{0,1,2,3};
 public:
 	CRect baseRect;
@@ -26,7 +28,7 @@ public:
 	vector<CRect> outs;
 	vector<CRect> ins;
 	int prevC = -1;
-	int outValue = -1;
+
 public:
 	GaiaObject();
 	virtual ~GaiaObject();
