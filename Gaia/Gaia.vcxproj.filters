@@ -34,6 +34,18 @@
     <Filter Include="소스 파일\Gate">
       <UniqueIdentifier>{ae51b9c7-138e-4474-8592-34cfe8ae8802}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\FlipFlop">
+      <UniqueIdentifier>{1c57e16f-4bcb-498b-9119-b0af6edb322a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\FlipFlop">
+      <UniqueIdentifier>{42c71b44-c560-455d-874d-758bdded4718}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Input/Output">
+      <UniqueIdentifier>{cd20065f-9db2-4339-812c-47aaa57f5b1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Input/Output">
+      <UniqueIdentifier>{2dd3aa6d-22c2-4472-a0aa-bfa18d1700b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -102,9 +114,6 @@
     <ClInclude Include="GaiaLLogic.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="InputBtn.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SheetElement.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -126,14 +135,17 @@
     <ClInclude Include="XorGate.h">
       <Filter>헤더 파일\Gate</Filter>
     </ClInclude>
-    <ClInclude Include="DFF.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SevenSegment.h">
-      <Filter>헤더 파일\Gate</Filter>
-    </ClInclude>
     <ClInclude Include="GaiaListInfo.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DFF.h">
+      <Filter>헤더 파일\FlipFlop</Filter>
+    </ClInclude>
+    <ClInclude Include="InputBtn.h">
+      <Filter>헤더 파일\Input/Output</Filter>
+    </ClInclude>
+    <ClInclude Include="SevenSegment.h">
+      <Filter>헤더 파일\Input/Output</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +197,6 @@
     <ClCompile Include="GaiaFrame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="InputBtn.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="SheetElement.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -203,9 +212,6 @@
     <ClCompile Include="NorGate.cpp">
       <Filter>소스 파일\Gate</Filter>
     </ClCompile>
-    <ClCompile Include="SevenSegment.cpp">
-      <Filter>소스 파일\Gate</Filter>
-    </ClCompile>
     <ClCompile Include="XorGate.cpp">
       <Filter>소스 파일\Gate</Filter>
     </ClCompile>
@@ -213,7 +219,13 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DFF.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\FlipFlop</Filter>
+    </ClCompile>
+    <ClCompile Include="InputBtn.cpp">
+      <Filter>소스 파일\Input/Output</Filter>
+    </ClCompile>
+    <ClCompile Include="SevenSegment.cpp">
+      <Filter>소스 파일\Input/Output</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
