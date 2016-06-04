@@ -128,7 +128,7 @@ void GaiaToolView::OnPaint()
 		);
 	CPen pen, pen2;
 	CBrush first(RGB(89, 168, 222));
-	bDC.SetTextColor(RGB(0,122, 204));
+	bDC.SetTextColor(RGB(255,255, 255));
 	bDC.SelectObject(&font);
 	bDC.SetBkMode(TRANSPARENT);
 	pen.CreatePen(PS_DOT, 2, RGB(0, 122, 204));
@@ -140,17 +140,23 @@ void GaiaToolView::OnPaint()
 	bDC.SelectObject(&pen);
 	CBrush fBrush(RGB(200, 220, 200));
 	bDC.SelectObject(&fBrush);
-	
+	//
+	Graphics graphics(bDC);
+	SolidBrush  semiTransBrush(Color(100, 0, 124, 255));
+	SolidBrush  semiTransBrush2(Color(180, 100, 181, 246));
+	SolidBrush  semiTransBrush3(Color(50, 187, 222, 251));
+	graphics.FillRectangle(&semiTransBrush, table.TopLeft().x, table.TopLeft().y, table.Width(), table.Height());
+	//
 	bDC.SelectObject(&pen);
 	bDC.DrawText(_T("INFOMATION"), &table, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-	bDC.MoveTo(table.left, table.bottom);
-	bDC.LineTo(table.right, table.bottom);
-	bDC.SetTextColor(RGB(222, 200, 200));
+	/*bDC.MoveTo(table.left, table.bottom+20);
+	bDC.LineTo(table.right, table.bottom+20);*/
+	bDC.SetTextColor(RGB(252, 250, 255));
 	CRect inven;
 
 	auto& contents = SingleTon<GaiaTableInfo>::use()->contents;
 	auto& cRect = SingleTon<GaiaTableInfo>::use()->invenRect;
-	pen2.CreatePen(PS_DOT, 2, RGB(204, 122, 0));
+	pen2.CreatePen(PS_DOT, 2, RGB(250, 250, 255));
 	bool isPush = false;
 	if (cRect.empty()){
 		isPush = true;
@@ -158,13 +164,15 @@ void GaiaToolView::OnPaint()
 	for (int i = 0; i < contents.size(); i++){
 		bDC.SelectObject(&first);
 		inven.SetRect(width / 8, h, width / 8 * 3, h + 40);
-		bDC.RoundRect(&inven, CPoint(5, 5));
+		graphics.FillRectangle(&semiTransBrush2,inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
+		//bDC.RoundRect(&inven, CPoint(5, 5));
 		CRect temp = inven;
 		bDC.DrawText(contents[i].first, &inven, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		bDC.SelectStockObject(NULL_BRUSH);
-		bDC.SetTextColor(RGB(200, 200, 222));
+		//bDC.SetTextColor(RGB(200, 200, 222));
 		inven.SetRect(width / 8 * 3, h, width / 8 * 7, h + 40);
-		bDC.RoundRect(&inven, CPoint(5, 5));
+
+		graphics.FillRectangle(&semiTransBrush3, inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
 		bDC.DrawText(contents[i].second, &inven, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		h += 50;
 		if (isPush == true)

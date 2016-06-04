@@ -155,8 +155,7 @@ public:
 		SPAIR temp2(_T("Label"), _T(""));
 		contents.push_back(temp2);
 
-		SPAIR temp3(_T("BIts"), _T(""));
-		contents.push_back(temp3);
+	;
 
 
 	}

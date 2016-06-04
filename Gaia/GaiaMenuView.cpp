@@ -81,6 +81,8 @@ void GaiaMenuView::OnPaint()
 	this->GetClientRect(&rect);
 	DblBufMaker bm(&dc, rect);
 	CDC& bDC = bm.GetDC();
+
+	//graphics.FillRectangle(&semiTransBrush, table.TopLeft().x, table.TopLeft().y, table.Width(), table.Height());
 	bDC.FillRect(&rect, &brush);
 	vme.clear();
 	//부모가 여러개일때 수정
@@ -192,7 +194,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				e.clear();
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
-				printf("size : %d", e.size());
+				
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			else if ((*it)->myID == 4){		// 라이브러리 박스 삭제

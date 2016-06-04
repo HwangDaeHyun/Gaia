@@ -309,7 +309,9 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 			drawObj = new XorGate();
 			bmp.LoadBitmapW(IDB_XOR_0);
 			break;
-			//case 26:	//D FF
+		//case 26:	//D FF
+			/*drawObj = new DFF();
+			drawObj->Draw(&bDC);*/
 			//	break;
 			//case 27:	//T FF
 			//	break;
@@ -455,8 +457,11 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
-
-
+	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
+	GaiaObject* p = new DFF();
+	p->SetPoint(20,20);
+	obj.push_back(p);
+	
 
 	return 0;
 
@@ -522,33 +527,28 @@ R:{};
 	if (sel != -1){
 
 		auto& tbl = SingleTon<GaiaTableInfo>::use()->contents;
+		
+		while (tbl.size() > 2){
+			tbl.pop_back();
+		}
+		
 		SingleTon<GaiaTableInfo>::use()->title = e[sel]->name;
 		tbl[0].second = e[sel]->arrow;
 		tbl[1].second = e[sel]->name;
 		auto& tdb = SingleTon<GaiaDrawGrid>::use()->dBoard;
-		// 여기
-		/*if (e[sel]->out != CRect()){
-		if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 0){
-		tbl[2].second = _T("0");
+		vector<SPAIR> temp;
+		temp.assign(e[sel]->outs.size(), SPAIR());
+		CString t_str;
+		CString index;
+		for (int i = 0; i < temp.size(); i++){
+			t_str.Format(_T("%d"), tdb[e[sel]->outs[i].CenterPoint().x / 10][e[sel]->outs[i].CenterPoint().y / 10]);
+			index.Format(_T("%d"), i+1);
+			index = _T("out (") + index + _T(")");
+			temp[i].first = index;
+			temp[i].second = t_str;
+			tbl.push_back(temp[i]);
 		}
-		else if (tdb[e[sel]->out.CenterPoint().x / 10][e[sel]->out.CenterPoint().y / 10] == 1){
-		tbl[2].second = _T("1");
-		}
-		else{
-		tbl[2].second = _T("-1");
-		}
-		}
-		else{
-		if (tdb[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] == 0){
-		tbl[2].second = _T("0");
-		}
-		else if (tdb[e[sel]->in1.CenterPoint().x / 10][e[sel]->in1.CenterPoint().y / 10] == 1){
-		tbl[2].second = _T("1");
-		}
-		else{
-		tbl[2].second = _T("-1");
-		}
-		}*/
+		
 		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate(false);
 		////
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;

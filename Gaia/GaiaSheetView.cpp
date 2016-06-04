@@ -184,6 +184,9 @@ void GaiaSheetView::OnPaint()
 	//bDC.SetBkMode(TRANSPARENT);
 	pen.CreatePen(PS_DOT, 2, RGB(0, 122, 204));
 	CPen* op = bDC.SelectObject(&pen);
+	/////
+
+	////
 	bDC.MoveTo(title.left, title.bottom);
 	bDC.LineTo(title.right, title.bottom);
 	bDC.DrawText(_T("LIST"), &title, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
