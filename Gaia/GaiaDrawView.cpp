@@ -106,7 +106,22 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 	}
 
 	// 선택한 오브젝트의 테두리를 표시합니다
-
+	auto& s = SingleTon<GaiaDrawGrid>::use()->sel_objects;
+	if (s.empty() != TRUE){
+		for (auto& elem : s){
+			CPen p;
+			p.CreatePen(PS_SOLID, 1, RGB(20, 20, 20));
+			pDC->SelectObject(&p);
+			//pDC->MoveTo(elem->baseRect.left, elem->baseRect.top);
+			int d = elem->baseRect.Height();
+			int rec_sz = 8;
+			pDC->Rectangle(elem->base_point.x, elem->base_point.y, elem->base_point.x + rec_sz, elem->base_point.y + rec_sz);
+			pDC->Rectangle(elem->base_point.x + d, elem->base_point.y, elem->base_point.x + d + rec_sz, elem->base_point.y + rec_sz);
+			pDC->Rectangle(elem->base_point.x, elem->base_point.y + d, elem->base_point.x + rec_sz, elem->base_point.y + d + rec_sz);
+			pDC->Rectangle(elem->base_point.x + d, elem->base_point.y + d, elem->base_point.x + d + rec_sz, elem->base_point.y + d + rec_sz);
+			pen.DeleteObject();
+		}
+	}
 	// ===
 
 
@@ -216,7 +231,7 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 			}
 		}
 	LABEL1:{}
-		//게이트를 옴길때 구동하는 함수
+		//게이트를 옮길때 구동하는 함수
 
 		this->MoveLogic(bDC, possible);
 		//
@@ -283,6 +298,7 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 		CBitmap bmp;
 		int w = 60;
 		int h = 60;
+		BOOL isBMP = TRUE;	// 비트맵이 아니라 다른거 그리려면 case에서 FALSE로
 		switch (SingleTon<GaiaGateInfo>::use()->selObj){
 		case 10:
 			drawObj = new AndGate();
@@ -325,12 +341,14 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 			//case 41:	//output
 			//	break;
 		}
-		BITMAP bmpinfo;
-		CBitmap* oldbmp = memDC.SelectObject(&bmp);
-		bmp.GetBitmap(&bmpinfo);
-		memDC.SelectObject(&bmp);
-		bDC.TransparentBlt(point.x - 30, point.y - 30, w, h, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
-		memDC.SelectObject(oldbmp);
+		if (isBMP == TRUE){
+			BITMAP bmpinfo;
+			CBitmap* oldbmp = memDC.SelectObject(&bmp);
+			bmp.GetBitmap(&bmpinfo);
+			memDC.SelectObject(&bmp);
+			bDC.TransparentBlt(point.x - 30, point.y - 30, w, h, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+			memDC.SelectObject(oldbmp);
+		}
 	}
 }
 void GaiaDrawView::MoveLogic(CDC& bDC, bool& possible){
@@ -574,6 +592,7 @@ R:{};
 		}
 	}
 	else{
+		SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
 		this->isDrag = true;
 		this->dragSrc = point;
 	}
@@ -617,11 +636,13 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 	this->clkIdx = -1;
 	this->tempOut.clear();
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if (this->isDrag){
+	if (this->isDrag && this->dragSrc != point){
 		this->isDrag = false;
+		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+		auto& s = SingleTon<GaiaDrawGrid>::use()->sel_objects;
 		vector<int>* datas = SearchObjects(&bDC, this->draggedRect);
 		for (int i = 0; i < datas->size(); i++){
-			printf("%d\n", datas->at(i));
+			s.push_back(e[datas->at(i)]);
 		}
 		datas->~vector();
 	}

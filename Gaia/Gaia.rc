@@ -260,6 +260,10 @@ IDB_BTN_PASTE_HOVER     BITMAP                  "res\\menu_btn\\BTN_PASTE_HOVER.
 IDB_BTN_REDO_HOVER      BITMAP                  "res\\menu_btn\\BTN_REDO_HOVER.bmp"
 IDB_BTN_SAVE_HOVER      BITMAP                  "res\\menu_btn\\BTN_SAVE_HOVER.bmp"
 IDB_BTN_UNDO_HOVER      BITMAP                  "res\\menu_btn\\BTN_UNDO_HOVER.bmp"
+IDB_BTN_ADD             BITMAP                  "res\\menu_btn\\BTN_ADD.bmp"
+IDB_BTN_ADD_HOVER       BITMAP                  "res\\menu_btn\\BTN_ADD_HOVER.bmp"
+IDB_BTN_CLK             BITMAP                  "res\\menu_btn\\BTN_CLK.bmp"
+IDB_BTN_CLK_HOVER       BITMAP                  "res\\menu_btn\\BTN_CLK_HOVER.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

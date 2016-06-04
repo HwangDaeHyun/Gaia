@@ -5,7 +5,7 @@
 #include"SingleTon.h"
 
 using namespace design_pattern;
-enum ObjectSize{ SMALL, MID, BIG };
+enum ObjectSize{ SMALL, MID, BIG, LIB };
 enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, SEVENSEG };
 
 class GaiaObject : public CObject{
@@ -13,6 +13,8 @@ class GaiaObject : public CObject{
 public:
 	virtual void Serialize(CArchive& ar);
 public:
+	int lib_h;
+	int lib_w;
 	ObjectSize objSize = MID;
 	ObjectKind objKind = NOTTHING;
 	CPoint base_point;

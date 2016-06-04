@@ -83,6 +83,7 @@ CREATE_SINGLETON(GaiaDrawGrid){
 public:
 	vector<vector<bool>> grid;
 	vector<GaiaObject*> objects;
+	vector<GaiaObject*> sel_objects;
 	vector<PDV> edges;
 	vector<CRect> inBtns;
 	int board[GSIZE][GSIZE];
@@ -155,7 +156,7 @@ public:
 		SPAIR temp2(_T("Label"), _T(""));
 		contents.push_back(temp2);
 
-	;
+		;
 
 
 	}

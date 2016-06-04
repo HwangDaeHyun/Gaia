@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Gaia.h"
 #include"GaiaDoc.h"
+#include"LibBox.h"
 #include "GaiaMenuView.h"
 
 
@@ -207,8 +208,16 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					//printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
 				}
 			}
-			else if ((*it)->myID == 5){
-
+			else if ((*it)->myID == 5){		//라이브러리박스 추가
+				n.push_back(_T("ADD"));
+				//auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+				//e.clear();
+				//SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+				auto& s = SingleTon<GaiaDrawGrid>::use()->sel_objects;
+				LibBox* lbox = new LibBox();
+				e.push_back(lbox);
+				s.clear();
 
 			}
 			else if ((*it)->myID == 6){
@@ -286,13 +295,13 @@ int GaiaMenuView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	this->InsertMenuElement(0, 2, IDB_BTN_OPEN, IDB_BTN_OPEN_HOVER);
 	this->InsertMenuElement(0, 3, IDB_BTN_SAVE, IDB_BTN_SAVE_HOVER);
 	this->InsertMenuElement(0, 4, IDB_BTN_DELETE, IDB_BTN_DELETE_HOVER);
-	this->InsertMenuElement(0, 5, IDB_BTN_COPY, IDB_BTN_COPY_HOVER);
-	this->InsertMenuElement(0, 6, IDB_BTN_CUT, IDB_BTN_CUT_HOVER);
-	this->InsertMenuElement(0, 7, IDB_BTN_PASTE, IDB_BTN_PASTE_HOVER);
-	this->InsertMenuElement(0, 8, IDB_BTN_UNDO, IDB_BTN_UNDO_HOVER);
-	this->InsertMenuElement(0, 9, IDB_BTN_REDO, IDB_BTN_REDO_HOVER);
-
-
+	this->InsertMenuElement(0, 5, IDB_BTN_ADD, IDB_BTN_ADD_HOVER);
+	this->InsertMenuElement(0, 6, IDB_BTN_COPY, IDB_BTN_COPY_HOVER);
+	this->InsertMenuElement(0, 7, IDB_BTN_CUT, IDB_BTN_CUT_HOVER);
+	this->InsertMenuElement(0, 8, IDB_BTN_PASTE, IDB_BTN_PASTE_HOVER);
+	this->InsertMenuElement(0, 9, IDB_BTN_UNDO, IDB_BTN_UNDO_HOVER);
+	this->InsertMenuElement(0, 10, IDB_BTN_REDO, IDB_BTN_REDO_HOVER);
+	this->InsertMenuElement(0, 11, IDB_BTN_CLK, IDB_BTN_CLK_HOVER);
 	return 0;
 }
 

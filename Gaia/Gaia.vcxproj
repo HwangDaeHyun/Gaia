@@ -117,6 +117,7 @@
     <ClInclude Include="GaiaToolView.h" />
     <ClInclude Include="GaiaView.h" />
     <ClInclude Include="InputBtn.h" />
+    <ClInclude Include="LibBox.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuElement.h" />
     <ClInclude Include="NandGate.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="GaiaToolView.cpp" />
     <ClCompile Include="GaiaView.cpp" />
     <ClCompile Include="InputBtn.cpp" />
+    <ClCompile Include="LibBox.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuEleMent.cpp" />
     <ClCompile Include="NandGate.cpp" />
@@ -196,6 +198,10 @@
     <Image Include="res\gate\XOR_90.bmp" />
     <Image Include="res\icon.bmp" />
     <Image Include="res\menu_back.bmp" />
+    <Image Include="res\menu_btn\BTN_ADD.bmp" />
+    <Image Include="res\menu_btn\BTN_ADD_HOVER.bmp" />
+    <Image Include="res\menu_btn\BTN_CLK.bmp" />
+    <Image Include="res\menu_btn\BTN_CLK_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_COPY.bmp" />
     <Image Include="res\menu_btn\BTN_COPY_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_CUT.bmp" />
