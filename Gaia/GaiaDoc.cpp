@@ -7,6 +7,7 @@
 // 해당 프로젝트와 문서 코드를 공유하도록 해 줍니다.
 #ifndef SHARED_HANDLERS
 #include "Gaia.h"
+
 #endif
 
 #include "GaiaDoc.h"
@@ -15,6 +16,7 @@
 
 #include"GaiaDrawView.h"
 #include"AndGate.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -24,6 +26,8 @@
 IMPLEMENT_DYNCREATE(GaiaDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(GaiaDoc, CDocument)
+	ON_COMMAND(ID_EDIT_UNDO, Undo)
+	ON_COMMAND(ID_EDIT_REDO, Redo)
 END_MESSAGE_MAP()
 
 
@@ -296,6 +300,178 @@ BOOL GaiaDoc::OnOpenDocument()
 		}
 
 	}
-	
+	printf("-----%d------", SingleTon<GaiaDrawGrid>::use()->objects.size());
 	return TRUE;
+}
+void GaiaDoc::Undo(){
+	auto& g = SingleTon<GaiaDrawGrid>::use()->grid;
+	if (!this->gaia_list.empty()){
+		GaiaListInfo* forRedo = new GaiaListInfo();
+		memcpy(forRedo->dBoard, SingleTon<GaiaDrawGrid>::use()->dBoard, GSIZE*GSIZE);
+		for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->edges.size(); i++){
+			forRedo->edges.push_back(SingleTon<GaiaDrawGrid>::use()->edges[i]);
+		}
+		forRedo->edges = SingleTon<GaiaDrawGrid>::use()->edges;
+		for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->inBtns.size(); i++){
+			forRedo->inBtns.push_back(SingleTon<GaiaDrawGrid>::use()->inBtns[i]);
+		}
+		bool temp;
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j <GSIZE; j++){
+				temp = g[i][j];
+				forRedo->grid[i][j] = temp;
+			}
+		}
+		//memcpy(&(forRedo->grid[0]), &(SingleTon<GaiaDrawGrid>::use()->grid[0]), sizeof(SingleTon<GaiaDrawGrid>::use()->grid));
+		forRedo->obj_list.clear();
+		for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->objects.size(); i++){
+			forRedo->obj_list.push_back(SingleTon<GaiaDrawGrid>::use()->objects[i]);
+		}
+		this->redo_list.push_back(forRedo);
+		if (redo_list.size()>20){
+			redo_list.pop_front();
+		}
+		/////////////
+		GaiaListInfo* node;
+		node = this->gaia_list.back();
+		memcpy(SingleTon<GaiaDrawGrid>::use()->dBoard, (node)->dBoard, sizeof(GSIZE*GSIZE));
+		SingleTon<GaiaDrawGrid>::use()->edges = (node)->edges;
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j < GSIZE; j++){
+				temp = (node)->grid[i][j];
+				g[i][j] = temp;
+
+			}
+
+		}
+		/*for (int i = 0; i <SingleTon<GaiaDrawGrid>::use()->grid.size(); i++){
+		for (int j = 0; j < SingleTon<GaiaDrawGrid>::use()->grid[i].size(); j++){
+		SingleTon<GaiaDrawGrid>::use()->grid[i][j] = (node)->grid[i][j];
+		}
+		}*/
+		SingleTon<GaiaDrawGrid>::use()->inBtns = (node)->inBtns;
+		SingleTon<GaiaDrawGrid>::use()->objects = (node)->obj_list;
+		this->gaia_list.pop_back();
+		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
+	}
+
+
+}
+
+void GaiaDoc::Redo(){
+	GaiaListInfo* node;
+	auto& g = SingleTon<GaiaDrawGrid>::use()->grid;
+	if (!redo_list.empty()){
+		/*memcpy(node->dBoard, redo_list.back()->dBoard, sizeof(GSIZE*GSIZE));
+		for (int i = 0; i < redo_list.back()->edges.size(); i++){
+		node->edges.push_back(redo_list.back()->edges[i]);
+		}
+		bool temp;
+		for (int i = 0; i < GSIZE; i++){
+		for (int j = 0; j < GSIZE; j++){
+		temp = redo_list.back()->grid[i][j];
+		(node)->grid[i][j] =temp;
+		}
+		}
+		for (int i = 0; i < redo_list.back()->inBtns.size(); i++){
+		node->inBtns.push_back(redo_list.back()->inBtns[i]);
+		}
+		for (int i = 0; i < redo_list.back()->obj_list.size(); i++){
+		node->obj_list.push_back(redo_list.back()->obj_list[i]);
+		}
+
+		memcpy(SingleTon<GaiaDrawGrid>::use()->dBoard, (node)->dBoard, sizeof(GSIZE*GSIZE));
+		SingleTon<GaiaDrawGrid>::use()->edges = (node)->edges;
+
+		for (int i = 0; i < GSIZE; i++){
+		for (int j = 0; j < GSIZE; j++){
+		temp = (node)->grid[i][j];
+		g[i][j] = temp;
+		}
+		}*/
+		this->PushGaiaList();
+		//memcpy(&(SingleTon<GaiaDrawGrid>::use()->grid[0]), &(node->grid[0]), sizeof(SingleTon<GaiaDrawGrid>::use()->grid));
+		/*
+		SingleTon<GaiaDrawGrid>::use()->inBtns = (node)->inBtns;
+		auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
+		obj.clear();
+		for (int i = 0; i < (node)->obj_list.size(); i++){
+		obj.push_back(node->obj_list[i]);
+		}*/
+		node = this->redo_list.back();
+		memcpy(SingleTon<GaiaDrawGrid>::use()->dBoard, (node)->dBoard, sizeof(GSIZE*GSIZE));
+		bool temp;
+		SingleTon<GaiaDrawGrid>::use()->edges = (node)->edges;
+		for (int i = 0; i < GSIZE; i++){
+			for (int j = 0; j < GSIZE; j++){
+				temp = (node)->grid[i][j];
+				g[i][j] = temp;
+			}
+		}
+		SingleTon<GaiaDrawGrid>::use()->inBtns = (node)->inBtns;
+		SingleTon<GaiaDrawGrid>::use()->objects = (node)->obj_list;
+
+		redo_list.pop_back();
+		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
+	}
+
+
+}
+void GaiaDoc::PushGaiaList(){
+	GaiaListInfo* myList = new GaiaListInfo();
+	auto& g = SingleTon<GaiaDrawGrid>::use()->grid;
+	memcpy(myList->dBoard, SingleTon<GaiaDrawGrid>::use()->dBoard, GSIZE*GSIZE);
+	myList->edges.clear();
+	for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->edges.size(); i++){
+		myList->edges.push_back(SingleTon<GaiaDrawGrid>::use()->edges[i]);
+	}
+	for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->inBtns.size(); i++){
+		myList->inBtns.push_back(SingleTon<GaiaDrawGrid>::use()->inBtns[i]);
+	}
+	bool temp;
+	for (int i = 0; i < GSIZE; i++){
+		for (int j = 0; j < GSIZE; j++){
+			temp = g[i][j];
+			myList->grid[i][j] = temp;
+		}
+	}
+	myList->obj_list.clear();
+	//memcpy(&(myList.grid[0]), &(SingleTon<GaiaDrawGrid>::use()->grid[0]), sizeof(SingleTon<GaiaDrawGrid>::use()->grid));
+	for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->objects.size(); i++){
+		myList->obj_list.push_back(SingleTon<GaiaDrawGrid>::use()->objects[i]);
+	}
+	this->gaia_list.push_back(myList);
+	if (gaia_list.size()>20){
+		gaia_list.pop_front();
+	}
+}
+void GaiaDoc::SetTempGaiaListNode(){
+	this->tempNode = new GaiaListInfo();
+	auto& g = SingleTon<GaiaDrawGrid>::use()->grid;
+	memcpy(this->tempNode->dBoard, SingleTon<GaiaDrawGrid>::use()->dBoard, GSIZE*GSIZE);
+	this->tempNode->edges.clear();
+	for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->edges.size(); i++){
+		this->tempNode->edges.push_back(SingleTon<GaiaDrawGrid>::use()->edges[i]);
+	}
+	for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->inBtns.size(); i++){
+		this->tempNode->inBtns.push_back(SingleTon<GaiaDrawGrid>::use()->inBtns[i]);
+	}
+	bool temp;
+	for (int i = 0; i < GSIZE; i++){
+		for (int j = 0; j < GSIZE; j++){
+			temp = g[i][j];
+			this->tempNode->grid[i][j] = temp;
+		}
+	}
+	this->tempNode->obj_list.clear();
+	//memcpy(&(this->tempNode.grid[0]), &(SingleTon<GaiaDrawGrid>::use()->grid[0]), sizeof(SingleTon<GaiaDrawGrid>::use()->grid));
+	for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->objects.size(); i++){
+		this->tempNode->obj_list.push_back(SingleTon<GaiaDrawGrid>::use()->objects[i]);
+	}
+}
+void GaiaDoc::PushTempNode(){
+	if (this->tempNode != nullptr){
+		this->gaia_list.push_back(this->tempNode);
+	}
+	this->tempNode = nullptr;
 }

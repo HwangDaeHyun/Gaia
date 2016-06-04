@@ -170,7 +170,8 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 			CString str;
 			str.Format(_T("%d"), (*it)->myID);
 			//MessageBox(str);
-			if ((*it)->myID == 1){ // 라이브러리 박스 추가
+			if ((*it)->myID == 1){ //새로만들기
+
 				if (IDYES == AfxMessageBox(L"현재 내용을 저장하시겠습니까 ?", MB_YESNO)){
 					GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 					pDoc->OnSaveDocument();
@@ -191,7 +192,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				e.clear();
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
-				//printf("size : %d", e.size());
+				printf("size : %d", e.size());
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			else if ((*it)->myID == 4){		// 라이브러리 박스 삭제
@@ -217,11 +218,13 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 
 			}
 			else if ((*it)->myID == 8){
-
+				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+				pDoc->Undo();
 
 			}
 			else if ((*it)->myID == 9){
-
+				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+				pDoc->Redo();
 
 			}
 			this->Invalidate();

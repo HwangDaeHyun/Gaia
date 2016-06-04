@@ -8,6 +8,7 @@
 #include"GaiaObject.h"
 #include<deque>
 #include<vector>
+#include<list>
 #include<string>
 using namespace std;
 using namespace design_pattern;
@@ -164,6 +165,7 @@ CREATE_SINGLETON(GaiaObjectSizeInfo){
 	int length;
 	int sLen;		//small length
 	int bLen;		//big length
+
 	void SetLength(int l){
 		this->length = l;
 	}
@@ -183,4 +185,5 @@ CREATE_SINGLETON(GaiaObjectSizeInfo){
 		return this->bLen;
 	}
 };
+
 #endif

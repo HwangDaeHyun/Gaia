@@ -107,6 +107,7 @@
     <ClInclude Include="GaiaDoc.h" />
     <ClInclude Include="GaiaDrawView.h" />
     <ClInclude Include="GaiaFrame.h" />
+    <ClInclude Include="GaiaListInfo.h" />
     <ClInclude Include="GaiaLLogic.h" />
     <ClInclude Include="GaiaMainView.h" />
     <ClInclude Include="GaiaMenuView.h" />

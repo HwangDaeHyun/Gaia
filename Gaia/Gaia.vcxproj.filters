@@ -132,6 +132,9 @@
     <ClInclude Include="SevenSegment.h">
       <Filter>헤더 파일\Gate</Filter>
     </ClInclude>
+    <ClInclude Include="GaiaListInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">

@@ -4,8 +4,9 @@
 
 
 #pragma once
-#include "SingleTon.h"
-
+#include "GaiaRepo.h"
+#include"GaiaListInfo.h"
+#include<afxtempl.h>
 
 class GaiaDoc : public CDocument
 {
@@ -15,12 +16,19 @@ protected: // serialization에서만 만들어집니다.
 
 	// 특성입니다.
 public:
-
 	// 작업입니다.
 public:
 
 	// 재정의입니다.
 public:
+	list<GaiaListInfo*> gaia_list;
+	list<GaiaListInfo*> redo_list;
+	void Undo();
+	void Redo();
+	void PushGaiaList();
+	void SetTempGaiaListNode();
+	void PushTempNode();
+	GaiaListInfo* tempNode = nullptr;
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 #ifdef SHARED_HANDLERS

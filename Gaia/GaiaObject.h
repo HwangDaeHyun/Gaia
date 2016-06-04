@@ -6,7 +6,7 @@
 
 using namespace design_pattern;
 enum ObjectSize{ SMALL, MID, BIG };
-enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND,XOR,NOR , DFLIP,TFLIP,JKFLIP, INBUTTON, OUTLAMP, SEVENSEG };
+enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, SEVENSEG };
 
 class GaiaObject : public CObject{
 	DECLARE_SERIAL(GaiaObject)

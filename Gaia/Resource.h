@@ -70,13 +70,14 @@
 #define IDB_BTN_REDO_HOVER              379
 #define IDB_BTN_SAVE_HOVER              380
 #define IDB_BTN_UNDO_HOVER              381
+#define ID_ACCELERATOR32772             32772
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        382
-#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_COMMAND_VALUE         32773
 #define _APS_NEXT_CONTROL_VALUE         1000
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
