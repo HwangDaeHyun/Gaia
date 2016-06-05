@@ -81,6 +81,9 @@
 #define IDB_BITMAP5                     388
 #define IDB_BTN_ROTATE_HOVER            388
 #define IDD_DIALOG1                     389
+#define IDB_DFF                         390
+#define IDB_BITMAP4                     391
+#define IDB_TFF                         391
 #define IDC_EDIT1                       1000
 #define ID_ACCELERATOR32772             32772
 
@@ -88,7 +91,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        390
+#define _APS_NEXT_RESOURCE_VALUE        392
 #define _APS_NEXT_COMMAND_VALUE         32773
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310

@@ -285,6 +285,8 @@ IDB_BTN_CLK_HOVER       BITMAP                  "res\\menu_btn\\BTN_CLK_HOVER.bm
 IDB_CLK                 BITMAP                  "res\\CLK.bmp"
 IDB_BTN_ROTATE          BITMAP                  "res\\menu_btn\\BTN_ROTATE.bmp"
 IDB_BTN_ROTATE_HOVER    BITMAP                  "res\\menu_btn\\BTN_ROTATE_HOVER.bmp"
+IDB_DFF                 BITMAP                  "res\\DFF.bmp"
+IDB_TFF                 BITMAP                  "res\\TFF.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

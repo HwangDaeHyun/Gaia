@@ -1,15 +1,15 @@
-#ifndef DFF_H_INCLUDE
-#define DFF_H_INCLUDE
+#ifndef JKFF_H_INCLUDE
+#define JKFF_H_INCLUDE
 #include"GaiaObject.h"
 #include"GaiaLLogic.h"
 
-class DFF :public GaiaLLogic
+class JKFF :public GaiaLLogic
 {
-	DECLARE_SERIAL(DFF)
+	DECLARE_SERIAL(JKFF)
 public:
 	virtual void Serialize(CArchive& ar);
 public:
-	DFF();
+	JKFF();
 	inline void Draw(CDC* pDC)override;
 	inline void Calculate() override;
 

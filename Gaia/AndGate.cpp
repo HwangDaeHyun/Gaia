@@ -170,7 +170,8 @@ void AndGate::Calculate(){
 		if (inputGraph[0].back() == db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] &&
 			inputGraph[1].back() == db[this->ins[1].CenterPoint().x / 10][this->ins[1].CenterPoint().y / 10] &&
 			outputGraph[0].back() == db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]
-			){
+			)
+		{
 			return;
 		}
 	}

@@ -269,12 +269,14 @@ void GaiaToolView::DrawGraph(Graphics* graphics, int y){
 	SolidBrush  semiTransBrush2(Color(180, 100, 181, 246));
 	SolidBrush  semiTransBrush3(Color(50, 187, 222, 251));		//in
 	SolidBrush  semiFontColor(Color(200, 255, 255, 255));
-	SolidBrush semiFontColor2(Color(200, 255, 204, 25));
+	SolidBrush	semiFontColor2(Color(200, 255, 204, 25));
+	SolidBrush semiFontColor3(Color(100, 222, 100));
 	FontFamily fontFamily(_T("Times New Roman"));
 
 	Gdiplus::Font font(&fontFamily, 15, FontStyleRegular, UnitPixel);
 	Pen gPen(Color(150, 255, 255, 255), 3);			//	in
 	Pen gPen2(Color(200, 255, 204, 25), 3);
+	Pen gPen3(Color(100, 222, 100), 3);
 	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
 	CRect paintRect;
 	CRect textRect(rect.left + 10, y, rect.left + 30, y + 20);
@@ -289,7 +291,7 @@ void GaiaToolView::DrawGraph(Graphics* graphics, int y){
 		in_str = _T("in,");
 		index.Format(_T("%d"), i);
 		in_str = in_str + index;
-		graphics->FillRectangle(&semiTransBrush2, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
+		graphics->FillRectangle(&semiTransBrush3, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
 		graphics->DrawString(in_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor);
 		paintRect.SetRect(paintRect.left, textRect.bottom + 5, paintRect.right, textRect.bottom + 25);
 		textRect.SetRect(textRect.left, paintRect.bottom + 20, textRect.right, paintRect.bottom + 40);
@@ -320,7 +322,7 @@ void GaiaToolView::DrawGraph(Graphics* graphics, int y){
 		out_str = _T("out,");
 		index.Format(_T("%d"), i);
 		out_str = out_str + index;
-		graphics->FillRectangle(&semiTransBrush2, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
+		graphics->FillRectangle(&semiTransBrush3, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
 		graphics->DrawString(out_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor2);
 		paintRect.SetRect(paintRect.left, textRect.bottom + 5, paintRect.right, textRect.bottom + 25);
 		textRect.SetRect(textRect.left, paintRect.bottom + 20, textRect.right, paintRect.bottom + 40);
@@ -348,28 +350,28 @@ void GaiaToolView::DrawGraph(Graphics* graphics, int y){
 	if (!obj[selNum]->clkGraph.empty()){
 		paintRect.SetRect(rectPos.left, rectPos.bottom + 60, rectPos.right, rectPos.bottom + 80);
 		clk_str = _T("clk,");
-		graphics->FillRectangle(&semiTransBrush2, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
-		graphics->DrawString(clk_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor2);
+		graphics->FillRectangle(&semiTransBrush3, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
+		graphics->DrawString(clk_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor3);
 		paintRect.SetRect(paintRect.left, textRect.bottom + 5, paintRect.right, textRect.bottom + 25);
 		textRect.SetRect(textRect.left, paintRect.bottom + 20, textRect.right, paintRect.bottom + 40);
 		for (int i = 0; i < obj[selNum]->clkGraph.size(); i++){
 			if (obj[selNum]->clkGraph[i] == 1){
 				//graphics->FillRectangle(&semiTransBrush, paintRect.left, paintRect.top, paintRect.Width(), paintRect.Height());
-				graphics->DrawLine(&gPen2, paintRect.left, paintRect.top, paintRect.right, paintRect.top);
+				graphics->DrawLine(&gPen3, paintRect.left, paintRect.top, paintRect.right, paintRect.top);
 			}
 			else {
-				graphics->DrawLine(&gPen2, paintRect.left, paintRect.bottom, paintRect.right, paintRect.bottom);
+				graphics->DrawLine(&gPen3, paintRect.left, paintRect.bottom, paintRect.right, paintRect.bottom);
 			}
 
 			if (i >0){
 				if (
 					(obj[selNum]->clkGraph[i] == 1 && (obj[selNum]->clkGraph[i - 1] == 0 || obj[selNum]->clkGraph[i - 1] == -1)) ||
 					(obj[selNum]->clkGraph[i - 1] == 1 && (obj[selNum]->clkGraph[i] == 0 || obj[selNum]->clkGraph[i] == -1))){
-					graphics->DrawLine(&gPen, paintRect.left, paintRect.top, paintRect.left, paintRect.bottom);
-					graphics->DrawLine(&gPen, paintRect.right, paintRect.bottom, paintRect.right, paintRect.bottom);
+					graphics->DrawLine(&gPen3, paintRect.left, paintRect.top, paintRect.left, paintRect.bottom);
+					graphics->DrawLine(&gPen3, paintRect.right, paintRect.bottom, paintRect.right, paintRect.bottom);
 				}
 			}
-			paintRect.SetRect(paintRect.right, paintRect.top, paintRect.right + 10, paintRect.bottom);
+			paintRect.SetRect(paintRect.right, paintRect.top, paintRect.right + 20, paintRect.bottom);
 		}
 	}
 }

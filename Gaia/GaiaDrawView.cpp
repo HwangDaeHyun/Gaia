@@ -16,6 +16,8 @@
 #include"GaiaListInfo.h"
 #include "SevenSegment.h"
 #include"ClockCycle.h"
+#include"TFF.h"
+#include"JKFF.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -486,12 +488,12 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
 	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
-	GaiaObject* p = new DFF();
+	GaiaObject* p = new TFF();
 	p->SetPoint(20, 20);
 	obj.push_back(p);
 	p = new ClockCycle(30, 30);
 	obj.push_back(p);
-	p = new ClockCycle(50, 30);
+	p = new InputBtn(50, 30);
 	obj.push_back(p);
 	p = new InputBtn(10, 10);
 	obj.push_back(p);

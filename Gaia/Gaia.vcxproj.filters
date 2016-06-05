@@ -46,6 +46,9 @@
     <Filter Include="헤더 파일\Input/Output">
       <UniqueIdentifier>{2dd3aa6d-22c2-4472-a0aa-bfa18d1700b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="리소스 파일\FF">
+      <UniqueIdentifier>{628aa57e-e689-4ffa-ae9d-8222da20550c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -156,6 +159,12 @@
     <ClInclude Include="LibBoxNameDlg.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="JKFF.h">
+      <Filter>헤더 파일\FlipFlop</Filter>
+    </ClInclude>
+    <ClInclude Include="TFF.h">
+      <Filter>헤더 파일\FlipFlop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -244,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="LibBoxNameDlg.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="JKFF.cpp">
+      <Filter>소스 파일\FlipFlop</Filter>
+    </ClCompile>
+    <ClCompile Include="TFF.cpp">
+      <Filter>소스 파일\FlipFlop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -427,6 +442,12 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\menu_btn\BTN_ROTATE_HOVER.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\DFF.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\TFF.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>
