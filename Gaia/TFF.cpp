@@ -7,6 +7,7 @@ TFF::TFF(){
 	this->outs.assign(2, CRect());
 	this->objKind = JKFLIP;
 	this->objSize = MID;
+	this->trigger = RISING;
 	this->name = _T("JK-FlipFlop");
 	this->arrow = this->GetArrow();
 	this->inputGraph.assign(1, deque<int>());

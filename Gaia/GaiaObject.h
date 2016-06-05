@@ -8,7 +8,7 @@
 using namespace design_pattern;
 enum ObjectSize{ SMALL, MID, BIG, LIB };
 enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, CLOCKCYCLE,SEVENSEG, LIBBOX };
-
+enum ObjectTrigger{NOTCLK, RISING , FALLING};
 class GaiaObject : public CObject{
 	DECLARE_SERIAL(GaiaObject)
 public:
@@ -18,6 +18,7 @@ public:
 	int lib_w;
 	ObjectSize objSize = MID;
 	ObjectKind objKind = NOTTHING;
+	ObjectTrigger trigger = NOTCLK;
 	CPoint base_point;
 	CString name;
 	CString arrow;

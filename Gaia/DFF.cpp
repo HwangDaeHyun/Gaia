@@ -7,11 +7,12 @@ DFF::DFF(){
 	this->outs.assign(2, CRect());
 	this->objKind = DFLIP;
 	this->objSize = MID;
+	this->trigger = RISING;
 	this->name = _T("D-FlipFlop");
 	this->arrow = this->GetArrow();
 	this->inputGraph.assign(1, deque<int>());
 	this->outputGraph.assign(2, deque<int>());
-	
+
 }
 void DFF::Draw(CDC* pDC){
 	CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + this->GetLength() * 10 - 20, this->base_point.y + this->GetLength() * 10 - 20);
@@ -23,8 +24,8 @@ void DFF::Draw(CDC* pDC){
 	switch (radius){
 	case 0:
 		bmp.LoadBitmapW(IDB_DFF);
-		this->ins[0].SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 +5, rect.left, (rect.bottom + rect.top) / 2 + 15);
-		this->clk.SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 -15, rect.left, (rect.bottom + rect.top) / 2 -5);
+		this->ins[0].SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 + 5, rect.left, (rect.bottom + rect.top) / 2 + 15);
+		this->clk.SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 - 15, rect.left, (rect.bottom + rect.top) / 2 - 5);
 		this->outs[0] = CRect(rect.right - 5, (rect.bottom + rect.top) / 2 - 15, rect.right + 5, (rect.bottom + rect.top) / 2 - 5);
 		this->outs[1] = CRect(rect.right - 5, (rect.bottom + rect.top) / 2 + 5, rect.right + 5, (rect.bottom + rect.top) / 2 + 15);
 		break;
@@ -50,14 +51,28 @@ void DFF::Calculate(){
 	int tC = this->prevC;
 	int curr = db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10];
 	//printf("%d , %d \n", tC, this->prevC);
-	if (tC == 0 && curr == 1){
-		if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
-			db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 1;
-			db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = 0;
+	if (this->trigger == RISING){
+		if (tC == 0 && curr == 1){
+			if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 1;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = 0;
+			}
+			else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = 1;
+			}
 		}
-		else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
-			db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
-			db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = 1;
+	}
+	else if (this->trigger == FALLING){
+		if (tC == 1 && curr == 0){
+			if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 1;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = 0;
+			}
+			else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = 1;
+			}
 		}
 	}
 	this->prevC = curr;
@@ -78,12 +93,12 @@ void DFF::Calculate(){
 	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == -1 && db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10] == -1 && db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
 		return;
 	}
-	outputGraph[1].push_back(db[this->outs[1].CenterPoint().x/10][this->outs[1].CenterPoint().y / 10]);
+	outputGraph[1].push_back(db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10]);
 	inputGraph[0].push_back(db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10]);
 	clkGraph.push_back(db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10]);
 	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
 }
-IMPLEMENT_SERIAL(DFF, GaiaLLogic,2)
+IMPLEMENT_SERIAL(DFF, GaiaLLogic, 2)
 void DFF::Serialize(CArchive& ar){
 	GaiaLLogic::Serialize(ar);
 }
