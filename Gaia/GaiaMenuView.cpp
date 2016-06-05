@@ -199,29 +199,29 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
 				}
 			}
-			else if ((*it)->myID == 6){
-
-
-			}
-			else if ((*it)->myID == 7){
-
+			else if ((*it)->myID == 6){		// ctrl +c
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->OnCopy();
 
 			}
-			else if ((*it)->myID == 8){
-				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
-				pDoc->Undo();
+			else if ((*it)->myID == 7){		//ctrl +x
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->OnCut();
+
+			}
+			else if ((*it)->myID == 8){		//ctrl+v
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->OnPaste();
 
 			}
 			else if ((*it)->myID == 9){
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+				pDoc->Undo();
+
+			}
+			else if ((*it)->myID == 10){ 
+				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->Redo();
 
 			}
-			else if ((*it)->myID == 10){
-
-
-			}
-			else if ((*it)->myID == 11){
+			else if ((*it)->myID == 11){	//clik
 
 
 			}

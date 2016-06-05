@@ -10,7 +10,9 @@ class GaiaCView : public CView
 public:
 	GaiaCView();           // 동적 만들기에 사용되는 protected 생성자입니다.
 	virtual ~GaiaCView();
-
+	virtual void OnCopy(){};
+	virtual void OnCut(){};
+	virtual void OnPaste(){};
 public:
 	virtual void DrawSplitterBar();
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
