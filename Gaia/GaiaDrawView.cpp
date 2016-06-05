@@ -47,7 +47,9 @@ BEGIN_MESSAGE_MAP(GaiaDrawView, GaiaCView)
 	ON_WM_LBUTTONUP()
 	ON_WM_SIZE()
 	ON_WM_LBUTTONDBLCLK()
-
+	ON_COMMAND(ID_EDIT_COPY, OnCopy)
+	ON_COMMAND(ID_EDIT_CUT, OnCut)
+	ON_COMMAND(ID_EDIT_PASTE, OnPaste)
 	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -59,8 +61,6 @@ void GaiaDrawView::OnDraw(CDC* pDC)
 	CDocument* pDoc = GetDocument();
 	// TODO: 여기에 그리기 코드를 추가합니다.
 }
-
-
 // GaiaDrawView 진단입니다.
 
 #ifdef _DEBUG
@@ -580,6 +580,8 @@ R:{};
 			clickBase = e[i]->base_point;
 			SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
 			SingleTon<GaiaDrawGrid>::use()->sel_objects.push_back(e[i]);
+			SingleTon<GaiaDrawGrid>::use()->sel_idx.clear();
+			SingleTon<GaiaDrawGrid>::use()->sel_idx.push_back(i);
 			break;
 		}
 	}
@@ -692,9 +694,11 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 		this->isDrag = false;
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 		auto& s = SingleTon<GaiaDrawGrid>::use()->sel_objects;
+		auto& sel_idx = SingleTon<GaiaDrawGrid>::use()->sel_idx;
 		vector<int>* datas = SearchObjects(&bDC, this->draggedRect);
 		for (int i = 0; i < datas->size(); i++){
 			s.push_back(e[datas->at(i)]);
+			sel_idx.push_back(datas->at(i));
 		}
 		datas->~vector();
 	}
@@ -894,15 +898,98 @@ void GaiaDrawView::OnTimer(UINT_PTR nIDEvent)
 	}
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	GaiaCView::OnTimer(nIDEvent);
-	GaiaCView::OnTimer(nIDEvent);
+	
 }
 void GaiaDrawView::StartClock(int index){
-	auto& cycle = SingleTon<GaiaClockInfo>::use()->cycle;
-	
+	int cycle = SingleTon<GaiaClockInfo>::use()->cycle;
 	auto& idx = SingleTon<GaiaClockInfo>::use()->clock_index;
 	idx = index;
 	auto& id = SingleTon<GaiaClockInfo>::use()->timerId;
-
+	if (cycle == -1){
+		AfxMessageBox(L"아래 의 시계모양 버튼을 클릭하여 주기를 설정해주세요 ");
+		return;
+	}
 	SetTimer(0, cycle, NULL);
 
+}
+void GaiaDrawView::OnCopy(){
+	//GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+	//pDoc->PushGaiaList();
+	auto& sel_obj = SingleTon<GaiaDrawGrid>::use()->sel_objects;
+	auto& tempV = SingleTon<GaiaTempRepo>::use()->tempV;
+	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+	for (int i = 0; i < sel_obj.size(); i++){
+		tempV.push_back(sel_obj[i]);
+	}
+}
+void GaiaDrawView::OnPaste(){
+	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+	pDoc->PushGaiaList();
+	auto& tempV = SingleTon<GaiaTempRepo>::use()->tempV;
+	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+	GaiaObject* obj;
+	for (int i = 0; i < tempV.size(); i++){
+		switch (tempV[i]->objKind){
+		case ObjectKind::AND:
+			obj = new AndGate();
+			break;
+		case ObjectKind::NOT:
+			obj = new NotGate();
+			break;
+		case ObjectKind::NAND:
+			obj = new NandGate();
+			break;
+		case ObjectKind::NOR:
+			obj = new NorGate();
+			break;
+		case ObjectKind::XOR:
+			obj = new XorGate();
+			break;
+		case ObjectKind::DFLIP:
+			obj = new DFF();
+			break;
+		case ObjectKind::JKFLIP:
+			obj = new JKFF();
+			break;
+		case ObjectKind::TFLIP:
+			obj = new TFF();
+			break;
+		case ObjectKind::SEVENSEG:
+			obj = new SevenSegment();
+			break;
+		case ObjectKind::INBUTTON:
+			obj = new InputBtn();
+			break;
+		case ObjectKind::CLOCKCYCLE:
+			obj = new ClockCycle(tempV[i]->base_point.x / 10 + 5, tempV[i]->base_point.y / 10 + 7);
+			goto WHICH;
+			break;
+		case ObjectKind::OUTLAMP:
+			obj = new OutLamp();
+			break;
+		case ObjectKind::OR:
+			obj = new OrGate();
+			break;
+		}
+		obj->SetPoint(tempV[i]->base_point.x/10 + 5, tempV[i]->base_point.y/10 + 7);
+	WHICH:{};
+		e.push_back(obj);
+	}
+	Invalidate(false);
+}
+void GaiaDrawView::OnCut(){
+	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+	pDoc->PushGaiaList();
+	auto& sel_idx = SingleTon<GaiaDrawGrid>::use()->sel_idx;
+	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+	auto& temp = SingleTon<GaiaTempRepo>::use()->tempV;
+	temp.clear();
+	std::sort(sel_idx.begin(), sel_idx.end(), [](int i, int j)->bool{return  j<i; });
+	
+	for (int i = 0; i < sel_idx.size(); i++){
+		e[sel_idx[i]]->ClearPoint();
+		temp.push_back(e[sel_idx[i]]);
+		e.erase(e.begin()+sel_idx[i]);
+	}
+	Invalidate(false);
 }

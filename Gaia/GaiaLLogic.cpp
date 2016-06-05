@@ -302,8 +302,11 @@ void Update(CRect& out){
 }
 //선택된 영역에 그림을 아직 못그림 . 
 vector<int>* SearchObjects(CDC* pDC, CRect bound){
+
 	vector<int>* temp = new vector<int>();
 	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
+	SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
+	SingleTon<GaiaDrawGrid>::use()->sel_idx.clear();
 	CBrush brush(RGB(200, 20, 20));
 	pDC->SelectObject(&brush);
 	for (int i = 0; i < obj.size(); i++){

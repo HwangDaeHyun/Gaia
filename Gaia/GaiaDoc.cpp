@@ -185,7 +185,7 @@ void GaiaDoc::Serialize(CArchive& ar)
 				e.push_back(obj);
 				break;
 			case ObjectKind::INBUTTON:
-				obj = new XorGate();
+				obj = new InputBtn();
 				ar >> obj;
 				e.push_back(obj);
 				break;
@@ -424,7 +424,7 @@ void GaiaDoc::Undo(){
 		SingleTon<GaiaDrawGrid>::use()->inBtns = (node)->inBtns;
 		SingleTon<GaiaDrawGrid>::use()->objects = (node)->obj_list;
 		this->gaia_list.pop_back();
-		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
+		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 	}
 
 
@@ -484,7 +484,7 @@ void GaiaDoc::Redo(){
 		SingleTon<GaiaDrawGrid>::use()->objects = (node)->obj_list;
 
 		redo_list.pop_back();
-		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
+		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 	}
 
 

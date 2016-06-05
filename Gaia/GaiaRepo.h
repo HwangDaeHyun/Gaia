@@ -84,6 +84,7 @@ public:
 	vector<vector<bool>> grid;
 	vector<GaiaObject*> objects;
 	vector<GaiaObject*> sel_objects;
+	vector<int> sel_idx;
 	vector<GaiaObject*> lib_objects;
 	vector<PDV> edges;
 	vector<CRect> inBtns;
@@ -187,8 +188,12 @@ CREATE_SINGLETON(GaiaObjectSizeInfo){
 CREATE_SINGLETON(GaiaClockInfo){
 public:
 	int clock_index = -1;
-	int cycle;
+	int cycle=-1;
 	vector<int> timerId;
 	vector<int> cnt;
+};
+CREATE_SINGLETON(GaiaTempRepo){
+public:
+	vector<GaiaObject*> tempV;
 };
 #endif
