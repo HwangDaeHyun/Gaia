@@ -6,6 +6,9 @@
 
 class NorGate :public GaiaLLogic
 {
+	DECLARE_SERIAL(NorGate)
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	NorGate();
 	void Draw(CDC* pDC)override;

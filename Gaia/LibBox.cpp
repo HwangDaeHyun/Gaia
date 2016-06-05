@@ -17,6 +17,7 @@ LibBox::LibBox()
 	this->ins.assign(this->in_size, CRect());
 	this->outs.assign(this->out_size, CRect());
 	this->name = _T("LibBox");
+	
 }
 LibBox::LibBox(CString name)
 {
@@ -288,4 +289,9 @@ void LibBox::mkLib(){
 		Update(cal_clk);
 	}
 	UpdateDBoard();
+}
+
+IMPLEMENT_SERIAL(LibBox, GaiaLLogic, 3)
+void LibBox::Serialize(CArchive& ar){
+	GaiaLLogic::Serialize(ar);
 }

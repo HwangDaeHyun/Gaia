@@ -16,6 +16,19 @@
 
 #include"GaiaDrawView.h"
 #include"AndGate.h"
+#include"OrGate.h"
+#include"NotGate.h"
+#include"XorGate.h"
+#include"NandGate.h"
+#include"NorGate.h"
+#include"InputBtn.h"
+#include"OutLamp.h"
+#include"DFF.h"
+#include"LibBox.h"
+#include "SevenSegment.h"
+#include"ClockCycle.h"
+#include"TFF.h"
+#include"JKFF.h""
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -64,7 +77,6 @@ void GaiaDoc::Serialize(CArchive& ar)
 	if (ar.IsStoring())
 	{
 		// TODO: 여기에 저장 코드를 추가합니다.	
-
 		auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 		auto&edges = SingleTon<GaiaDrawGrid>::use()->edges;
 		auto&inBtns = SingleTon<GaiaDrawGrid>::use()->inBtns;
@@ -129,6 +141,66 @@ void GaiaDoc::Serialize(CArchive& ar)
 			switch (objKind){
 			case ObjectKind::AND:
 				obj = new AndGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::NOT:
+				obj = new NotGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::NAND:
+				obj = new NandGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::NOR:
+				obj = new NorGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::XOR:
+				obj = new XorGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::DFLIP:
+				obj = new DFF();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::JKFLIP:
+				obj = new JKFF();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::TFLIP:
+				obj = new TFF();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::SEVENSEG:
+				obj = new SevenSegment();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::INBUTTON:
+				obj = new XorGate();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::CLOCKCYCLE:
+				obj = new ClockCycle();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::OUTLAMP:
+				obj = new OutLamp();
+				ar >> obj;
+				e.push_back(obj);
+				break;
+			case ObjectKind::OR:
+				obj = new OrGate();
 				ar >> obj;
 				e.push_back(obj);
 				break;

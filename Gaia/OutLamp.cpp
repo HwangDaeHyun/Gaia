@@ -7,6 +7,7 @@ OutLamp::OutLamp(){
 	this->ins.assign(1, CRect());
 	this->name = _T("LAMP");
 	this->arrow = this->GetArrow();
+	this->inputGraph.assign(1, deque<int>());
 }
 void OutLamp::Draw(CDC* pDC){
 	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + SingleTon<GaiaObjectSizeInfo>::use()->GetLength() * 10 - 25, this->base_point.y + SingleTon<GaiaObjectSizeInfo>::use()->GetLength() * 10 - 25);
@@ -77,4 +78,15 @@ void OutLamp::Calculate(){
 			db[ins[0].CenterPoint().x / 10][ins[0].CenterPoint().y / 10] = db[edges[i].first.first.x / 10][edges[i].first.first.y / 10];
 		}
 	}
+	if (this->inputGraph[0].size()>15){
+		this->inputGraph[0].clear();
+	}
+	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == -1){
+		return;
+	}
+	inputGraph[0].push_back(db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10]);
+}
+IMPLEMENT_SERIAL(OutLamp, GaiaLLogic, 15)
+void OutLamp::Serialize(CArchive& ar){
+	GaiaLLogic::Serialize(ar);
 }

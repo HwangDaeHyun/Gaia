@@ -163,6 +163,17 @@ BEGIN
     EDITTEXT        IDC_EDIT1,15,19,213,18,ES_AUTOHSCROLL
 END
 
+IDD_DIALOG2 DIALOGEX 0, 0, 251, 95
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,126,66,50,14
+    PUSHBUTTON      "취소",IDCANCEL,179,66,50,14
+    EDITTEXT        IDC_EDIT1,43,38,177,14,ES_AUTOHSCROLL
+    LTEXT           "원하는 클럭주기(Hz)를 입력해주세요 (1Hz=> 1/1000초단위)",IDC_STATIC,27,22,198,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -225,6 +236,14 @@ BEGIN
         RIGHTMARGIN, 236
         TOPMARGIN, 7
         BOTTOMMARGIN, 63
+    END
+
+    IDD_DIALOG2, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 244
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
     END
 END
 #endif    // APSTUDIO_INVOKED

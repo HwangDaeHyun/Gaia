@@ -608,6 +608,20 @@ R:{};
 			temp[i].second = t_str;
 			tbl.push_back(temp[i]);
 		}
+		CString trigger, clk_name;
+		SPAIR tTable;
+		tTable.first = _T("Trigger");
+		if (e[sel]->trigger == RISING){
+			clk_name = _T("RISING");
+			tTable.second = clk_name;
+			tbl.push_back(tTable);
+		}
+		else if (e[sel]->trigger == FALLING){
+			clk_name = _T("FALLING");
+			tTable.second = clk_name;
+			tbl.push_back(tTable);
+		}
+		SingleTon<GaiaTableInfo>::use()->isSel = true;
 		SingleTon<GaiaTableInfo>::use()->selNum = sel;
 		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate(false);
 		////
@@ -647,10 +661,7 @@ R:{};
 		e.back()->SetPoint((point.x - 30) / 10, (point.y - 30) / 10);
 		SingleTon < GaiaGateInfo>::use()->isDrawObject = FALSE;
 		SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
-		// undo , redo list ¿¡Ãß°¡
 
-
-		//
 	}
 	//==
 	GaiaCView::OnLButtonDown(nFlags, point);
@@ -887,7 +898,7 @@ void GaiaDrawView::OnTimer(UINT_PTR nIDEvent)
 }
 void GaiaDrawView::StartClock(int index){
 	auto& cycle = SingleTon<GaiaClockInfo>::use()->cycle;
-	cycle = 1;
+	
 	auto& idx = SingleTon<GaiaClockInfo>::use()->clock_index;
 	idx = index;
 	auto& id = SingleTon<GaiaClockInfo>::use()->timerId;

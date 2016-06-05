@@ -6,6 +6,9 @@
 
 class NandGate :public GaiaLLogic
 {
+	DECLARE_SERIAL(NandGate)
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	NandGate();
 	void Draw(CDC* pDC)override;

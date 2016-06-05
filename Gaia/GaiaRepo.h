@@ -156,8 +156,6 @@ public:
 
 		SPAIR temp2(_T("Label"), _T(""));
 		contents.push_back(temp2);
-;
-
 
 	}
 };

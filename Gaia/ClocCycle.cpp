@@ -6,6 +6,7 @@ ClockCycle::ClockCycle(){
 }
 ClockCycle::ClockCycle(int x, int  y)
 {
+	this->outputGraph.assign(1, deque<int>());
 	this->objKind = CLOCKCYCLE;
 	this->objSize = SMALL;
 	this->SetPoint(x, y);
@@ -20,6 +21,7 @@ ClockCycle::ClockCycle(int x, int  y)
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 0;
 	Update(this->outs[0]);
+	
 }
 void ClockCycle::Draw(CDC* pDC){
 	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + this->GetLength() * 10 - 25, this->base_point.y + this->GetLength() * 10 - 25);
@@ -51,9 +53,18 @@ void ClockCycle::Draw(CDC* pDC){
 }
 
 void ClockCycle::Calculate(){
-
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	if (outputGraph[0].size() > 15){
+		outputGraph[0].clear();
+	}
+	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
+		return;
+	}
+	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
 }
-IMPLEMENT_SERIAL(ClockCycle, GaiaLLogic, 2)
+
+IMPLEMENT_SERIAL(ClockCycle, GaiaLLogic, 12)
 void ClockCycle::Serialize(CArchive& ar){
 	GaiaLLogic::Serialize(ar);
+
 }

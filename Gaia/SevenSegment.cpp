@@ -8,6 +8,7 @@ SevenSegment::SevenSegment(){
 	this->name = _T("seven seg");
 	this->arrow = this->GetArrow();
 	this->objSize = BIG;
+	this->objKind = SEVENSEG;
 }
 void SevenSegment::Draw(CDC* pDC){
 	CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + this->GetLength() * 10 - 10 + 1, this->base_point.y + this->GetLength() * 10 - 10 + 1);
@@ -56,4 +57,8 @@ void SevenSegment::Draw(CDC* pDC){
 }
 void SevenSegment::Calculate(){
 
+}
+IMPLEMENT_SERIAL(SevenSegment, GaiaLLogic, 14)
+void SevenSegment::Serialize(CArchive& ar){
+	GaiaLLogic::Serialize(ar);
 }

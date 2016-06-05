@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AndGate.h" />
+    <ClInclude Include="ClkDialog.h" />
     <ClInclude Include="ClockCycle.h" />
     <ClInclude Include="DblBufMaker.h" />
     <ClInclude Include="DFF.h" />
@@ -140,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AndGate.cpp" />
+    <ClCompile Include="ClkDialog.cpp" />
     <ClCompile Include="ClocCycle.cpp" />
     <ClCompile Include="DblBufMaker.cpp" />
     <ClCompile Include="DFF.cpp" />

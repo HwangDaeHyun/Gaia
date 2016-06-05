@@ -98,7 +98,7 @@ void DFF::Calculate(){
 	clkGraph.push_back(db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10]);
 	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
 }
-IMPLEMENT_SERIAL(DFF, GaiaLLogic, 2)
+IMPLEMENT_SERIAL(DFF, GaiaLLogic, 9)
 void DFF::Serialize(CArchive& ar){
 	GaiaLLogic::Serialize(ar);
 }

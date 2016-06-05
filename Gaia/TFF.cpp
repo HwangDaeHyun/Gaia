@@ -5,7 +5,7 @@
 TFF::TFF(){
 	this->ins.assign(2, CRect());
 	this->outs.assign(2, CRect());
-	this->objKind = JKFLIP;
+	this->objKind = TFLIP;
 	this->objSize = MID;
 	this->trigger = RISING;
 	this->name = _T("JK-FlipFlop");
@@ -47,19 +47,33 @@ void TFF::Draw(CDC* pDC){
 void TFF::Calculate(){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	int tC = this->prevC;
+
 	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
 		db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
 	}
 	int curr = db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10];
-	//printf("%d , %d \n", tC, this->prevC);
-	if (tC == 0 && curr == 1){
-		if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
-			db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
-			db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
+	if (this->trigger == RISING){
+		if (tC == 0 && curr == 1){
+			if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
+			}
+			else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
+			}
 		}
-		else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
-			db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
-			db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
+	}
+	else if (this->trigger == FALLING){
+		if (tC == 1 && curr == 0){
+			if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
+			}
+			else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
+				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
+				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
+			}
 		}
 	}
 	this->prevC = curr;
@@ -77,7 +91,7 @@ void TFF::Calculate(){
 			return;
 		}
 	}
-	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == -1 && db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10] == -1 && db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
+	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == -1 && db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10] == -1){
 		return;
 	}
 	outputGraph[1].push_back(db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10]);
@@ -85,7 +99,7 @@ void TFF::Calculate(){
 	clkGraph.push_back(db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10]);
 	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
 }
-IMPLEMENT_SERIAL(TFF, GaiaLLogic, 2)
+IMPLEMENT_SERIAL(TFF, GaiaLLogic, 11)
 void TFF::Serialize(CArchive& ar){
 	GaiaLLogic::Serialize(ar);
 }

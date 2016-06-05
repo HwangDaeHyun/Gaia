@@ -7,6 +7,9 @@
 class InputBtn :
 	public GaiaLLogic
 {
+	DECLARE_SERIAL(InputBtn)
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	InputBtn();
 	InputBtn(int x, int y);

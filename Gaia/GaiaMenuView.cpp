@@ -7,7 +7,7 @@
 #include"LibBox.h"
 #include "GaiaMenuView.h"
 #include"LibBoxNameDlg.h"
-
+#include"ClkDialog.h"
 // GaiaMenuView
 
 IMPLEMENT_DYNCREATE(GaiaMenuView, GaiaCView)
@@ -165,8 +165,6 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				pDoc->OnSaveDocument();
 			}
 			else if ((*it)->myID == 2){			//불러오기
-				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-				e.clear();
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
 
@@ -234,7 +232,16 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			else if ((*it)->myID == 13){	//TIMER
-
+				ClkDialog clkDialog;
+				if (clkDialog.DoModal() == IDOK){
+					int temp = _ttoi(clkDialog.m_str);
+					if (temp == 0){
+						AfxMessageBox(L"숫자 0이나 숫자를 입력하지 않으셨습니다. 잘못된 입력입니다 !");
+					}
+					else{
+						SingleTon<GaiaClockInfo>::use()->cycle = temp;
+					}
+				}
 			}
 			this->Invalidate();
 			break;

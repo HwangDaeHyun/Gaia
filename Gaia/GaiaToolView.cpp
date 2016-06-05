@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(GaiaToolView, GaiaCView)
 	ON_WM_SIZE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_CHAR()
+	ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -103,7 +104,7 @@ void GaiaToolView::OnPaint()
 	CPaintDC dc(this); // device context for painting
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 	// 그리기 메시지에 대해서는 GaiaCView::OnPaint()을(를) 호출하지 마십시오.
-
+	this->infosRect.clear();
 	CBrush brush(SingleTon<GaiaLayoutRepo>::use()->Getrightside());
 	CRect rect;
 	this->GetClientRect(&rect);
@@ -163,7 +164,7 @@ void GaiaToolView::OnPaint()
 	}
 	for (int i = 0; i < contents.size(); i++){
 		bDC.SelectObject(&first);
-		inven.SetRect(width / 8, h, width / 8 * 3, h + 30);
+		inven.SetRect(width / 8 - 5, h, width / 8 * 3 - 5, h + 30);
 		graphics.FillRectangle(&semiTransBrush2, inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
 		//bDC.RoundRect(&inven, CPoint(5, 5));
 		CRect temp = inven;
@@ -174,7 +175,8 @@ void GaiaToolView::OnPaint()
 
 		graphics.FillRectangle(&semiTransBrush3, inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
 		bDC.DrawText(contents[i].second, &inven, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-		h += 40;
+		h += 35;
+		this->infosRect.push_back(inven);
 		if (isPush == true)
 			cRect.push_back(CRect(temp.left, temp.top, inven.right, inven.bottom));
 	}
@@ -376,3 +378,30 @@ void GaiaToolView::DrawGraph(Graphics* graphics, int y){
 	}
 }
 
+
+
+void GaiaToolView::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+	bool isSel = SingleTon<GaiaTableInfo>::use()->isSel;
+	int selNum = SingleTon<GaiaTableInfo>::use()->selNum;
+	auto& tbl = SingleTon<GaiaTableInfo>::use()->invenRect;
+	auto& nameTbl = SingleTon<GaiaTableInfo>::use()->contents;
+	if (isSel == true && selNum != -1){
+		if (e[selNum]->trigger != NOTCLK){
+			if (this->infosRect.back().PtInRect(point)){
+				if (e[selNum]->trigger == RISING){
+					e[selNum]->trigger = FALLING;
+					nameTbl.back().second = _T("FALLING");
+				}
+				else{
+					e[selNum]->trigger = RISING;
+					nameTbl.back().second = _T("RISING");
+				}
+			}
+		}
+	}
+	this->Invalidate(false);
+	GaiaCView::OnLButtonDblClk(nFlags, point);
+}

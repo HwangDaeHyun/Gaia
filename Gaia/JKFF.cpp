@@ -10,7 +10,7 @@ JKFF::JKFF(){
 	this->trigger = RISING;
 	this->name = _T("JK-FlipFlop");
 	this->arrow = this->GetArrow();
-	this->inputGraph.assign(1, deque<int>());
+	this->inputGraph.assign(2, deque<int>());
 	this->outputGraph.assign(2, deque<int>());
 
 }
@@ -78,7 +78,7 @@ void JKFF::Calculate(){
 	clkGraph.push_back(db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10]);
 	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
 }
-IMPLEMENT_SERIAL(JKFF, GaiaLLogic, 2)
+IMPLEMENT_SERIAL(JKFF, GaiaLLogic, 10)
 void JKFF::Serialize(CArchive& ar){
 	GaiaLLogic::Serialize(ar);
 }

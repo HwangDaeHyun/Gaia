@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "InputBtn.h"
 InputBtn::InputBtn(){
+	this->outputGraph.assign(1, deque<int>());
 	this->objKind = INBUTTON;
 	this->objSize = SMALL;
 	this->SetRadius(0);
@@ -14,9 +15,11 @@ InputBtn::InputBtn(){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 0;
 	Update(this->outs[0]);
+	
 }
 
 InputBtn::InputBtn(int x, int y){
+	this->outputGraph.assign(1, deque<int>());
 	this->objKind = INBUTTON;
 	this->objSize = SMALL;
 	this->SetPoint(x, y);
@@ -80,4 +83,17 @@ void InputBtn::Draw(CDC* pDC){
 	brush4.DeleteObject();
 }
 
-void InputBtn::Calculate(){}
+void InputBtn::Calculate(){
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	if (!this->outputGraph.empty()&&this->outputGraph[0].size() > 15){
+		this->outputGraph[0].clear();
+	}
+	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
+		return;
+	}
+	this->outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
+}
+IMPLEMENT_SERIAL(InputBtn, GaiaLLogic, 13)
+void InputBtn::Serialize(CArchive& ar){
+	GaiaLLogic::Serialize(ar);
+}

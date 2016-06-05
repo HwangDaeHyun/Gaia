@@ -6,6 +6,9 @@
 #include"GaiaObject.h"
 class LibBox : public GaiaLLogic
 {
+	DECLARE_SERIAL(LibBox);
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	LibBox();
 	LibBox(CString name);

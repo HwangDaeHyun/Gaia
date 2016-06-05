@@ -6,6 +6,9 @@
 
 class NotGate :public GaiaLLogic
 {
+	DECLARE_SERIAL(NotGate)
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	NotGate();
 	void Draw(CDC* pDC)override;

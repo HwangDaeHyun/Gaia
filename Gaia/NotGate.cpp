@@ -9,6 +9,8 @@ NotGate::NotGate(){
 	this->arrow = this->GetArrow();
 	this->objKind = NOT;
 	this->objSize = MID;
+	this->inputGraph.assign(1, deque<int>());
+	this->outputGraph.assign(1, deque<int>());
 }
 void NotGate::Draw(CDC* pDC){
 	CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + this->GetLength() * 10 - 20, this->base_point.y + this->GetLength() * 10 - 20);
@@ -115,4 +117,24 @@ void NotGate::Calculate(){
 	else{
 		db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = -1;
 	}
+	if (inputGraph[0].size() > 15 || outputGraph[0].size() > 15){
+		inputGraph[0].clear();
+		outputGraph[0].clear();
+	}
+	if (!inputGraph[0].empty() && !outputGraph[0].empty()){
+		if (inputGraph[0].back() == db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] &&
+			outputGraph[0].back() == db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]
+			){
+			return;
+		}
+	}
+	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == -1 && db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
+		return;
+	}
+	inputGraph[0].push_back(db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10]);
+	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
+}
+IMPLEMENT_SERIAL(NotGate, GaiaLLogic, 6)
+void NotGate::Serialize(CArchive& ar){
+	GaiaLLogic::Serialize(ar);
 }

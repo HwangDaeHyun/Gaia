@@ -6,6 +6,9 @@
 
 class OrGate :public GaiaLLogic
 {
+	DECLARE_SERIAL(OrGate)
+public:
+	virtual void Serialize(CArchive& ar);
 public:
 	OrGate();
 	void Draw(CDC* pDC)override;
