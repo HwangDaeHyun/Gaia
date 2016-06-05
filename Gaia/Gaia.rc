@@ -287,6 +287,10 @@ IDB_BTN_ROTATE          BITMAP                  "res\\menu_btn\\BTN_ROTATE.bmp"
 IDB_BTN_ROTATE_HOVER    BITMAP                  "res\\menu_btn\\BTN_ROTATE_HOVER.bmp"
 IDB_DFF                 BITMAP                  "res\\DFF.bmp"
 IDB_TFF                 BITMAP                  "res\\TFF.bmp"
+IDB_NOT_0               BITMAP                  "res\\gate\\NOT_0.bmp"
+IDB_NOT_90              BITMAP                  "res\\gate\\NOT_90.bmp"
+IDB_NOT_180             BITMAP                  "res\\gate\\NOT_180.bmp"
+IDB_NOT_270             BITMAP                  "res\\gate\\NOT_270.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

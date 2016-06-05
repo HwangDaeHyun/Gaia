@@ -128,8 +128,8 @@ public:
 		names.push_back(_T("Or Gate"));
 		names.push_back(_T("Not Gate"));
 		names.push_back(_T("Nand Gate"));
-		names.push_back(_T("XOR Gate"));
 		names.push_back(_T("NOR Gate"));
+		names.push_back(_T("XOR Gate"));
 		names.push_back(_T("D Flip-Flop"));
 		names.push_back(_T("T Flip-Flop"));
 		names.push_back(_T("JK Flip-Flop"));

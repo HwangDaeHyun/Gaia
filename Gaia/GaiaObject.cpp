@@ -54,6 +54,10 @@ CString GaiaObject::GetArrow(){
 void GaiaObject::Draw(CDC* pDC){
 
 }
+int GaiaObject::GetRadius(){
+	return this->radius;
+}
+
 IMPLEMENT_SERIAL(GaiaObject, CObject, 1)
 void GaiaObject::Serialize(CArchive& ar){
 	CObject::Serialize(ar);

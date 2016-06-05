@@ -165,6 +165,9 @@
     <ClInclude Include="TFF.h">
       <Filter>헤더 파일\FlipFlop</Filter>
     </ClInclude>
+    <ClInclude Include="NotGate.h">
+      <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="TFF.cpp">
       <Filter>소스 파일\FlipFlop</Filter>
+    </ClCompile>
+    <ClCompile Include="NotGate.cpp">
+      <Filter>소스 파일\Gate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,6 +454,21 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\TFF.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_btn\bitmap7.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_0.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_90.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_180.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_270.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

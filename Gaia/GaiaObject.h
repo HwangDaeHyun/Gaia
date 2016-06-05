@@ -53,6 +53,7 @@ public:
 	virtual void Draw(CDC* pDC);
 	void SetRadius(int r = 0);
 	int GetLength();
+	int GetRadius();
 	CString GetArrow();
 };
 

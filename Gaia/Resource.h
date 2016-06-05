@@ -84,6 +84,11 @@
 #define IDB_DFF                         390
 #define IDB_BITMAP4                     391
 #define IDB_TFF                         391
+#define IDB_NOT_0                       393
+#define IDB_NOT_90                      394
+#define IDB_NOT_180                     395
+#define IDB_BITMAP12                    396
+#define IDB_NOT_270                     396
 #define IDC_EDIT1                       1000
 #define ID_ACCELERATOR32772             32772
 
@@ -91,7 +96,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        392
+#define _APS_NEXT_RESOURCE_VALUE        397
 #define _APS_NEXT_COMMAND_VALUE         32773
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310

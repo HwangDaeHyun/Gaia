@@ -6,6 +6,7 @@
 #include"GaiaObject.h"
 #include"AndGate.h"
 #include"OrGate.h"
+#include"NotGate.h"
 #include"XorGate.h"
 #include"NandGate.h"
 #include"NorGate.h"
@@ -319,10 +320,10 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 				drawObj = new OrGate();
 				bmp.LoadBitmapW(IDB_OR_0);
 				break;
-				//case 12:	//Not
-				//	drawObj = new NotGate();
-				//	drawObj->SetRadius();
-				//	break;
+			case 12:	//Not
+				drawObj = new NotGate();
+				bmp.LoadBitmapW(IDB_NOT_0);
+				break;
 			case 13:	//Nand
 				drawObj = new NandGate();
 				bmp.LoadBitmapW(IDB_NAND_0);

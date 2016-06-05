@@ -125,6 +125,7 @@
     <ClInclude Include="MenuElement.h" />
     <ClInclude Include="NandGate.h" />
     <ClInclude Include="NorGate.h" />
+    <ClInclude Include="NotGate.h" />
     <ClInclude Include="OrGate.h" />
     <ClInclude Include="OutLamp.h" />
     <ClInclude Include="Resource.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="MenuEleMent.cpp" />
     <ClCompile Include="NandGate.cpp" />
     <ClCompile Include="NorGate.cpp" />
+    <ClCompile Include="NotGate.cpp" />
     <ClCompile Include="OrGate.cpp" />
     <ClCompile Include="SevenSegment.cpp" />
     <ClCompile Include="SheetElement.cpp" />
@@ -198,6 +200,10 @@
     <Image Include="res\gate\NOR_180.bmp" />
     <Image Include="res\gate\NOR_270.bmp" />
     <Image Include="res\gate\NOR_90.bmp" />
+    <Image Include="res\gate\NOT_0.bmp" />
+    <Image Include="res\gate\NOT_180.bmp" />
+    <Image Include="res\gate\NOT_270.bmp" />
+    <Image Include="res\gate\NOT_90.bmp" />
     <Image Include="res\gate\OR_0.bmp" />
     <Image Include="res\gate\OR_180.bmp" />
     <Image Include="res\gate\OR_270.bmp" />
@@ -208,6 +214,7 @@
     <Image Include="res\gate\XOR_90.bmp" />
     <Image Include="res\icon.bmp" />
     <Image Include="res\menu_back.bmp" />
+    <Image Include="res\menu_btn\bitmap7.bmp" />
     <Image Include="res\menu_btn\BTN_ADD.bmp" />
     <Image Include="res\menu_btn\BTN_ADD_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_CLK.bmp" />

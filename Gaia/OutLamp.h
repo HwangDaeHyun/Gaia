@@ -5,6 +5,7 @@ class OutLamp : public GaiaLLogic
 {
 public:
 	OutLamp(){
+		this->objKind = OUTLAMP;
 		this->outs.assign(1, CRect());
 		this->ins.assign(1, CRect());
 		this->name = _T("LAMP");
@@ -90,7 +91,16 @@ public:
 		pDC->SetBkMode(TRANSPARENT);
 		pDC->DrawText(this->name, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
+	void Calculate()override{
+		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
+		for (int i = 0; i < edges.size(); i++){
+			if (this->ins[0].PtInRect(edges[i].first.second)){
+				db[ins[0].CenterPoint().x / 10][ins[0].CenterPoint().y / 10] = db[edges[i].first.first.x / 10][edges[i].first.first.y / 10];
+			}
+		}
 
+	}
 };
 
 #endif

@@ -169,7 +169,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				e.clear();
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
-				
+
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			else if ((*it)->myID == 4){		//라이브러리박스 추가
@@ -218,6 +218,20 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->Redo();
 
+			}
+			else if ((*it)->myID == 10){
+
+
+			}
+			else if ((*it)->myID == 11){
+
+
+			}
+			else if ((*it)->myID == 12){
+				for (auto& s : SingleTon<GaiaDrawGrid>::use()->sel_objects){
+					s->SetRadius((s->GetRadius() + 1) % 4);
+				}
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			this->Invalidate();
 			break;
