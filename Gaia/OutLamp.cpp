@@ -11,6 +11,7 @@ OutLamp::OutLamp(){
 void OutLamp::Draw(CDC* pDC){
 	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + SingleTon<GaiaObjectSizeInfo>::use()->GetLength() * 10 - 25, this->base_point.y + SingleTon<GaiaObjectSizeInfo>::use()->GetLength() * 10 - 25);
 	this->baseRect = rect;
+	this->arrow = this->GetArrow();
 	VERIFY(radius >= 0);
 	VERIFY(radius <= 3);
 	switch (radius){
@@ -27,15 +28,14 @@ void OutLamp::Draw(CDC* pDC){
 		this->ins[0] = CRect((rect.left + rect.right) / 2 - 5, rect.bottom + 8, (rect.left + rect.right) / 2 + 5, rect.bottom + 18);
 		break;
 	}
-	pDC->Ellipse(this->ins[0]);
 	CBrush onB(RGB(220, 250, 0));
-	CBrush* old;
 	CPen pen;
 	pen.CreatePen(PS_SOLID, 2, RGB(15, 15, 0));
 	pDC->SelectObject(&pen);
+	pDC->Ellipse(this->ins[0]);
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
-		old = pDC->SelectObject(&onB);
+		pDC->SelectObject(&onB);
 	}
 	else{
 		pDC->SelectStockObject(WHITE_BRUSH);
@@ -43,7 +43,6 @@ void OutLamp::Draw(CDC* pDC){
 	CRect rect2;
 	rect2.SetRect(rect.left + 1, rect.top + 1, rect.right - 1, rect.bottom - 1);
 	pDC->Ellipse(&rect2);
-
 	//글자를 그립니다
 	CFont font;
 	font.CreateFont(15,                     // 글자높이

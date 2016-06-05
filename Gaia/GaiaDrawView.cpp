@@ -308,6 +308,12 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 		auto& selNum = SingleTon<GaiaGateInfo>::use()->selObj;
 		int w = 60;
 		int h = 60;
+		CBrush brush(RGB(200, 110, 111));
+		CBrush brush2(RGB(0, 0, 100));
+		CBrush brush3(RGB(255, 255, 255));
+		CPen pen;
+		pen.CreatePen(PS_NULL, 1, RGB(241, 95, 95));
+
 		BOOL isBMP = TRUE;	// 비트맵이 아니라 다른거 그리려면 case에서 FALSE로
 		if (selNum < 10 && selNum > 0){
 			auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
@@ -351,10 +357,20 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 
 				//case 39:	//7 Seg
 				//	break;
-				//case 40:	//input
-				//	break;
-				//case 41:	//output
-				//	break;
+			case 40:	//input
+				isBMP = FALSE;
+				drawObj = new InputBtn();
+				bDC.SelectObject(&brush2);
+				bDC.RoundRect(CRect(point.x-20, point.y-20, point.x + 10, point.y + 10), { 30, 30 });
+				bDC.SelectObject(&brush);
+				bDC.Ellipse(point.x-18, point.y-18, point.x + 8, point.y + 8);
+				break;
+			case 41:	//output
+				isBMP = FALSE;
+				bDC.SelectObject(&brush3);
+				drawObj = new OutLamp();
+				bDC.Ellipse(point.x - 25, point.y - 25, point.x + 20, point.y + 20);
+				break;
 			}
 			if (isBMP == TRUE){
 				BITMAP bmpinfo;

@@ -1,7 +1,19 @@
 #include "stdafx.h"
 #include "InputBtn.h"
 InputBtn::InputBtn(){
-
+	this->objKind = INBUTTON;
+	this->objSize = SMALL;
+	this->SetRadius(0);
+	this->name = _T("¹öÆ°");
+	this->arrow = this->GetArrow();
+	this->ins = vector<CRect>();
+	this->outs.assign(1, CRect());
+	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + this->GetLength() * 10 - 25, this->base_point.y + this->GetLength() * 10 - 25);
+	this->outs[0] = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
+	SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->outs[0]);
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 0;
+	Update(this->outs[0]);
 }
 
 InputBtn::InputBtn(int x, int y){
@@ -24,10 +36,12 @@ void InputBtn::Draw(CDC* pDC){
 	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() * 10 - 25, this->base_point.y + SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() * 10 - 25);
 	CRect rect2(this->base_point.x + 9, this->base_point.y + 9, this->base_point.x + SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() * 10 - 29, this->base_point.y + SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() * 10 - 29);
 	this->baseRect = rect;
-	CBrush brush(RGB(200, 11, 211));
+	this->arrow = this->GetArrow();
+	CBrush brush(RGB(0, 0, 100));
 	CPen pen;
 	pen.CreatePen(PS_NULL, 1, RGB(241, 95, 95));
 	pDC->SelectObject(&pen);
+	pDC->SelectObject(&brush);
 	VERIFY(radius >= 0);
 	VERIFY(radius <= 3);
 	switch (radius){
