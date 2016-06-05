@@ -555,18 +555,17 @@ R:{};
 		return;
 	}
 	sel = -1;
-	//오브젝트 하나 선택
+	//오브젝트 하나를 선택합니다.
 	for (int i = 0; i < e.size(); i++){
 		if (e[i]->baseRect.PtInRect(point) == TRUE){
 			sel = i;
 			clickPoint = point;
 			e[i]->ClearPoint();
 			clickBase = e[i]->base_point;
+			SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
 			SingleTon<GaiaDrawGrid>::use()->sel_objects.push_back(e[i]);
-			isDrag = FALSE;
 			break;
 		}
-
 	}
 
 	if (sel != -1){
