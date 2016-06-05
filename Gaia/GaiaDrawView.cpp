@@ -116,8 +116,10 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 	if (s.empty() != TRUE){
 		for (auto& elem : s){
 			CPen p;
+			CBrush b(RGB(255, 255, 255));
 			p.CreatePen(PS_SOLID, 1, RGB(20, 20, 20));
 			pDC->SelectObject(&p);
+			pDC->SelectObject(&b);
 			//pDC->MoveTo(elem->baseRect.left, elem->baseRect.top);
 			int d = elem->baseRect.Height();
 			int rec_sz = 8;
@@ -125,7 +127,8 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 			pDC->Rectangle(elem->base_point.x + d, elem->base_point.y, elem->base_point.x + d + rec_sz, elem->base_point.y + rec_sz);
 			pDC->Rectangle(elem->base_point.x, elem->base_point.y + d, elem->base_point.x + rec_sz, elem->base_point.y + d + rec_sz);
 			pDC->Rectangle(elem->base_point.x + d, elem->base_point.y + d, elem->base_point.x + d + rec_sz, elem->base_point.y + d + rec_sz);
-			pen.DeleteObject();
+			p.DeleteObject();
+			b.DeleteObject();
 		}
 	}
 	// ===

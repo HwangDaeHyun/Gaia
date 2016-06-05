@@ -126,9 +126,6 @@
     <ClInclude Include="OrGate.h">
       <Filter>헤더 파일\Gate</Filter>
     </ClInclude>
-    <ClInclude Include="OutLamp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="NandGate.h">
       <Filter>헤더 파일\Gate</Filter>
     </ClInclude>
@@ -167,6 +164,9 @@
     </ClInclude>
     <ClInclude Include="NotGate.h">
       <Filter>헤더 파일\Gate</Filter>
+    </ClInclude>
+    <ClInclude Include="OutLamp.h">
+      <Filter>헤더 파일\Input/Output</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="NotGate.cpp">
       <Filter>소스 파일\Gate</Filter>
+    </ClCompile>
+    <ClCompile Include="OutLamp.cpp">
+      <Filter>소스 파일\Input/Output</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

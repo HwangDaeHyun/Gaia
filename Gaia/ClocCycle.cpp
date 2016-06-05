@@ -26,6 +26,7 @@ void ClockCycle::Draw(CDC* pDC){
 	CDC memDC;
 	CBitmap bmp;
 	this->baseRect = rect;
+	this->arrow = this->GetArrow();
 	memDC.CreateCompatibleDC(pDC);
 	VERIFY(radius >= 0);
 	VERIFY(radius <= 3);
@@ -33,9 +34,17 @@ void ClockCycle::Draw(CDC* pDC){
 	case 0: bmp.LoadBitmapW(IDB_CLK);
 		this->outs[0] = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
 		break;
+	case 1: bmp.LoadBitmapW(IDB_CLK);
+		this->outs[0] = CRect((rect.right + rect.left) / 2 - 6, rect.bottom, (rect.right + rect.left) / 2 + 6 , rect.bottom + 12);
+		break;
+	case 2: bmp.LoadBitmapW(IDB_CLK);
+		this->outs[0] = CRect(rect.left-20, (rect.bottom + rect.top) / 2 - 6, rect.left-8, (rect.bottom + rect.top) / 2 + 6);
+		break;
+	case 3: bmp.LoadBitmapW(IDB_CLK);
+		this->outs[0] = CRect((rect.right + rect.left) / 2 - 6, rect.top-12, (rect.right + rect.left) / 2 + 6, rect.top);
+		break;
 	}
 	BITMAP bmpinfo;
-	//CBitmap* oldbmp = memDC.SelectObject(&bmp);
 	bmp.GetBitmap(&bmpinfo);
 	memDC.SelectObject(&bmp);
 	pDC->TransparentBlt(this->base_point.x - 5, this->base_point.y - 5, 50, 50, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));

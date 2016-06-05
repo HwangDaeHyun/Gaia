@@ -36,11 +36,13 @@ void InputBtn::Draw(CDC* pDC){
 		//¿©±â
 		break;
 	case 1:
-
+		this->outs[0] = CRect((rect.right + rect.left) / 2 - 6, rect.bottom, (rect.right + rect.left) / 2  + 6, rect.bottom +12);
 		break;
 	case 2:
-
+		this->outs[0] = CRect(rect.left-12, (rect.bottom + rect.top) / 2 - 6, rect.left , (rect.bottom + rect.top) / 2 + 6);
+		break;
 	case 3:
+		this->outs[0] = CRect((rect.right + rect.left) / 2 - 6, rect.top - 10, (rect.right + rect.left) / 2 + 6, rect.top +2 );
 		break;
 	}
 	pDC->RoundRect(&rect, { 30, 30 });
@@ -57,7 +59,11 @@ void InputBtn::Draw(CDC* pDC){
 	CBrush brush4(RGB(0, 0, 100));
 	pDC->SelectObject(&brush4);
 	pDC->Ellipse(this->outs[0]);
-
+	pen.DeleteObject();
+	brush.DeleteObject();
+	brush2.DeleteObject();
+	brush3.DeleteObject();
+	brush4.DeleteObject();
 }
 
 void InputBtn::Calculate(){}
