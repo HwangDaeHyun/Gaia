@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AndGate.h" />
+    <ClInclude Include="ClockCycle.h" />
     <ClInclude Include="DblBufMaker.h" />
     <ClInclude Include="DFF.h" />
     <ClInclude Include="Gaia.h" />
@@ -135,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AndGate.cpp" />
+    <ClCompile Include="ClocCycle.cpp" />
     <ClCompile Include="DblBufMaker.cpp" />
     <ClCompile Include="DFF.cpp" />
     <ClCompile Include="Gaia.cpp" />
@@ -174,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\CheckCheck.bmp" />
+    <Image Include="res\CLK.bmp" />
     <Image Include="res\Gaia.ico" />
     <Image Include="res\GaiaDoc.ico" />
     <Image Include="res\gate\AND.bmp" />

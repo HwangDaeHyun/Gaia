@@ -12,6 +12,7 @@ public:
 	virtual ~GaiaToolView();
 	int lighting = -1;
 public:
+	void DrawGraph(Graphics* graphics, int y);
 	void DrawSplitterBar()override;
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
 #ifdef _DEBUG

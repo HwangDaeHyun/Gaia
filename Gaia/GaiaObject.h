@@ -2,11 +2,12 @@
 #include"stdafx.h"
 #include<algorithm>
 #include<vector>
+#include<deque>
 #include"SingleTon.h"
 
 using namespace design_pattern;
 enum ObjectSize{ SMALL, MID, BIG, LIB };
-enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, SEVENSEG };
+enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, CLOCKCYCLE,SEVENSEG };
 
 class GaiaObject : public CObject{
 	DECLARE_SERIAL(GaiaObject)
@@ -30,7 +31,9 @@ public:
 	vector<CRect> outs;
 	vector<CRect> ins;
 	int prevC = -1;
-
+	vector<deque<int>> inputGraph;
+	vector<deque<int>> outputGraph;
+	deque<int> clkGraph = deque<int>();
 public:
 	GaiaObject();
 	virtual ~GaiaObject();

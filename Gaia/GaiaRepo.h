@@ -155,8 +155,7 @@ public:
 
 		SPAIR temp2(_T("Label"), _T(""));
 		contents.push_back(temp2);
-
-		;
+;
 
 
 	}
@@ -186,4 +185,11 @@ CREATE_SINGLETON(GaiaObjectSizeInfo){
 	}
 };
 
+CREATE_SINGLETON(GaiaClockInfo){
+public:
+	int clock_index = -1;
+	int cycle;
+	vector<int> timerId;
+	vector<int> cnt;
+};
 #endif

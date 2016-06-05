@@ -14,6 +14,7 @@
 #include"DFF.h"
 #include"GaiaListInfo.h"
 #include "SevenSegment.h"
+#include"ClockCycle.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -43,6 +44,7 @@ BEGIN_MESSAGE_MAP(GaiaDrawView, GaiaCView)
 	ON_WM_SIZE()
 	ON_WM_LBUTTONDBLCLK()
 
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -477,9 +479,17 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	pDoc->PushGaiaList();
 	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
 	GaiaObject* p = new DFF();
-	p->SetPoint(20,20);
+	p->SetPoint(20, 20);
 	obj.push_back(p);
-	
+	p = new ClockCycle(30, 30);
+	obj.push_back(p);
+	p = new ClockCycle(50, 30);
+	obj.push_back(p);
+	p = new InputBtn(10, 10);
+	obj.push_back(p);
+	p = new OutLamp();
+	p->SetPoint(30, 50);
+	obj.push_back(p);
 
 	return 0;
 
@@ -566,7 +576,7 @@ R:{};
 			temp[i].second = t_str;
 			tbl.push_back(temp[i]);
 		}
-		
+		SingleTon<GaiaTableInfo>::use()->selNum = sel;
 		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate(false);
 		////
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
@@ -767,6 +777,12 @@ void GaiaDrawView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	auto& objects = SingleTon<GaiaDrawGrid>::use()->objects;
 	int len = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() * 10;
+	for (int i = 0; i < objects.size(); i++){
+		if (objects[i]->objKind == CLOCKCYCLE && objects[i]->baseRect.PtInRect(point)){
+			this->StartClock(i);
+			return;
+		}
+	}
 	for (auto& b : btn){
 		CRect t(b.left - len, b.top - len / 2, b.right, b.bottom + len / 2);
 		if (t.PtInRect(point)){
@@ -799,4 +815,49 @@ W:{};
 	DrawArea(&bDC);
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	GaiaCView::OnLButtonDblClk(nFlags, point);
+}
+
+
+void GaiaDrawView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CClientDC dc(this);
+	CRect rect;
+	this->GetClientRect(rect);
+	DblBufMaker dm(&dc, rect);
+	CDC& bDC = dm.GetDC();
+	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	int idx = SingleTon<GaiaClockInfo>::use()->clock_index;
+	static int cnt = 0;
+	if (obj[idx]->objKind == CLOCKCYCLE){
+		if (db[obj[idx]->outs[0].CenterPoint().x / 10][obj[idx]->outs[0].CenterPoint().y / 10] == 0){
+			db[obj[idx]->outs[0].CenterPoint().x / 10][obj[idx]->outs[0].CenterPoint().y / 10] = 1;
+		}
+		else{
+			db[obj[idx]->outs[0].CenterPoint().x / 10][obj[idx]->outs[0].CenterPoint().y / 10] = 0;
+		}
+	}
+	::Sleep(100);
+	Update(obj[idx]->outs[0]);
+	UpdateDBoard();
+	DrawArea(&bDC);
+	cnt++;
+	if (cnt == 20){
+		KillTimer(0);
+		cnt = 0;
+	}
+	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
+	GaiaCView::OnTimer(nIDEvent);
+	GaiaCView::OnTimer(nIDEvent);
+}
+void GaiaDrawView::StartClock(int index){
+	auto& cycle = SingleTon<GaiaClockInfo>::use()->cycle;
+	cycle = 1;
+	auto& idx = SingleTon<GaiaClockInfo>::use()->clock_index;
+	idx = index;
+	auto& id = SingleTon<GaiaClockInfo>::use()->timerId;
+
+	SetTimer(0, cycle, NULL);
+
 }

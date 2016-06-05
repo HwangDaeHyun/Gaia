@@ -128,7 +128,7 @@ void GaiaToolView::OnPaint()
 		);
 	CPen pen, pen2;
 	CBrush first(RGB(89, 168, 222));
-	bDC.SetTextColor(RGB(255,255, 255));
+	bDC.SetTextColor(RGB(255, 255, 255));
 	bDC.SelectObject(&font);
 	bDC.SetBkMode(TRANSPARENT);
 	pen.CreatePen(PS_DOT, 2, RGB(0, 122, 204));
@@ -136,7 +136,7 @@ void GaiaToolView::OnPaint()
 
 	int h = 10;
 	CRect table(width / 10, h, width / 10 * 9, h + 40); // title
-	h += 80;
+	h += 60;
 	bDC.SelectObject(&pen);
 	CBrush fBrush(RGB(200, 220, 200));
 	bDC.SelectObject(&fBrush);
@@ -163,18 +163,18 @@ void GaiaToolView::OnPaint()
 	}
 	for (int i = 0; i < contents.size(); i++){
 		bDC.SelectObject(&first);
-		inven.SetRect(width / 8, h, width / 8 * 3, h + 40);
-		graphics.FillRectangle(&semiTransBrush2,inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
+		inven.SetRect(width / 8, h, width / 8 * 3, h + 30);
+		graphics.FillRectangle(&semiTransBrush2, inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
 		//bDC.RoundRect(&inven, CPoint(5, 5));
 		CRect temp = inven;
 		bDC.DrawText(contents[i].first, &inven, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		bDC.SelectStockObject(NULL_BRUSH);
 		//bDC.SetTextColor(RGB(200, 200, 222));
-		inven.SetRect(width / 8 * 3, h, width / 8 * 7, h + 40);
+		inven.SetRect(width / 8 * 3, h, width / 8 * 7, h + 30);
 
 		graphics.FillRectangle(&semiTransBrush3, inven.TopLeft().x, inven.TopLeft().y, inven.Width(), inven.Height());
 		bDC.DrawText(contents[i].second, &inven, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-		h += 50;
+		h += 40;
 		if (isPush == true)
 			cRect.push_back(CRect(temp.left, temp.top, inven.right, inven.bottom));
 	}
@@ -183,6 +183,12 @@ void GaiaToolView::OnPaint()
 		bDC.RoundRect(cRect[lighting], CPoint(5, 5));
 	}
 	brush.DeleteObject();
+	CRect waveRect(table.left, inven.bottom + 30, table.right, inven.bottom + 30 + table.Height());
+	graphics.FillRectangle(&semiTransBrush, waveRect.TopLeft().x, waveRect.TopLeft().y, waveRect.Width(), waveRect.Height());
+	bDC.DrawText(_T("WAVE RESULT"), &waveRect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+	this->DrawGraph(&graphics, waveRect.bottom + 20);
+
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 
 }
@@ -197,7 +203,7 @@ void GaiaToolView::OnSize(UINT nType, int cx, int cy)
 		SingleTon<GaiaToolListRepo>::use()->Setwidth(cx + 10);
 	}
 	else if (SingleTon<GaiaLayoutRepo>::use()->GetspView() != nullptr && cx < 100){
-		SingleTon<GaiaToolListRepo>::use()->Setwidth(250);
+		SingleTon<GaiaToolListRepo>::use()->Setwidth(300);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(0, SingleTon<GaiaSheetListRepo>::use()->Getwidth() - 10, 0);
 		SingleTon<GaiaLayoutRepo>::use()->GetspView()->SetColumnInfo(1, SingleTon<GaiaToolListRepo>::use()->Getwidth() - 10, 0);
 		auto v = SingleTon<GaiaLayoutRepo>::use()->GetspView();
@@ -252,3 +258,119 @@ void GaiaToolView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 	Invalidate(false);
 	GaiaCView::OnChar(nChar, nRepCnt, nFlags);
 }
+
+void GaiaToolView::DrawGraph(Graphics* graphics, int y){
+	int selNum = SingleTon<GaiaTableInfo>::use()->selNum;
+	if (selNum == -1){
+		return;
+	}
+	CRect rect;
+	this->GetClientRect(&rect);
+	SolidBrush  semiTransBrush2(Color(180, 100, 181, 246));
+	SolidBrush  semiTransBrush3(Color(50, 187, 222, 251));		//in
+	SolidBrush  semiFontColor(Color(200, 255, 255, 255));
+	SolidBrush semiFontColor2(Color(200, 255, 204, 25));
+	FontFamily fontFamily(_T("Times New Roman"));
+
+	Gdiplus::Font font(&fontFamily, 15, FontStyleRegular, UnitPixel);
+	Pen gPen(Color(150, 255, 255, 255), 3);			//	in
+	Pen gPen2(Color(200, 255, 204, 25), 3);
+	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
+	CRect paintRect;
+	CRect textRect(rect.left + 10, y, rect.left + 30, y + 20);
+	CRect rectPos(rect.left + 40, textRect.bottom + 5, rect.left + 60, textRect.bottom + 25);
+	paintRect = rectPos;
+
+	//input rect
+	CString in_str, out_str, clk_str;
+	CString index;
+	for (int i = 0; i < obj[selNum]->inputGraph.size(); i++){
+
+		in_str = _T("in,");
+		index.Format(_T("%d"), i);
+		in_str = in_str + index;
+		graphics->FillRectangle(&semiTransBrush2, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
+		graphics->DrawString(in_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor);
+		paintRect.SetRect(paintRect.left, textRect.bottom + 5, paintRect.right, textRect.bottom + 25);
+		textRect.SetRect(textRect.left, paintRect.bottom + 20, textRect.right, paintRect.bottom + 40);
+
+		for (int j = 0; j < obj[selNum]->inputGraph[i].size(); j++){
+			if (obj[selNum]->inputGraph[i][j] == 1){
+				//graphics->FillRectangle(&semiTransBrush, paintRect.left, paintRect.top, paintRect.Width(), paintRect.Height());
+				graphics->DrawLine(&gPen, paintRect.left, paintRect.top, paintRect.right, paintRect.top);
+			}
+			else {
+				graphics->DrawLine(&gPen, paintRect.left, paintRect.bottom, paintRect.right, paintRect.bottom);
+			}
+			if (j >0){
+				if ((obj[selNum]->inputGraph[i][j] == 1 && (obj[selNum]->inputGraph[i][j - 1] == 0 || obj[selNum]->inputGraph[i][j - 1] == -1)) ||
+					(obj[selNum]->inputGraph[i][j - 1] == 1 && (obj[selNum]->inputGraph[i][j] == 0 || obj[selNum]->inputGraph[i][j] == -1))){
+					graphics->DrawLine(&gPen, paintRect.left, paintRect.top, paintRect.left, paintRect.bottom);
+					graphics->DrawLine(&gPen, paintRect.right, paintRect.bottom, paintRect.right, paintRect.bottom);
+				}
+			}
+			paintRect.SetRect(paintRect.right, paintRect.top, paintRect.right + 20, paintRect.bottom);
+		}
+		paintRect.SetRect(rectPos.left, rectPos.bottom + 20, rectPos.right, rectPos.bottom + 40);
+	}
+
+	//output rect
+	paintRect.SetRect(rectPos.left, rectPos.bottom + 60, rectPos.right, rectPos.bottom + 80);
+	for (int i = 0; i < obj[selNum]->outputGraph.size(); i++){
+		out_str = _T("out,");
+		index.Format(_T("%d"), i);
+		out_str = out_str + index;
+		graphics->FillRectangle(&semiTransBrush2, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
+		graphics->DrawString(out_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor2);
+		paintRect.SetRect(paintRect.left, textRect.bottom + 5, paintRect.right, textRect.bottom + 25);
+		textRect.SetRect(textRect.left, paintRect.bottom + 20, textRect.right, paintRect.bottom + 40);
+		for (int j = 0; j < obj[selNum]->outputGraph[i].size(); j++){
+			if (obj[selNum]->outputGraph[i][j] == 1){
+				//graphics->FillRectangle(&semiTransBrush, paintRect.left, paintRect.top, paintRect.Width(), paintRect.Height());
+				graphics->DrawLine(&gPen2, paintRect.left, paintRect.top, paintRect.right, paintRect.top);
+			}
+			else {
+				graphics->DrawLine(&gPen2, paintRect.left, paintRect.bottom, paintRect.right, paintRect.bottom);
+			}
+			if (j>0){
+				if ((obj[selNum]->outputGraph[i][j] == 1 && (obj[selNum]->outputGraph[i][j - 1] == 0 || obj[selNum]->outputGraph[i][j - 1] == -1)) ||
+					(obj[selNum]->outputGraph[i][j - 1] == 1 && (obj[selNum]->outputGraph[i][j] == 0 || obj[selNum]->outputGraph[i][j] == -1))){
+					graphics->DrawLine(&gPen2, paintRect.left, paintRect.top, paintRect.left, paintRect.bottom);
+					graphics->DrawLine(&gPen2, paintRect.right, paintRect.bottom, paintRect.right, paintRect.bottom);
+				}
+			}
+			paintRect.SetRect(paintRect.right, paintRect.top, paintRect.right + 20, paintRect.bottom);
+		}
+		paintRect.SetRect(rectPos.left, rectPos.bottom + 20, rectPos.right, rectPos.bottom + 40);
+	}
+
+	//clk rect
+	if (!obj[selNum]->clkGraph.empty()){
+		paintRect.SetRect(rectPos.left, rectPos.bottom + 60, rectPos.right, rectPos.bottom + 80);
+		clk_str = _T("clk,");
+		graphics->FillRectangle(&semiTransBrush2, textRect.TopLeft().x + 5, textRect.TopLeft().y + 5, textRect.Width() - 5, textRect.Height() - 5);
+		graphics->DrawString(clk_str, in_str.GetLength(), &font, PointF(textRect.CenterPoint().x, textRect.CenterPoint().y), &semiFontColor2);
+		paintRect.SetRect(paintRect.left, textRect.bottom + 5, paintRect.right, textRect.bottom + 25);
+		textRect.SetRect(textRect.left, paintRect.bottom + 20, textRect.right, paintRect.bottom + 40);
+		for (int i = 0; i < obj[selNum]->clkGraph.size(); i++){
+			if (obj[selNum]->clkGraph[i] == 1){
+				//graphics->FillRectangle(&semiTransBrush, paintRect.left, paintRect.top, paintRect.Width(), paintRect.Height());
+				graphics->DrawLine(&gPen2, paintRect.left, paintRect.top, paintRect.right, paintRect.top);
+			}
+			else {
+				graphics->DrawLine(&gPen2, paintRect.left, paintRect.bottom, paintRect.right, paintRect.bottom);
+			}
+
+			if (i >0){
+				if (
+					(obj[selNum]->clkGraph[i] == 1 && (obj[selNum]->clkGraph[i - 1] == 0 || obj[selNum]->clkGraph[i - 1] == -1)) ||
+					(obj[selNum]->clkGraph[i - 1] == 1 && (obj[selNum]->clkGraph[i] == 0 || obj[selNum]->clkGraph[i] == -1))){
+					graphics->DrawLine(&gPen, paintRect.left, paintRect.top, paintRect.left, paintRect.bottom);
+					graphics->DrawLine(&gPen, paintRect.right, paintRect.bottom, paintRect.right, paintRect.bottom);
+				}
+			}
+			paintRect.SetRect(paintRect.right, paintRect.top, paintRect.right + 10, paintRect.bottom);
+		}
+	}
+}
+

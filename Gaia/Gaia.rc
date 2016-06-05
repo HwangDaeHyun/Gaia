@@ -264,6 +264,7 @@ IDB_BTN_ADD             BITMAP                  "res\\menu_btn\\BTN_ADD.bmp"
 IDB_BTN_ADD_HOVER       BITMAP                  "res\\menu_btn\\BTN_ADD_HOVER.bmp"
 IDB_BTN_CLK             BITMAP                  "res\\menu_btn\\BTN_CLK.bmp"
 IDB_BTN_CLK_HOVER       BITMAP                  "res\\menu_btn\\BTN_CLK_HOVER.bmp"
+IDB_CLK                 BITMAP                  "res\\CLK.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
