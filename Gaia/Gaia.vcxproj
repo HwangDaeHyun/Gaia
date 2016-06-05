@@ -237,6 +237,8 @@
     <Image Include="res\menu_btn\BTN_ROTATE_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_SAVE.bmp" />
     <Image Include="res\menu_btn\BTN_SAVE_HOVER.bmp" />
+    <Image Include="res\menu_btn\BTN_TIMER.bmp" />
+    <Image Include="res\menu_btn\BTN_TIMER_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_UNDO.bmp" />
     <Image Include="res\menu_btn\BTN_UNDO_HOVER.bmp" />
     <Image Include="res\menu_edit.bmp" />

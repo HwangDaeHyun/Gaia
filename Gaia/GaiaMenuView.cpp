@@ -227,11 +227,14 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 			}
-			else if ((*it)->myID == 12){
+			else if ((*it)->myID == 12){	//ROTATE
 				for (auto& s : SingleTon<GaiaDrawGrid>::use()->sel_objects){
 					s->SetRadius((s->GetRadius() + 1) % 4);
 				}
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+			}
+			else if ((*it)->myID == 13){	//TIMER
+
 			}
 			this->Invalidate();
 			break;
@@ -298,6 +301,7 @@ int GaiaMenuView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	this->InsertMenuElement(0, 10, IDB_BTN_REDO, IDB_BTN_REDO_HOVER);
 	this->InsertMenuElement(0, 11, IDB_BTN_CLK, IDB_BTN_CLK_HOVER);
 	this->InsertMenuElement(0, 12, IDB_BTN_ROTATE, IDB_BTN_ROTATE_HOVER);
+	this->InsertMenuElement(0, 13, IDB_BTN_TIMER, IDB_BTN_TIMER_HOVER);
 	return 0;
 }
 

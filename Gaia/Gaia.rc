@@ -291,6 +291,8 @@ IDB_NOT_0               BITMAP                  "res\\gate\\NOT_0.bmp"
 IDB_NOT_90              BITMAP                  "res\\gate\\NOT_90.bmp"
 IDB_NOT_180             BITMAP                  "res\\gate\\NOT_180.bmp"
 IDB_NOT_270             BITMAP                  "res\\gate\\NOT_270.bmp"
+IDB_BTN_TIMER           BITMAP                  "res\\menu_btn\\BTN_TIMER.bmp"
+IDB_BTN_TIMER_HOVER     BITMAP                  "res\\menu_btn\\BTN_TIMER_HOVER.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

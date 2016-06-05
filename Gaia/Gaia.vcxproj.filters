@@ -471,5 +471,11 @@
     <Image Include="res\gate\NOT_270.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\menu_btn\BTN_TIMER.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_TIMER_HOVER.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
