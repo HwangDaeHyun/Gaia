@@ -6,7 +6,7 @@
 #include"SingleTon.h"
 
 using namespace design_pattern;
-enum ObjectSize{ SMALL, MID, BIG, LIB };
+enum ObjectSize{ SMALL, MID, BIG, LARG };
 enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, CLOCKCYCLE,SEVENSEG, LIBBOX };
 enum ObjectTrigger{NOTCLK, RISING , FALLING};
 class GaiaObject : public CObject{

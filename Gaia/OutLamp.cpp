@@ -15,6 +15,11 @@ void OutLamp::Draw(CDC* pDC){
 	this->arrow = this->GetArrow();
 	VERIFY(radius >= 0);
 	VERIFY(radius <= 3);
+	CBrush onB(RGB(220, 250, 0));
+	CPen pen;
+	pen.CreatePen(PS_SOLID, 2, RGB(15, 15, 0));
+	CBrush b(RGB(20, 20, 0));
+	pDC->SelectObject(&pen);
 	switch (radius){
 	case 0:
 		this->ins[0] = CRect(rect.left - 15, (rect.top + rect.bottom) / 2 - 5, rect.left - 5, (rect.top + rect.bottom) / 2 + 5);
@@ -29,10 +34,7 @@ void OutLamp::Draw(CDC* pDC){
 		this->ins[0] = CRect((rect.left + rect.right) / 2 - 5, rect.bottom + 8, (rect.left + rect.right) / 2 + 5, rect.bottom + 18);
 		break;
 	}
-	CBrush onB(RGB(220, 250, 0));
-	CPen pen;
-	pen.CreatePen(PS_SOLID, 2, RGB(15, 15, 0));
-	pDC->SelectObject(&pen);
+	pDC->SelectObject(&b);
 	pDC->Ellipse(this->ins[0]);
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){

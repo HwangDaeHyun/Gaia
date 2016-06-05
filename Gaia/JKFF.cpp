@@ -21,22 +21,47 @@ void JKFF::Draw(CDC* pDC){
 	CDC memDC;
 	memDC.CreateCompatibleDC(pDC);
 	CBitmap bmp;
+
 	switch (radius){
 	case 0:
-		bmp.LoadBitmapW(IDB_DFF);
-		//
-		//this->ins[0].SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 + 5, rect.left, (rect.bottom + rect.top) / 2 + 15);
-		//this->clk.SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 - 15, rect.left, (rect.bottom + rect.top) / 2 - 5);
-		//this->outs[0] = CRect(rect.right - 5, (rect.bottom + rect.top) / 2 - 15, rect.right + 5, (rect.bottom + rect.top) / 2 - 5);
-		//this->outs[1] = CRect(rect.right - 5, (rect.bottom + rect.top) / 2 + 5, rect.right + 5, (rect.bottom + rect.top) / 2 + 15);
+		bmp.LoadBitmapW(IDB_JKFF_0);
+		this->ins[0] = CRect(rect.left - 10, rect.top + 5, rect.left, rect.top + 15);
+		this->ins[1] = CRect(rect.left - 10, rect.top + 50, rect.left, rect.top + 60);
+		this->outs[0] = CRect(rect.right, rect.top + 5, rect.right + 10, rect.top + 15);
+		this->outs[1] = CRect(rect.right, rect.top + 45, rect.right + 10, rect.top + 55);
+		this->clk = CRect(rect.left - 10, (rect.top + rect.bottom) / 2 - 5, rect.left, (rect.top + rect.bottom) / 2 + 5);
 		break;
 	case 1:
+//		bmp.LoadBitmapW(IDB_JKFF_90);
+		this->ins[0] = CRect((rect.left + rect.right) / 2 - 30, rect.top - 10, (rect.left + rect.right) / 2 - 20, rect.top);
+		this->ins[1] = CRect((rect.left + rect.right) / 2 + 20, rect.top - 10, (rect.left + rect.right) / 2 + 30, rect.top);
+		this->outs[0] = CRect((rect.left + rect.right) / 2 - 25, rect.bottom - 3, (rect.left + rect.right) / 2 - 15, rect.bottom + 7);
+		this->outs[1] = CRect((rect.left + rect.right) / 2 + 15, rect.bottom - 3, (rect.left + rect.right) / 2 + 25, rect.bottom + 7);
+		this->clk = CRect((rect.left + rect.right) / 2 - 5, rect.top - 10, (rect.left + rect.right) / 2 + 5, rect.top);
 		break;
 	case 2:
+	//	bmp.LoadBitmapW(IDB_JKFF_180);
+		this->ins[0] = CRect(rect.right + 5, rect.top + 5, rect.right + 15, rect.top + 15);
+		this->ins[1] = CRect(rect.right + 5, rect.top + 50, rect.right + 15, rect.top + 60);
+		this->outs[0] = CRect(rect.left - 5, rect.top + 5, rect.left + 5, rect.top + 15);
+		this->outs[1] = CRect(rect.left - 5, rect.top + 45, rect.left + 5, rect.top + 55);
+		this->clk = CRect(rect.right + 5, (rect.top + rect.bottom) / 2 - 5, rect.right + 15, (rect.top + rect.bottom) / 2 + 5);
 		break;
 	case 3:
+	//	bmp.LoadBitmapW(IDB_JKFF_270);
+		this->ins[0] = CRect((rect.left + rect.right) / 2 - 30, rect.bottom + 5, (rect.left + rect.right) / 2 - 20, rect.bottom + 15);
+		this->ins[1] = CRect((rect.left + rect.right) / 2 + 20, rect.bottom + 5, (rect.left + rect.right) / 2 + 30, rect.bottom + 15);
+		this->outs[0] = CRect((rect.left + rect.right) / 2 - 25, rect.top - 5, (rect.left + rect.right) / 2 - 15, rect.top + 5);
+		this->outs[1] = CRect((rect.left + rect.right) / 2 + 15, rect.top - 5, (rect.left + rect.right) / 2 + 25, rect.top + 5);
+		this->clk = CRect((rect.left + rect.right) / 2 - 5, rect.bottom + 5, (rect.left + rect.right) / 2 + 5, rect.bottom + 15);
 		break;
 	}
+	pDC->Ellipse(this->ins[0]);
+	pDC->Ellipse(this->outs[0]);
+	pDC->Ellipse(this->ins[1]);
+	pDC->Ellipse(this->outs[1]);
+	pDC->Ellipse(this->clk);
+
 	static_assert(sizeof(int) == sizeof(LONG), "이 플랫폼은 지원하지않습니다.");
 	BITMAP bmpinfo;
 	bmp.GetBitmap(&bmpinfo);

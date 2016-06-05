@@ -15,12 +15,11 @@ void GaiaLLogic::SetPoint(CPoint p){
 	case BIG:
 		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 		break;
+	case LARG:
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
+		break;
 	default:
 		break;
-	}
-	if (this->objSize == LIB){
-		w = this->lib_w;
-		h = this->lib_h;
 	}
 	int bx = this->base_point.x / 10;
 	int by = this->base_point.y / 10;
@@ -49,12 +48,11 @@ void GaiaLLogic::SetPoint(){
 	case BIG:
 		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 		break;
+	case LARG:
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
+		break;
 	default:
 		break;
-	}
-	if (this->objSize == LIB){
-		w = this->lib_w;
-		h = this->lib_h;
 	}
 	for (int i = by; i < by + h; i++){
 		for (int j = bx; j < bx + w; j++){
@@ -78,12 +76,11 @@ void GaiaLLogic::ClearPoint(){
 	case BIG:
 		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 		break;
+	case LARG:
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
+		break;
 	default:
 		break;
-	}
-	if (this->objSize == LIB){
-		w = this->lib_w;
-		h = this->lib_h;
 	}
 	for (int i = by; i < by + h; i++){
 		for (int j = bx; j < bx + w; j++){

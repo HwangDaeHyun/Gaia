@@ -10,15 +10,15 @@
 #include"XorGate.h"
 #include"NandGate.h"
 #include"NorGate.h"
-#include"InputBtn.h"
-#include"OutLamp.h"
 #include"DFF.h"
-#include"LibBox.h"
-#include"GaiaListInfo.h"
-#include "SevenSegment.h"
-#include"ClockCycle.h"
 #include"TFF.h"
 #include"JKFF.h"
+#include"LibBox.h"
+#include"InputBtn.h"
+#include "SevenSegment.h"
+#include"OutLamp.h"
+#include"ClockCycle.h"
+#include"GaiaListInfo.h"
 // GaiaDrawView
 using namespace design_pattern;
 
@@ -312,7 +312,7 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 		CBrush brush2(RGB(0, 0, 100));
 		CBrush brush3(RGB(255, 255, 255));
 		CPen pen;
-		pen.CreatePen(PS_NULL, 1, RGB(241, 95, 95));
+		pen.CreatePen(PS_SOLID, 2, RGB(0, 0, 0));
 
 		BOOL isBMP = TRUE;	// 비트맵이 아니라 다른거 그리려면 case에서 FALSE로
 		if (selNum < 10 && selNum > 0){
@@ -346,14 +346,18 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 				drawObj = new XorGate();
 				bmp.LoadBitmapW(IDB_XOR_0);
 				break;
-				//case 26:	//D FF
-				/*drawObj = new DFF();
-				drawObj->Draw(&bDC);*/
-				//	break;
-				//case 27:	//T FF
-				//	break;
-				//case 28:	//JK FF
-				//	break;
+			case 26:	//D FF
+				drawObj = new DFF();
+				bmp.LoadBitmapW(IDB_DFF);
+				break;
+			case 27:	//T FF
+				drawObj = new TFF();
+				bmp.LoadBitmapW(IDB_TFF);
+				break;
+			case 28:	//JK FF
+				drawObj = new JKFF();
+				bmp.LoadBitmapW(IDB_JKFF_0);
+				break;
 
 				//case 39:	//7 Seg
 				//	break;
@@ -361,13 +365,14 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 				isBMP = FALSE;
 				drawObj = new InputBtn();
 				bDC.SelectObject(&brush2);
-				bDC.RoundRect(CRect(point.x-20, point.y-20, point.x + 10, point.y + 10), { 30, 30 });
+				bDC.RoundRect(CRect(point.x - 20, point.y - 20, point.x + 10, point.y + 10), { 30, 30 });
 				bDC.SelectObject(&brush);
-				bDC.Ellipse(point.x-18, point.y-18, point.x + 8, point.y + 8);
+				bDC.Ellipse(point.x - 18, point.y - 18, point.x + 8, point.y + 8);
 				break;
 			case 41:	//output
 				isBMP = FALSE;
 				bDC.SelectObject(&brush3);
+				bDC.SelectObject(pen);
 				drawObj = new OutLamp();
 				bDC.Ellipse(point.x - 25, point.y - 25, point.x + 20, point.y + 20);
 				break;
