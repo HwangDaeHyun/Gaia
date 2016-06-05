@@ -119,6 +119,7 @@
     <ClInclude Include="GaiaView.h" />
     <ClInclude Include="InputBtn.h" />
     <ClInclude Include="LibBox.h" />
+    <ClInclude Include="LibBoxNameDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MenuElement.h" />
     <ClInclude Include="NandGate.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="GaiaView.cpp" />
     <ClCompile Include="InputBtn.cpp" />
     <ClCompile Include="LibBox.cpp" />
+    <ClCompile Include="LibBoxNameDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MenuEleMent.cpp" />
     <ClCompile Include="NandGate.cpp" />
@@ -219,6 +221,8 @@
     <Image Include="res\menu_btn\BTN_PASTE_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_REDO.bmp" />
     <Image Include="res\menu_btn\BTN_REDO_HOVER.bmp" />
+    <Image Include="res\menu_btn\BTN_ROTATE.bmp" />
+    <Image Include="res\menu_btn\BTN_ROTATE_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_SAVE.bmp" />
     <Image Include="res\menu_btn\BTN_SAVE_HOVER.bmp" />
     <Image Include="res\menu_btn\BTN_UNDO.bmp" />

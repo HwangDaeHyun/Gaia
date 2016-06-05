@@ -17,7 +17,7 @@ void AndGate::Draw(CDC* pDC){
 	CBrush *old = pDC->SelectObject(&brush);
 	CBrush brush2(RGB(241, 5, 5));
 	//pDC->FillRect(rect, &brush2);
-
+	this->arrow = GetArrow();
 	CPen pen;
 	pen.CreatePen(PS_NULL, 1, RGB(241, 95, 95));
 	pDC->SelectObject(&pen);

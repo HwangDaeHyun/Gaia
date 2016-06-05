@@ -8,6 +8,7 @@ LibBox::LibBox()
 	mkLib();
 	this->mx_sz = this->in_size > this->out_size ? this->in_size : this->out_size;
 	this->objSize = LIB;
+	this->objKind = LIBBOX;
 	this->lib_h = 8;
 	this->lib_w = 8;
 	if (mx_sz > 3){
@@ -17,87 +18,132 @@ LibBox::LibBox()
 	this->outs.assign(this->out_size, CRect());
 	this->name = _T("LibBox");
 }
-void LibBox::Draw(CDC* pDC){
+LibBox::LibBox(CString name)
+{
+	mkLib();
+	this->mx_sz = this->in_size > this->out_size ? this->in_size : this->out_size;
+	this->objSize = LIB;
+	this->lib_h = 8;
+	this->lib_w = 8;
+	if (this->radius % 2 == 0){// 0, 180
+		if (mx_sz > 3){
+			this->lib_h = mx_sz * 3;
+		}
+	}
+	else{// 90, 270
+		if (mx_sz > 3){
+			this->lib_w = mx_sz * 3;
+		}
+	}
+	this->ins.assign(this->in_size, CRect());
+	this->outs.assign(this->out_size, CRect());
+	this->name = name;
+}
+
+LibBox::LibBox(int sel){
+	auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
+	this->result = lib[sel]->result;
+	this->clk_result = lib[sel]->clk_result;
+	this->in_size = lib[sel]->in_size;
+	this->out_size = lib[sel]->out_size;
+	this->clk_size = lib[sel]->clk_size;
+	this->mx_sz = this->in_size > this->out_size ? this->in_size : this->out_size;
+	this->objSize = LIB;
+	this->objKind = LIBBOX;
+	this->lib_h = lib[sel]->lib_h;
+	this->lib_w = lib[sel]->lib_w;
+	if (mx_sz > 3){
+		this->lib_h = mx_sz * 3;
+	}
+	this->ins.assign(this->in_size, CRect());
+	this->outs.assign(this->out_size, CRect());
+	this->name = lib[sel]->name;
+}
+
+void LibBox::Draw(CDC* pDC)
+{
 	CRect rect(this->base_point.x, this->base_point.y, this->base_point.x + this->lib_w * 10 - 10 + 1, this->base_point.y + this->lib_h * 10 - 10 + 1);
-
-
-	this->baseRect = rect;
-	switch (radius){
+	CRect rec(this->base_point.x, this->base_point.y, this->base_point.x + this->lib_h * 10 - 10 + 1, this->base_point.y + this->lib_w * 10 - 10 + 1);
+	int temp;
+	switch (this->radius){
 	case 0:	// 0
-		for (int i = 0; i < this->ins.size(); i++){	//input
-			this->ins[i] = CRect(this->baseRect.left - 10, this->baseRect.top + 20 * (i + 1), this->baseRect.left, this->baseRect.top + (i + 1) * 20 + 10);
+		this->baseRect = rect;
+		pDC->RoundRect(rect, CPoint(5, 5));
+		for (int i = 0; i < this->ins.size(); i++) {	//input
+			this->ins[i] = CRect(rect.left - 10, rect.top + 20 * (i + 1), rect.left, rect.top + (i + 1) * 20 + 10);
 			pDC->Ellipse(this->ins[i]);
 		}
-		for (int i = 0; i < this->outs.size(); i++){
-			this->outs[i] = CRect(this->baseRect.right, this->baseRect.top + ((i + 1) * 20) + 5, this->baseRect.right + 10, this->baseRect.top + 15 + ((i + 1) * 20));
+		for (int i = 0; i < this->outs.size(); i++) {
+			this->outs[i] = CRect(rect.right, rect.top + ((i + 1) * 20) + 5, rect.right + 10, rect.top + 15 + ((i + 1) * 20));
 			pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
-			this->clk = CRect((this->baseRect.left + this->baseRect.right) / 2, this->baseRect.top - 10, ((this->baseRect.left + this->baseRect.right) / 2) + 10, this->baseRect.top);
+			this->clk = CRect((rect.left + rect.right) / 2, rect.top - 10, ((rect.left + rect.right) / 2) + 10, rect.top);
 			pDC->Ellipse(this->clk);
 		}
 		break;
-		//case 1:	// 90
-		//	for (int i = 0; i < this->ins.size(); i++){	//input
-		//		//this->ins[i] = CRect(this->baseRect.left - 10, this->baseRect.top + 20 * (i + 1), this->baseRect.left, this->baseRect.top + (i + 1) * 20 + 10);
-		//		this->ins[i] = CRect(this->baseRect.top - 10, this->baseRect.left + 20 * (i + 1), this->baseRect.top, this->baseRect.left + (i + 1) * 20 + 10);
-		//		pDC->Ellipse(this->ins[i]);
-		//	}
-		//	for (int i = 0; i < this->outs.size(); i++){
-		//		//this->outs[i] = CRect(rect.right, rect.top + ((i + 1) * 20) + 10, rect.right + 10, rect.top + 20 + ((i + 1) * 20));
-		//		this->outs[i] = CRect(this->baseRect.bottom, this->baseRect.left + ((i + 1) * 20) + 10, this->baseRect.bottom + 10, this->baseRect.left + 20 + ((i + 1) * 20));
-		//		pDC->Ellipse(this->outs[i]);
-		//	}
-		//	if (this->clk_size != 0){
-		//		this->clk = CRect((this->baseRect.top + this->baseRect.bottom) / 2, this->baseRect.left - 10, ((this->baseRect.top + this->baseRect.bottom) / 2) + 10, this->baseRect.left);
-		//		pDC->Ellipse(this->clk);
-		//	}
-		//	break;
-		//case 2:	//180
-		//	for (int i = 0; i < this->ins.size(); i++){	//input
-		//		//this->ins[i] = CRect(this->baseRect.left - 10, this->baseRect.top + 20 * (i + 1), this->baseRect.left, this->baseRect.top + (i + 1) * 20 + 10);
-		//		this->ins[i] = CRect(this->baseRect.right, this->baseRect.top + 20 * (i + 1), this->baseRect.right+10, this->baseRect.top + (i + 1) * 20 + 10);
-		//		pDC->Ellipse(this->ins[i]);
-		//	}
-		//	for (int i = 0; i < this->outs.size(); i++){
-		//		// this->outs[i] = CRect(rect.right, rect.top + ((i + 1) * 20) + 10, rect.right + 10, rect.top + 20 + ((i + 1) * 20));
-		//		this->outs[i] = CRect(this->baseRect.left - 10, rect.top + ((i + 1) * 20) + 10, this->baseRect.left, rect.top + 20 + ((i + 1) * 20));
-		//		pDC->Ellipse(this->outs[i]);
-		//	}
-		//	if (this->clk_size != 0){
-		//		this->clk = CRect((rect.left + rect.right) / 2, this->baseRect.bottom - 10, ((rect.left + rect.right) / 2) + 10, this->baseRect.bottom);
-		//		pDC->Ellipse(this->clk);
-		//	}
-		//	break;
-		//case 3:	//270
-		//	for (int i = 0; i < this->ins.size(); i++){	//input
-		//		//this->ins[i] = CRect(this->baseRect.top - 10, this->baseRect.left + 20 * (i + 1), this->baseRect.top, this->baseRect.left + (i + 1) * 20 + 10);
-		//		this->ins[i] = CRect(this->baseRect.bottom - 10, this->baseRect.left + 20 * (i + 1), this->baseRect.bottom, this->baseRect.left + (i + 1) * 20 + 10);
-		//		pDC->Ellipse(this->ins[i]);
-		//	}
-		//	for (int i = 0; i < this->outs.size(); i++){
-		//		//this->outs[i] = CRect(rect.bottom, rect.left + ((i + 1) * 20) + 10, rect.bottom + 10, rect.left + 20 + ((i + 1) * 20));
-		//		this->outs[i] = CRect(rect.top, rect.left + ((i + 1) * 20) + 10, rect.top + 10, rect.left + 20 + ((i + 1) * 20));
-		//		pDC->Ellipse(this->outs[i]);
-		//	}
-		//	if (this->clk_size != 0){
-		//		this->clk = CRect((rect.top + rect.bottom) / 2, this->baseRect.right - 10, ((rect.top + rect.bottom) / 2) + 10, this->baseRect.right);
-		//		pDC->Ellipse(this->clk);
-		//	}
-		//	break;
-		//}
-
+	case 1:	// 90
+		this->baseRect = rec;
+		pDC->RoundRect(rec, CPoint(5, 5));
+		for (int i = 0; i < this->ins.size(); i++){	//input
+			//	CBrush b(RGB(255, 0, 0));
+			//	pDC->FillRect(rect, &b);
+			//this->ins[i] = CRect(this->baseRect.left - 10, this->baseRect.top + 20 * (i + 1), this->baseRect.left, this->baseRect.top + (i + 1) * 20 + 10);
+			this->ins[i] = CRect(rec.left + 20 * (i + 1), rec.top - 20, rec.left + 20 * (i + 1) + 20, rec.top - 10);
+			//this->ins[i] = CRect(rec.left - 10, rec.top + 20 * (i + 1), rec.left, rec.top + (i + 1) * 20 + 10);
+			pDC->Ellipse(this->ins[i]);
+		}
+		for (int i = 0; i < this->outs.size(); i++){
+			//this->outs[i] = CRect(rect.right, rect.top + ((i + 1) * 20) + 10, rect.right + 10, rect.top + 20 + ((i + 1) * 20));
+			//this->outs[i] = CRect(rec.top, rec.left + ((i + 1) * 20) + 10, rec.top + 10, rec.left + 20 + ((i + 1) * 20));
+			this->outs[i] = CRect(rec.right, rec.top + ((i + 1) * 20) + 5, rec.right + 10, rec.top + 15 + ((i + 1) * 20));
+			pDC->Ellipse(this->outs[i]);
+		}
+		if (this->clk_size != 0){
+			this->clk = CRect(rec.right + 10, ((rec.top + rec.bottom) / 2) + 10, rec.right + 20, ((rec.top + rec.bottom) / 2) + 20);
+			pDC->Ellipse(this->clk);
+		}
+		break;
+	case 2:	//180
+		this->baseRect = rect;
+		pDC->RoundRect(rect, CPoint(5, 5));
+		for (int i = 0; i < this->ins.size(); i++){	//input
+			//this->ins[i] = CRect(this->baseRect.left - 10, this->baseRect.top + 20 * (i + 1), this->baseRect.left, this->baseRect.top + (i + 1) * 20 + 10);
+			this->ins[i] = CRect(this->baseRect.right, this->baseRect.top + 20 * (i + 1), this->baseRect.right + 10, this->baseRect.top + (i + 1) * 20 + 10);
+			pDC->Ellipse(this->ins[i]);
+		}
+		for (int i = 0; i < this->outs.size(); i++){
+			// this->outs[i] = CRect(rect.right, rect.top + ((i + 1) * 20) + 10, rect.right + 10, rect.top + 20 + ((i + 1) * 20));
+			this->outs[i] = CRect(this->baseRect.left - 20, rect.top + ((i + 1) * 20) + 10, this->baseRect.left - 10, rect.top + 20 + ((i + 1) * 20));
+			pDC->Ellipse(this->outs[i]);
+		}
+		if (this->clk_size != 0){
+			this->clk = CRect((rect.left + rect.right) / 2, this->baseRect.bottom - 10, ((rect.left + rect.right) / 2) + 10, this->baseRect.bottom);
+			pDC->Ellipse(this->clk);
+		}
+		break;
+	case 3:	//270
+		temp = this->lib_h;
+		this->lib_h = this->lib_w;
+		this->lib_w = temp;
+		this->baseRect = rec;
+		pDC->RoundRect(rec, CPoint(5, 5));
+		for (int i = 0; i < this->ins.size(); i++){	//input
+			//this->ins[i] = CRect(this->baseRect.top - 10, this->baseRect.left + 20 * (i + 1), this->baseRect.top, this->baseRect.left + (i + 1) * 20 + 10);
+			this->ins[i] = CRect(this->baseRect.bottom - 10, this->baseRect.left + 20 * (i + 1), this->baseRect.bottom, this->baseRect.left + (i + 1) * 20 + 10);
+			pDC->Ellipse(this->ins[i]);
+		}
+		for (int i = 0; i < this->outs.size(); i++){
+			//this->outs[i] = CRect(rect.bottom, rect.left + ((i + 1) * 20) + 10, rect.bottom + 10, rect.left + 20 + ((i + 1) * 20));
+			this->outs[i] = CRect(rect.top, rect.left + ((i + 1) * 20) + 10, rect.top + 10, rect.left + 20 + ((i + 1) * 20));
+			pDC->Ellipse(this->outs[i]);
+		}
+		if (this->clk_size != 0){
+			this->clk = CRect((rect.top + rect.bottom) / 2, this->baseRect.right - 10, ((rect.top + rect.bottom) / 2) + 10, this->baseRect.right);
+			pDC->Ellipse(this->clk);
+		}
+		break;
 	}
-
-
-
-
-
-	pDC->RoundRect(rect, CPoint(5, 5));
-
-
-
-
 
 	//글자를 그립니다
 	CFont font;
@@ -151,7 +197,6 @@ void LibBox::Calculate(){
 	}
 }
 void LibBox::mkLib(){
-	vector<int> temp_in;		//dboard 의상태를 저장
 	vector<CRect> cal_in;		//input 들의 위치
 	vector<CRect> cal_out;		//out
 	CRect cal_clk;				//clk
@@ -180,10 +225,6 @@ void LibBox::mkLib(){
 			this->out_size++;
 		}
 	COME: {};
-	}
-	for (int i = 0; i < cal_in.size(); i++){		//dBoard의 상태를 저장합니다.
-		temp_in.push_back(db[cal_in[i].CenterPoint().x / 10][cal_in[i].CenterPoint().y / 10]);
-		db[cal_in[i].CenterPoint().x / 10][cal_in[i].CenterPoint().y / 10] = 0;
 	}
 	int tempPrev = -1;
 	int nCase = (int)pow(3, this->clk_size + this->in_size);
@@ -230,7 +271,21 @@ void LibBox::mkLib(){
 			}
 		}
 	}
-	for (int i = 0; i < cal_in.size(); i++){
-		db[cal_in[i].CenterPoint().x / 10][cal_in[i].CenterPoint().y / 10] = temp_in[i];
+	for (int i = 0; i < cal_out.size(); i++){
+		db[cal_out[i].CenterPoint().x / 10][cal_out[i].CenterPoint().y / 10] = -1;
 	}
+	for (int i = 0; i < cal_in.size(); i++){
+		db[cal_in[i].CenterPoint().x / 10][cal_in[i].CenterPoint().y / 10] = -1;
+	}
+	for (int i = 0; i < cal_in.size(); i++){
+		Update(cal_in[i]);
+	}
+	for (int i = 0; i < cal_out.size(); i++){
+		Update(cal_out[i]);
+	}
+	if (cal_clk != 0){
+		db[cal_clk.CenterPoint().x / 10][cal_clk.CenterPoint().y / 10] = -1;
+		Update(cal_clk);
+	}
+	UpdateDBoard();
 }

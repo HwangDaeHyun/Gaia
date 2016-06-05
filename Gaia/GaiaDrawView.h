@@ -21,6 +21,8 @@ protected:
 	CPoint clickPoint;
 	CRect draggedRect;
 	CPoint clickBase;
+	int sel_index = -1;
+	BOOL isSelec = FALSE;
 public:
 	vector<PDV> tempEdges;
 	deque<PDV> plusWays;

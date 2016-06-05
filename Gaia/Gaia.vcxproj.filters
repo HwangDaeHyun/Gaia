@@ -153,6 +153,9 @@
     <ClInclude Include="ClockCycle.h">
       <Filter>헤더 파일\Input/Output</Filter>
     </ClInclude>
+    <ClInclude Include="LibBoxNameDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Gaia.cpp">
@@ -238,6 +241,9 @@
     </ClCompile>
     <ClCompile Include="ClocCycle.cpp">
       <Filter>소스 파일\Input/Output</Filter>
+    </ClCompile>
+    <ClCompile Include="LibBoxNameDlg.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -415,6 +421,12 @@
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\CLK.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_ROTATE.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menu_btn\BTN_ROTATE_HOVER.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

@@ -153,6 +153,16 @@ BEGIN
     DEFPUSHBUTTON   "확인",IDOK,113,41,50,14,WS_GROUP
 END
 
+IDD_DIALOG1 DIALOGEX 0, 0, 243, 70
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "LibBox Name Setting"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,125,42,50,14
+    PUSHBUTTON      "취소",IDCANCEL,179,42,50,14
+    EDITTEXT        IDC_EDIT1,15,19,213,18,ES_AUTOHSCROLL
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -207,6 +217,14 @@ BEGIN
         RIGHTMARGIN, 163
         TOPMARGIN, 7
         BOTTOMMARGIN, 55
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 236
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 63
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -265,6 +283,8 @@ IDB_BTN_ADD_HOVER       BITMAP                  "res\\menu_btn\\BTN_ADD_HOVER.bm
 IDB_BTN_CLK             BITMAP                  "res\\menu_btn\\BTN_CLK.bmp"
 IDB_BTN_CLK_HOVER       BITMAP                  "res\\menu_btn\\BTN_CLK_HOVER.bmp"
 IDB_CLK                 BITMAP                  "res\\CLK.bmp"
+IDB_BTN_ROTATE          BITMAP                  "res\\menu_btn\\BTN_ROTATE.bmp"
+IDB_BTN_ROTATE_HOVER    BITMAP                  "res\\menu_btn\\BTN_ROTATE_HOVER.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

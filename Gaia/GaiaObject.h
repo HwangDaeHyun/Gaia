@@ -7,7 +7,7 @@
 
 using namespace design_pattern;
 enum ObjectSize{ SMALL, MID, BIG, LIB };
-enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, CLOCKCYCLE,SEVENSEG };
+enum ObjectKind{ NOTTHING, AND, OR, NOT, NAND, XOR, NOR, DFLIP, TFLIP, JKFLIP, INBUTTON, OUTLAMP, CLOCKCYCLE,SEVENSEG, LIBBOX };
 
 class GaiaObject : public CObject{
 	DECLARE_SERIAL(GaiaObject)
@@ -23,6 +23,13 @@ public:
 	CString arrow;
 	bool btn = false;
 	int radius = 0; //{0,1,2,3};
+public:
+	int in_size = 0;
+	int out_size = 0;
+	int clk_size = 0;
+	int mx_sz;
+	vector<vector<int>> result;
+	vector<vector<int>> clk_result;
 public:
 	CRect baseRect;
 	CRect clk = CRect();			//Å¬·°

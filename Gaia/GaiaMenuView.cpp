@@ -6,7 +6,7 @@
 #include"GaiaDoc.h"
 #include"LibBox.h"
 #include "GaiaMenuView.h"
-
+#include"LibBoxNameDlg.h"
 
 // GaiaMenuView
 
@@ -127,32 +127,6 @@ void GaiaMenuView::OnPaint()
 		}
 	}
 	////
-	CFont font;
-	font.CreateFont(8,                     // 글자높이
-		7,                     // 글자너비
-		0,                      // 출력각도
-		0,                      // 기준 선에서의각도
-		FW_HEAVY,              // 글자굵기
-		FALSE,                  // Italic 적용여부
-		FALSE,                  // 밑줄적용여부
-		FALSE,                  // 취소선적용여부
-		DEFAULT_CHARSET,       // 문자셋종류
-		OUT_DEFAULT_PRECIS,    // 출력정밀도
-		CLIP_DEFAULT_PRECIS,   // 클리핑정밀도
-		DEFAULT_QUALITY,       // 출력문자품질
-		DEFAULT_PITCH,         // 글꼴Pitch
-		_T("Time New Romans")           // 글꼴
-		);
-	CRect r;
-	this->GetClientRect(&r);
-	CRect cr(r.right - 350, r.bottom - 50, r.right, r.bottom);
-	CBrush b(RGB(255, 255, 0));
-	//bDC.FillRect(cr, &b);
-	bDC.SetBkMode(TRANSPARENT);
-	bDC.SetTextColor(RGB(200, 200, 222));
-	bDC.DrawText(_T("@Created by DaeHyun, JaeChan On 2016. ??. ??...\n@Copyright (C) 2016 DaeHyun, JaeChan.\n@All rights reserved."),
-		&cr, DT_LEFT | DT_BOTTOM | DT_WORDBREAK);
-	////
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	brush.DeleteObject();
 }
@@ -198,27 +172,34 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
-			else if ((*it)->myID == 4){		// 라이브러리 박스 삭제
+			else if ((*it)->myID == 4){		//라이브러리박스 추가
+				auto& s = SingleTon<GaiaDrawGrid>::use()->sel_objects;
+				if (s.empty() == FALSE){
+					auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
+					LibBoxNameDlg dlg;
+					if (dlg.DoModal() == IDOK){
+						n.push_back(dlg.libName);
+						LibBox* lbox = new LibBox(dlg.libName);
+						lib.push_back(lbox);
+						s.clear();
+						printf("lib size %d L name size : %d\n", lib.size(), n.size());
+
+					}
+				}
+				else{
+					MessageBox(_T("선택된 개체가 없습니다."));
+				}
+			}
+			else if ((*it)->myID == 5){		// 라이브러리 박스 삭제
 				if (SingleTon<GaiaSheetListRepo>::use()->sel_lib > 0){
+					auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
 					n.erase(n.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib);
+					lib.erase(lib.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib - 1);
 					SingleTon<GaiaSheetListRepo>::use()->sel_lib = -1;
 					SingleTon<GaiaGateInfo>::use()->selObj = -1;
 					SingleTon<GaiaGateInfo>::use()->isDrawObject = FALSE;
 					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
-					//printf("Menu : %d \n", SingleTon<GaiaSheetListRepo>::use()->sel_btn);
 				}
-			}
-			else if ((*it)->myID == 5){		//라이브러리박스 추가
-				n.push_back(_T("ADD"));
-				//auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-				//e.clear();
-				//SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
-				auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
-				auto& s = SingleTon<GaiaDrawGrid>::use()->sel_objects;
-				LibBox* lbox = new LibBox();
-				e.push_back(lbox);
-				s.clear();
-
 			}
 			else if ((*it)->myID == 6){
 
@@ -294,14 +275,15 @@ int GaiaMenuView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	this->InsertMenuElement(0, 1, IDB_BTN_NEW, IDB_BTN_NEW_HOVER);
 	this->InsertMenuElement(0, 2, IDB_BTN_OPEN, IDB_BTN_OPEN_HOVER);
 	this->InsertMenuElement(0, 3, IDB_BTN_SAVE, IDB_BTN_SAVE_HOVER);
-	this->InsertMenuElement(0, 4, IDB_BTN_DELETE, IDB_BTN_DELETE_HOVER);
-	this->InsertMenuElement(0, 5, IDB_BTN_ADD, IDB_BTN_ADD_HOVER);
+	this->InsertMenuElement(0, 4, IDB_BTN_ADD, IDB_BTN_ADD_HOVER);
+	this->InsertMenuElement(0, 5, IDB_BTN_DELETE, IDB_BTN_DELETE_HOVER);
 	this->InsertMenuElement(0, 6, IDB_BTN_COPY, IDB_BTN_COPY_HOVER);
 	this->InsertMenuElement(0, 7, IDB_BTN_CUT, IDB_BTN_CUT_HOVER);
 	this->InsertMenuElement(0, 8, IDB_BTN_PASTE, IDB_BTN_PASTE_HOVER);
 	this->InsertMenuElement(0, 9, IDB_BTN_UNDO, IDB_BTN_UNDO_HOVER);
 	this->InsertMenuElement(0, 10, IDB_BTN_REDO, IDB_BTN_REDO_HOVER);
 	this->InsertMenuElement(0, 11, IDB_BTN_CLK, IDB_BTN_CLK_HOVER);
+	this->InsertMenuElement(0, 12, IDB_BTN_ROTATE, IDB_BTN_ROTATE_HOVER);
 	return 0;
 }
 

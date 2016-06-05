@@ -84,6 +84,7 @@ public:
 	vector<vector<bool>> grid;
 	vector<GaiaObject*> objects;
 	vector<GaiaObject*> sel_objects;
+	vector<GaiaObject*> lib_objects;
 	vector<PDV> edges;
 	vector<CRect> inBtns;
 	int board[GSIZE][GSIZE];

@@ -3,24 +3,29 @@
 void GaiaLLogic::SetPoint(CPoint p){
 	this->base_point = CPoint(p.x * 10, p.y * 10);
 	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
-	int len = 0;
+	int w = 0;
+	int h = 0;
 	switch (this->objSize){
 	case SMALL:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() - 1;
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() - 1;
 		break;
 	case MID:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetLength() - 1;
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLength() - 1;
 		break;
 	case BIG:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 		break;
 	default:
 		break;
 	}
+	if (this->objSize == LIB){
+		w = this->lib_w;
+		h = this->lib_h;
+	}
 	int bx = this->base_point.x / 10;
 	int by = this->base_point.y / 10;
-	for (int i = by; i < by + len; i++){
-		for (int j = bx; j < bx + len; j++){
+	for (int i = by; i < by + w; i++){
+		for (int j = bx; j < bx + h; j++){
 			grid[j][i] = true;
 		}
 	}
@@ -32,22 +37,27 @@ void GaiaLLogic::SetPoint(){
 	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 	int bx = this->base_point.x / 10;
 	int by = this->base_point.y / 10;
-	int len = 0;
+	int w = 0;
+	int h = 0;
 	switch (this->objSize){
 	case SMALL:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() - 1;
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() - 1;
 		break;
 	case MID:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetLength() - 1;
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLength() - 1;
 		break;
 	case BIG:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 		break;
 	default:
 		break;
 	}
-	for (int i = by; i < by + len; i++){
-		for (int j = bx; j < bx + len; j++){
+	if (this->objSize == LIB){
+		w = this->lib_w;
+		h = this->lib_h;
+	}
+	for (int i = by; i < by + h; i++){
+		for (int j = bx; j < bx + w; j++){
 			grid[j][i] = true;
 		}
 	}
@@ -56,22 +66,27 @@ void GaiaLLogic::ClearPoint(){
 	auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 	int bx = this->base_point.x / 10;
 	int by = this->base_point.y / 10;
-	int len = 0;
+	int w = 0;
+	int h = 0;
 	switch (this->objSize){
 	case SMALL:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() - 1;
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetSmallLength() - 1;
 		break;
 	case MID:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetLength() - 1;
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLength() - 1;
 		break;
 	case BIG:
-		len = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 		break;
 	default:
 		break;
 	}
-	for (int i = by; i < by + len; i++){
-		for (int j = bx; j < bx + len; j++){
+	if (this->objSize == LIB){
+		w = this->lib_w;
+		h = this->lib_h;
+	}
+	for (int i = by; i < by + h; i++){
+		for (int j = bx; j < bx + w; j++){
 			grid[j][i] = false;
 		}
 	}

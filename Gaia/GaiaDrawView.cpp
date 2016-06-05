@@ -12,6 +12,7 @@
 #include"InputBtn.h"
 #include"OutLamp.h"
 #include"DFF.h"
+#include"LibBox.h"
 #include"GaiaListInfo.h"
 #include "SevenSegment.h"
 #include"ClockCycle.h"
@@ -298,58 +299,65 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
 		CBitmap bmp;
+		auto& selNum = SingleTon<GaiaGateInfo>::use()->selObj;
 		int w = 60;
 		int h = 60;
 		BOOL isBMP = TRUE;	// 비트맵이 아니라 다른거 그리려면 case에서 FALSE로
-		switch (SingleTon<GaiaGateInfo>::use()->selObj){
-		case 10:
-			drawObj = new AndGate();
-			bmp.LoadBitmapW(IDB_AND_0);
-			break;
-		case 11:
-			drawObj = new OrGate();
-			bmp.LoadBitmapW(IDB_OR_0);
-			break;
-			//case 12:	//Not
-			//	drawObj = new NotGate();
-			//	drawObj->SetRadius();
-			//	break;
-		case 13:	//Nand
-			drawObj = new NandGate();
-			bmp.LoadBitmapW(IDB_NAND_0);
-			w = 70;
-			break;
-		case 14:	//Nor
-			drawObj = new NorGate();
-			bmp.LoadBitmapW(IDB_NOR_0);
-			break;
-		case 15:	//Xor
-			drawObj = new XorGate();
-			bmp.LoadBitmapW(IDB_XOR_0);
-			break;
-		//case 26:	//D FF
-			/*drawObj = new DFF();
-			drawObj->Draw(&bDC);*/
-			//	break;
-			//case 27:	//T FF
-			//	break;
-			//case 28:	//JK FF
-			//	break;
-
-			//case 39:	//7 Seg
-			//	break;
-			//case 40:	//input
-			//	break;
-			//case 41:	//output
-			//	break;
+		if (selNum < 10 && selNum > 0){
+			auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
+			drawObj = new LibBox(selNum - 1);
 		}
-		if (isBMP == TRUE){
-			BITMAP bmpinfo;
-			CBitmap* oldbmp = memDC.SelectObject(&bmp);
-			bmp.GetBitmap(&bmpinfo);
-			memDC.SelectObject(&bmp);
-			bDC.TransparentBlt(point.x - 30, point.y - 30, w, h, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
-			memDC.SelectObject(oldbmp);
+		else{
+			switch (SingleTon<GaiaGateInfo>::use()->selObj){
+			case 10:
+				drawObj = new AndGate();
+				bmp.LoadBitmapW(IDB_AND_0);
+				break;
+			case 11:
+				drawObj = new OrGate();
+				bmp.LoadBitmapW(IDB_OR_0);
+				break;
+				//case 12:	//Not
+				//	drawObj = new NotGate();
+				//	drawObj->SetRadius();
+				//	break;
+			case 13:	//Nand
+				drawObj = new NandGate();
+				bmp.LoadBitmapW(IDB_NAND_0);
+				w = 70;
+				break;
+			case 14:	//Nor
+				drawObj = new NorGate();
+				bmp.LoadBitmapW(IDB_NOR_0);
+				break;
+			case 15:	//Xor
+				drawObj = new XorGate();
+				bmp.LoadBitmapW(IDB_XOR_0);
+				break;
+				//case 26:	//D FF
+				/*drawObj = new DFF();
+				drawObj->Draw(&bDC);*/
+				//	break;
+				//case 27:	//T FF
+				//	break;
+				//case 28:	//JK FF
+				//	break;
+
+				//case 39:	//7 Seg
+				//	break;
+				//case 40:	//input
+				//	break;
+				//case 41:	//output
+				//	break;
+			}
+			if (isBMP == TRUE){
+				BITMAP bmpinfo;
+				CBitmap* oldbmp = memDC.SelectObject(&bmp);
+				bmp.GetBitmap(&bmpinfo);
+				memDC.SelectObject(&bmp);
+				bDC.TransparentBlt(point.x - 30, point.y - 30, w, h, &memDC, 0, 0, bmpinfo.bmWidth, bmpinfo.bmHeight, RGB(0, 0, 0));
+				memDC.SelectObject(oldbmp);
+			}
 		}
 	}
 }
@@ -541,15 +549,18 @@ R:{};
 		return;
 	}
 	sel = -1;
+	//오브젝트 하나 선택
 	for (int i = 0; i < e.size(); i++){
 		if (e[i]->baseRect.PtInRect(point) == TRUE){
-			SingleTon<GaiaDrawListRepo>::use()->selRect = e[i]->baseRect;	//오브젝트하나를 선택합니다.
 			sel = i;
 			clickPoint = point;
 			e[i]->ClearPoint();
 			clickBase = e[i]->base_point;
+			SingleTon<GaiaDrawGrid>::use()->sel_objects.push_back(e[i]);
+			isDrag = FALSE;
 			break;
 		}
+
 	}
 
 	if (sel != -1){
@@ -621,7 +632,6 @@ R:{};
 		//
 	}
 	//==
-	SingleTon<GaiaDrawListRepo>::use()->selRect = nullptr;					//선택된 오브젝트가 없습니다.
 	GaiaCView::OnLButtonDown(nFlags, point);
 }
 
@@ -655,6 +665,9 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 			s.push_back(e[datas->at(i)]);
 		}
 		datas->~vector();
+	}
+	else{
+		this->isDrag = FALSE;
 	}
 	if (sel != -1){
 		pDoc->PushGaiaList();
