@@ -468,32 +468,59 @@
     <Image Include="res\menu_btn\bitmap7.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="res\gate\NOT_0.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\gate\NOT_90.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\gate\NOT_180.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="res\gate\NOT_270.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
     <Image Include="res\menu_btn\BTN_TIMER.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
     <Image Include="res\menu_btn\BTN_TIMER_HOVER.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="res\gate\NOT_0.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_90.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_180.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
+    <Image Include="res\gate\NOT_270.bmp">
+      <Filter>리소스 파일\gate</Filter>
+    </Image>
     <Image Include="res\memmory\DFF_0.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\DFF_180.bmp">
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\DFF_90.bmp">
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\DFF_270.bmp">
+      <Filter>리소스 파일\FF</Filter>
     </Image>
     <Image Include="res\memmory\JKFF_0.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\JKFF_180.bmp">
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\JKFF_90.bmp">
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\JKFF_270.bmp">
+      <Filter>리소스 파일\FF</Filter>
     </Image>
     <Image Include="res\memmory\TFF_0.bmp">
-      <Filter>리소스 파일</Filter>
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\TFF_90.bmp">
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\TFF_180.bmp">
+      <Filter>리소스 파일\FF</Filter>
+    </Image>
+    <Image Include="res\memmory\TFF_270.bmp">
+      <Filter>리소스 파일\FF</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -96,6 +96,16 @@
 #define IDB_DFF_0                       400
 #define IDB_JKFF_0                      401
 #define IDB_TFF_0                       402
+#define IDB_DFF_90                      404
+#define IDB_DFF_180                     405
+#define IDB_DFF_270                     406
+#define IDB_JKFF_90                     408
+#define IDB_JKFF_180                    409
+#define IDB_JKFF_270                    410
+#define IDB_TFF_90                      412
+#define IDB_TFF_180                     413
+#define IDB_BITMAP19                    414
+#define IDB_TFF_270                     414
 #define IDC_EDIT1                       1000
 #define ID_ACCELERATOR32772             32772
 
@@ -103,7 +113,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        403
+#define _APS_NEXT_RESOURCE_VALUE        415
 #define _APS_NEXT_COMMAND_VALUE         32774
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310

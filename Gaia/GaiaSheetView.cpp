@@ -36,11 +36,11 @@ void GaiaSheetView::creatTree(){
 	}
 	this->InsertSheetElement(1, 0, 200, _T("Memmory"), RGB(100, 181, 246));
 	for (int i = 6; i < 9; i++){
-		this->InsertSheetElement(0, 200, i + 20, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
+		this->InsertSheetElement(0, 200, i + 20, names[i], RGB(116, 179, 231));
 	}
-	this->InsertSheetElement(1, 0, 300, _T("Button"), RGB(187, 222, 251));
-	for (int i = 9; i < 12; i++){
-		this->InsertSheetElement(0, 300, i + 30, names[i], SingleTon<GaiaGateInfo>::use()->colors[i]);
+	this->InsertSheetElement(1, 0, 300, _T("Button"), RGB(13, 200, 200));
+	for (int i = 9; i < 13; i++){
+		this->InsertSheetElement(0, 300, i + 30, names[i], RGB(187, 222, 251));
 	}
 }
 void GaiaSheetView::InsertSheetElement(int tid, int pid, int mid, CString name, COLORREF col) {

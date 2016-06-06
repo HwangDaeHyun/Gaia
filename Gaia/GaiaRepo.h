@@ -137,7 +137,8 @@ public:
 		names.push_back(_T("7-Segment"));
 		names.push_back(_T("Input Button"));
 		names.push_back(_T("Output Lamp"));
-		libName.push_back(_T("Main"));
+		names.push_back(_T("Clock Button"));
+		//libName.push_back(_T("Main"));
 	}
 };
 typedef pair<CRect, CRect> RPAIR; //rect pair

@@ -84,14 +84,7 @@ void InputBtn::Draw(CDC* pDC){
 }
 
 void InputBtn::Calculate(){
-	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-	if (!this->outputGraph.empty()&&this->outputGraph[0].size() > 15){
-		this->outputGraph[0].clear();
-	}
-	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
-		return;
-	}
-	this->outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
+
 }
 IMPLEMENT_SERIAL(InputBtn, GaiaLLogic, 13)
 void InputBtn::Serialize(CArchive& ar){

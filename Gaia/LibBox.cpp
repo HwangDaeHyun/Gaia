@@ -70,14 +70,17 @@ void LibBox::Draw(CDC* pDC)
 	pDC->Rectangle(rect);
 	switch (this->radius){
 	case 0:	// 0
-
 		for (int i = 0; i < this->ins.size(); i++) {	//input
 			this->ins[i] = CRect(rect.left - 20, rect.top + 17 * (i + 1), rect.left - 10, rect.top + (i + 1) * 17 + 10);
-			pDC->Ellipse(this->ins[i]);
+			pDC->MoveTo(this->ins[i].left + 5, (this->ins[i].top + this->ins[i].bottom) / 2);
+			pDC->LineTo(this->ins[i].right + 5, (this->ins[i].top + this->ins[i].bottom) / 2);
+			//pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
 			this->outs[i] = CRect(rect.right + 17, rect.top + ((i + 1) * 17) + 5, rect.right + 27, rect.top + 15 + ((i + 1) * 17));
-			pDC->Ellipse(this->outs[i]);
+			pDC->MoveTo(this->outs[i].left - 13, (this->outs[i].top + this->outs[i].bottom) / 2 - 1);
+			pDC->LineTo(this->outs[i].right - 7, (this->outs[i].top + this->outs[i].bottom) / 2 - 1);
+			//pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
 			this->clk = CRect((rect.left + rect.right) / 2, rect.top - 15, ((rect.left + rect.right) / 2) + 10, rect.top - 5);
@@ -87,11 +90,15 @@ void LibBox::Draw(CDC* pDC)
 	case 1:	// 90
 		for (int i = 0; i < this->ins.size(); i++) {	//input
 			this->ins[i] = CRect(rect.left + 17 * (i + 1), rect.top - 15, rect.left + 17 * (i + 1) + 10, rect.top - 5);
-			pDC->Ellipse(this->ins[i]);
+			pDC->MoveTo((this->ins[i].left + this->ins[i].right) / 2, this->ins[i].top + 5);
+			pDC->LineTo((this->ins[i].left + this->ins[i].right) / 2, this->ins[i].bottom);
+			//pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
 			this->outs[i] = CRect(rect.left + 17 * (i + 1), rect.bottom + 15, rect.left + 17 * (i + 1) + 10, rect.bottom + 25);
-			pDC->Ellipse(this->outs[i]);
+			pDC->MoveTo((this->outs[i].left + this->outs[i].right) / 2 - 5, this->outs[i].top - 10);
+			pDC->LineTo((this->outs[i].left + this->outs[i].right) / 2 - 5, this->outs[i].bottom - 10);
+			//pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
 			this->clk = CRect(rect.right + 10, (rect.top + rect.bottom) / 2, rect.right + 20, (rect.top + rect.bottom) / 2 + 10);
@@ -100,12 +107,16 @@ void LibBox::Draw(CDC* pDC)
 		break;
 	case 2:	//180
 		for (int i = 0; i < this->ins.size(); i++) {	//input
-			this->ins[i] = CRect(rect.right, rect.top + 17 * (i + 1), rect.right + 10, rect.top + (i + 1) * 17 + 10);
-			pDC->Ellipse(this->ins[i]);
+			this->ins[i] = CRect(rect.right + 10, rect.top + 17 * (i + 1), rect.right + 20, rect.top + (i + 1) * 17 + 10);
+			pDC->MoveTo(this->ins[i].left - 10, (this->ins[i].top + this->ins[i].bottom) / 2 - 1);
+			pDC->LineTo(this->ins[i].right - 7, (this->ins[i].top + this->ins[i].bottom) / 2 - 1);
+			//pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
-			this->outs[i] = CRect(rect.left - 15, rect.top + ((i + 1) * 17) + 5, rect.left - 5, rect.top + 15 + ((i + 1) * 17));
-			pDC->Ellipse(this->outs[i]);
+			this->outs[i] = CRect(rect.left - 30, rect.top + ((i + 1) * 17) + 5, rect.left - 20, rect.top + 15 + ((i + 1) * 17));
+			pDC->MoveTo(this->outs[i].left + 15, (this->outs[i].top + this->outs[i].bottom) / 2);
+			pDC->LineTo(this->outs[i].right + 15, (this->outs[i].top + this->outs[i].bottom) / 2);
+			//pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
 			this->clk = CRect((rect.left + rect.right) / 2, rect.bottom + 10, ((rect.left + rect.right) / 2) + 10, rect.bottom + 20);
@@ -115,11 +126,15 @@ void LibBox::Draw(CDC* pDC)
 	case 3:	//270
 		for (int i = 0; i < this->ins.size(); i++) {	//input
 			this->ins[i] = CRect(rect.left + 17 * (i + 1), rect.bottom + 10, rect.left + 17 * (i + 1) + 10, rect.bottom + 20);
-			pDC->Ellipse(this->ins[i]);
+			pDC->MoveTo((this->ins[i].left + this->ins[i].right) / 2, this->ins[i].top - 10);
+			pDC->LineTo((this->ins[i].left + this->ins[i].right) / 2, this->ins[i].bottom - 10);
+			//pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
 			this->outs[i] = CRect(rect.left + 17 * (i + 1), rect.top - 30, rect.left + 17 * (i + 1) + 10, rect.top - 20);
-			pDC->Ellipse(this->outs[i]);
+			pDC->MoveTo((this->outs[i].left + this->outs[i].right) / 2 - 5, this->outs[i].top + 7);
+			pDC->LineTo((this->outs[i].left + this->outs[i].right) / 2 - 5, this->outs[i].bottom + 10);
+			//pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
 			this->clk = CRect(rect.left - 20, (rect.top + rect.bottom) / 2, rect.left - 10, (rect.top + rect.bottom) / 2 + 10);
@@ -127,6 +142,7 @@ void LibBox::Draw(CDC* pDC)
 		}
 		break;
 	}
+
 
 	//글자를 그립니다
 	CFont font;

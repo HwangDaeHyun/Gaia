@@ -154,6 +154,9 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 					pDoc->OnSaveDocument();
 				}
+				SingleTon<GaiaGateInfo>::use()->libName.clear();
+				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+
 				SingleTon<GaiaDrawGrid>::use()->edges.clear();
 				SingleTon<GaiaDrawGrid>::use()->objects.clear();
 				memset(SingleTon<GaiaDrawGrid>::use()->dBoard, -1, sizeof(GSIZE*GSIZE));
@@ -175,9 +178,10 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				pDoc->OnSaveDocument();
 			}
 			else if ((*it)->myID == 2){			//불러오기
+				SingleTon<GaiaGateInfo>::use()->libName.clear();
+				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
-
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 			}
 			else if ((*it)->myID == 4){		//라이브러리박스 추가

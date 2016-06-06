@@ -119,7 +119,7 @@ void NorGate::Draw(CDC* pDC){
 		_T("Time New Romans")           // ±Û²Ã
 		);
 	pDC->SelectObject(&font);
-	pDC->SetTextColor(RGB(200, 250, 200));
+	pDC->SetTextColor(RGB(250, 250, 250));
 	pDC->SetBkMode(TRANSPARENT);
 	pDC->DrawText(this->name, &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	pen2.DeleteObject();

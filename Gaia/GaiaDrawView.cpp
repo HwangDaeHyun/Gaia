@@ -29,6 +29,7 @@ GaiaDrawView::GaiaDrawView()
 	SingleTon<GaiaObjectSizeInfo>::use()->SetLength(8);
 	SingleTon<GaiaObjectSizeInfo>::use()->SetSmallLength(6);
 	SingleTon<GaiaObjectSizeInfo>::use()->SetBigLength(10);
+	SingleTon<GaiaObjectSizeInfo>::use()->SetLargLength(15);
 }
 
 GaiaDrawView::~GaiaDrawView()
@@ -311,13 +312,14 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 		CBrush brush(RGB(200, 110, 111));
 		CBrush brush2(RGB(0, 0, 100));
 		CBrush brush3(RGB(255, 255, 255));
-		CPen pen;
-		pen.CreatePen(PS_SOLID, 2, RGB(0, 0, 0));
+		CBrush b(RGB(40, 40, 40));
+		CPen pen(PS_SOLID, 2, RGB(0, 0, 0));
+		CPen pen2(PS_SOLID, 5, RGB(40, 40, 255));
 
 		BOOL isBMP = TRUE;	// 비트맵이 아니라 다른거 그리려면 case에서 FALSE로
-		if (selNum < 10 && selNum > 0){
+		if (selNum < 10){
 			auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
-			drawObj = new LibBox(selNum - 1);
+			drawObj = new LibBox(selNum);
 		}
 		else{
 			switch (SingleTon<GaiaGateInfo>::use()->selObj){
@@ -348,19 +350,24 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 				break;
 			case 26:	//D FF
 				drawObj = new DFF();
-				bmp.LoadBitmapW(IDB_DFF);
+				bmp.LoadBitmapW(IDB_DFF_0);
 				break;
 			case 27:	//T FF
 				drawObj = new TFF();
-				bmp.LoadBitmapW(IDB_TFF);
+				bmp.LoadBitmapW(IDB_TFF_0);
 				break;
 			case 28:	//JK FF
 				drawObj = new JKFF();
 				bmp.LoadBitmapW(IDB_JKFF_0);
 				break;
+			case 39:	//7 Seg
+				isBMP = FALSE;
+				drawObj = new SevenSegment();
+				bDC.SelectObject(&b);
+				bDC.SelectObject(&pen2);
+				bDC.RoundRect(CRect(point.x - 30, point.y - 30, point.x + 110, point.y + 110), { 9, 9 });
 
-				//case 39:	//7 Seg
-				//	break;
+				break;
 			case 40:	//input
 				isBMP = FALSE;
 				drawObj = new InputBtn();
@@ -375,6 +382,10 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 				bDC.SelectObject(pen);
 				drawObj = new OutLamp();
 				bDC.Ellipse(point.x - 25, point.y - 25, point.x + 20, point.y + 20);
+				break;
+			case 42:	//clk
+				drawObj = new ClockCycle();
+				bmp.LoadBitmapW(IDB_CLK);
 				break;
 			}
 			if (isBMP == TRUE){
@@ -512,20 +523,7 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
-	auto& obj = SingleTon<GaiaDrawGrid>::use()->objects;
-	GaiaObject* p = new TFF();
-	p->SetPoint(20, 20);
-	obj.push_back(p);
-	p = new ClockCycle(30, 30);
-	obj.push_back(p);
-	p = new InputBtn(50, 30);
-	obj.push_back(p);
-	p = new InputBtn(10, 10);
-	obj.push_back(p);
-	p = new OutLamp();
-	p->SetPoint(30, 50);
-	obj.push_back(p);
-
+	
 	return 0;
 
 

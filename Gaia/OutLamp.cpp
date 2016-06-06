@@ -80,13 +80,6 @@ void OutLamp::Calculate(){
 			db[ins[0].CenterPoint().x / 10][ins[0].CenterPoint().y / 10] = db[edges[i].first.first.x / 10][edges[i].first.first.y / 10];
 		}
 	}
-	if (this->inputGraph[0].size()>15){
-		this->inputGraph[0].clear();
-	}
-	if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == -1){
-		return;
-	}
-	inputGraph[0].push_back(db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10]);
 }
 IMPLEMENT_SERIAL(OutLamp, GaiaLLogic, 15)
 void OutLamp::Serialize(CArchive& ar){

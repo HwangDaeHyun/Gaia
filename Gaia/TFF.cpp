@@ -23,17 +23,32 @@ void TFF::Draw(CDC* pDC){
 	CBitmap bmp;
 	switch (radius){
 	case 0:
-		bmp.LoadBitmapW(IDB_TFF);
+		bmp.LoadBitmapW(IDB_TFF_0);
 		this->ins[0].SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 + 5, rect.left, (rect.bottom + rect.top) / 2 + 15);
 		this->clk.SetRect(rect.left - 10, (rect.bottom + rect.top) / 2 - 15, rect.left, (rect.bottom + rect.top) / 2 - 5);
 		this->outs[0] = CRect(rect.right - 5, (rect.bottom + rect.top) / 2 - 15, rect.right + 5, (rect.bottom + rect.top) / 2 - 5);
 		this->outs[1] = CRect(rect.right - 5, (rect.bottom + rect.top) / 2 + 5, rect.right + 5, (rect.bottom + rect.top) / 2 + 15);
 		break;
 	case 1:
+		bmp.LoadBitmapW(IDB_TFF_90);
+		this->ins[0] = CRect((rect.left + rect.right) / 2 - 25, rect.top - 10, (rect.left + rect.right) / 2 - 15, rect.top);
+		this->clk = CRect((rect.left + rect.right) / 2 + 15, rect.top - 10, (rect.left + rect.right) / 2 + 25, rect.top);
+		this->outs[0] = CRect((rect.left + rect.right) / 2 - 25, rect.bottom - 3, (rect.left + rect.right) / 2 - 15, rect.bottom + 7);
+		this->outs[1] = CRect((rect.left + rect.right) / 2 + 15, rect.bottom - 3, (rect.left + rect.right) / 2 + 25, rect.bottom + 7);
 		break;
 	case 2:
+		bmp.LoadBitmapW(IDB_TFF_180);
+		this->ins[0] = CRect(rect.right + 5, (rect.bottom + rect.top) / 2 - 25, rect.right + 15, (rect.bottom + rect.top) / 2 - 15);
+		this->clk = CRect(rect.right + 5, (rect.bottom + rect.top) / 2 + 15, rect.right + 15, (rect.bottom + rect.top) / 2 + 25);
+		this->outs[0] = CRect(rect.left - 5, rect.top + 5, rect.left + 5, rect.top + 15);
+		this->outs[1] = CRect(rect.left - 5, rect.top + 45, rect.left + 5, rect.top + 55);
 		break;
 	case 3:
+		bmp.LoadBitmapW(IDB_TFF_270);
+		this->clk = CRect((rect.left + rect.right) / 2 - 25, rect.bottom + 4, (rect.left + rect.right) / 2 - 15, rect.bottom + 14);
+		this->ins[0] = CRect((rect.left + rect.right) / 2 + 15, rect.bottom + 4, (rect.left + rect.right) / 2 + 25, rect.bottom + 14);
+		this->outs[0] = CRect((rect.left + rect.right) / 2 - 25, rect.top - 5, (rect.left + rect.right) / 2 - 15, rect.top + 5);
+		this->outs[1] = CRect((rect.left + rect.right) / 2 + 15, rect.top - 5, (rect.left + rect.right) / 2 + 25, rect.top + 5);
 		break;
 	}
 	static_assert(sizeof(int) == sizeof(LONG), "이 플랫폼은 지원하지않습니다.");
@@ -48,9 +63,9 @@ void TFF::Calculate(){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	int tC = this->prevC;
 
-	//if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
-	//	db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
-	//}
+	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
+		db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
+	}
 	int curr = db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10];
 	if (this->trigger == RISING){
 		if (tC == 0 && curr == 1){

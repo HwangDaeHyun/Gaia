@@ -59,6 +59,9 @@ void ClockCycle::Draw(CDC* pDC){
 		this->outs[0] = CRect((rect.right + rect.left) / 2 - 6, rect.top-12, (rect.right + rect.left) / 2 + 6, rect.top);
 		break;
 	}
+	CBrush b(RGB(60, 60, 60));
+	pDC->SelectObject(&b);
+	pDC->Ellipse(this->outs[0]);
 	BITMAP bmpinfo;
 	bmp.GetBitmap(&bmpinfo);
 	memDC.SelectObject(&bmp);
@@ -66,14 +69,7 @@ void ClockCycle::Draw(CDC* pDC){
 }
 
 void ClockCycle::Calculate(){
-	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-	if (outputGraph[0].size() > 15){
-		outputGraph[0].clear();
-	}
-	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
-		return;
-	}
-	outputGraph[0].push_back(db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10]);
+
 }
 
 IMPLEMENT_SERIAL(ClockCycle, GaiaLLogic, 12)

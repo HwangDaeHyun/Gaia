@@ -217,8 +217,17 @@
     <Image Include="res\gate\XOR_90.bmp" />
     <Image Include="res\icon.bmp" />
     <Image Include="res\memmory\DFF_0.bmp" />
+    <Image Include="res\memmory\DFF_180.bmp" />
+    <Image Include="res\memmory\DFF_270.bmp" />
+    <Image Include="res\memmory\DFF_90.bmp" />
     <Image Include="res\memmory\JKFF_0.bmp" />
+    <Image Include="res\memmory\JKFF_180.bmp" />
+    <Image Include="res\memmory\JKFF_270.bmp" />
+    <Image Include="res\memmory\JKFF_90.bmp" />
     <Image Include="res\memmory\TFF_0.bmp" />
+    <Image Include="res\memmory\TFF_180.bmp" />
+    <Image Include="res\memmory\TFF_270.bmp" />
+    <Image Include="res\memmory\TFF_90.bmp" />
     <Image Include="res\menu_back.bmp" />
     <Image Include="res\menu_btn\bitmap7.bmp" />
     <Image Include="res\menu_btn\BTN_ADD.bmp" />
