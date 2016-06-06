@@ -9,6 +9,7 @@
 #include"LibBoxNameDlg.h"
 #include"ClkDialog.h"
 #include"GaiaLLogic.h"
+#pragma warning(disable : 4018)
 // GaiaMenuView
 
 IMPLEMENT_DYNCREATE(GaiaMenuView, GaiaCView)

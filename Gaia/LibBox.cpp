@@ -267,11 +267,13 @@ void LibBox::mkLib(){
 					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 3) - 1;
 					temp_j = temp_j / 3;
 					Update(cal_in[k]);
+					
 				}
 				UpdateDBoard();
 				for (int k = 0; k < cal_in.size(); k++){
 					Update(cal_in[k]);
 				}
+
 				this->result[i][j] = db[cal_out[i].CenterPoint().x / 10][cal_out[i].CenterPoint().y / 10];
 			}
 		}

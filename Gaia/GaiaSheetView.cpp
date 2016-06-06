@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "Gaia.h"
 #include "GaiaSheetView.h"
-
+#pragma warning(disable : 4018)
 
 // GaiaSheetView
 using namespace design_pattern;
@@ -325,7 +325,7 @@ void GaiaSheetView::OnLButtonDown(UINT nFlags, CPoint point)
 				SingleTon<GaiaSheetListRepo>::use()->sel_lib = (*it)->myID;
 				CString str;
 				str.Format(_T("%d"), sel);
-				MessageBox(str);
+				
 			}
 			selNum = id;
 			if ((*it)->topID != 1){
