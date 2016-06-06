@@ -30,6 +30,7 @@ GaiaDrawView::GaiaDrawView()
 	SingleTon<GaiaObjectSizeInfo>::use()->SetSmallLength(6);
 	SingleTon<GaiaObjectSizeInfo>::use()->SetBigLength(10);
 	SingleTon<GaiaObjectSizeInfo>::use()->SetLargLength(15);
+	SingleTon<GaiaObjectSizeInfo>::use()->SetSuperLength(20);
 }
 
 GaiaDrawView::~GaiaDrawView()
@@ -908,6 +909,7 @@ W:{};
 	for (int i = 0; i < objs.size(); i++){
 		for (int j = 0; j < objs[i]->outs.size(); j++){
 			Update(objs.at(i)->outs[j]);
+			UpdateDBoard();
 		}
 	}
 
@@ -976,15 +978,25 @@ void GaiaDrawView::OnCopy(){
 void GaiaDrawView::OnPaste(){
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
-#pragma warning(suppress: 28159)
+
 	srand(GetTickCount());
 	int x = rand() % 10 - 5;
 	int y = rand() % 10 - 5;
 	auto& tempV = SingleTon<GaiaTempRepo>::use()->tempV;
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	GaiaObject* obj;
+	int libIdx = -1;
 	for (int i = 0; i < tempV.size(); i++){
 		switch (tempV[i]->objKind){
+		case ObjectKind::LIBBOX:
+			for (int i = 0; i < SingleTon<GaiaDrawGrid>::use()->lib_objects.size(); i++){
+				if (SingleTon<GaiaDrawGrid>::use()->lib_objects[i]->name.Compare(tempV[i]->name)==0){
+					libIdx= i;
+					break;
+				}
+			}
+			obj = new LibBox(libIdx);
+			break;
 		case ObjectKind::AND:
 			obj = new AndGate();
 			break;
@@ -1025,6 +1037,8 @@ void GaiaDrawView::OnPaste(){
 		case ObjectKind::OR:
 			obj = new OrGate();
 			break;
+		default :
+			return;
 		}
 		obj->SetPoint(tempV[i]->base_point.x / 10 + x, tempV[i]->base_point.y / 10 + y);
 	WHICH:{};

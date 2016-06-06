@@ -155,8 +155,8 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 					pDoc->OnSaveDocument();
 				}
-				SingleTon<GaiaGateInfo>::use()->libName.clear();
-				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+			/*	SingleTon<GaiaGateInfo>::use()->libName.clear();
+				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();*/
 
 				SingleTon<GaiaDrawGrid>::use()->edges.clear();
 				SingleTon<GaiaDrawGrid>::use()->objects.clear();
@@ -166,7 +166,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
 				SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
 				SingleTon<GaiaDrawGrid>::use()->sel_idx.clear();
-				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+				
 
 				while (SingleTon<GaiaTableInfo>::use()->contents.size() > 2){
 					SingleTon<GaiaTableInfo>::use()->contents.pop_back();

@@ -18,6 +18,9 @@ void GaiaLLogic::SetPoint(CPoint p){
 	case LARG:
 		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
 		break;
+	case SUPER:
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetSuperLength();
+		break;
 	default:
 		break;
 	}
@@ -51,6 +54,9 @@ void GaiaLLogic::SetPoint(){
 	case LARG:
 		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
 		break;
+	case SUPER:
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetSuperLength();
+		break;
 	default:
 		break;
 	}
@@ -78,6 +84,9 @@ void GaiaLLogic::ClearPoint(){
 		break;
 	case LARG:
 		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
+		break;
+	case SUPER:
+		w = h = SingleTon<GaiaObjectSizeInfo>::use()->GetSuperLength();
 		break;
 	default:
 		break;
@@ -283,14 +292,17 @@ void UpdateDBoard(){
 void Update(CRect& out){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	auto& inputs = SingleTon<GaiaDrawGrid>::use()->objects;
+	
 	auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
 	for (auto& e : edges){
 		for (int i = 0; i < inputs.size(); i++){
-			if (inputs[i]->outs[0].PtInRect(e.first.first)){
-				db[e.first.second.x / 10][e.first.second.y / 10] = db[inputs[i]->outs[0].CenterPoint().x / 10][inputs[i]->outs[0].CenterPoint().y / 10];
-			}
-			else if (inputs[i]->outs[0].PtInRect(e.first.second)){
-				db[e.first.first.x / 10][e.first.first.y / 10] = db[inputs[i]->outs[0].CenterPoint().x / 10][inputs[i]->outs[0].CenterPoint().y / 10];
+			for (int j = 0; j < inputs[i]->outs.size(); j++){
+				if (inputs[i]->outs[j].PtInRect(e.first.first)){
+					db[e.first.second.x / 10][e.first.second.y / 10] = db[inputs[i]->outs[j].CenterPoint().x / 10][inputs[i]->outs[j].CenterPoint().y / 10];
+				}
+				/*else if (inputs[i]->outs[0].PtInRect(e.first.second)){
+					db[e.first.first.x / 10][e.first.first.y / 10] = db[inputs[i]->outs[0].CenterPoint().x / 10][inputs[i]->outs[0].CenterPoint().y / 10];
+				}*/
 			}
 		}
 	}
