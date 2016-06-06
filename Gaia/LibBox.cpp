@@ -170,10 +170,13 @@ void LibBox::Calculate(){
 	vector<int> inCase;
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	inCase.assign(this->ins.size(), 0);
+	// 0 , 1 ,2 인덱스를 찾는다.
+	
 	for (int i = 0; i < this->ins.size(); i++){
 		inCase[i] = db[this->ins[i].CenterPoint().x / 10][this->ins[i].CenterPoint().y / 10] + 1;
 	}
 	int cnt = 0;
+	//
 	for (int i = 0; i < inCase.size(); i++){
 		for (int j = 1; j < i + 1; j++){
 			inCase[i] = inCase[i] * 3;
@@ -196,6 +199,7 @@ void LibBox::Calculate(){
 	}
 }
 void LibBox::mkLib(){
+	this->prevC = 0;
 	vector<CRect> cal_in;		//input 들의 위치
 	vector<CRect> cal_out;		//out
 	CRect cal_clk;				//clk
@@ -226,7 +230,7 @@ void LibBox::mkLib(){
 	COME: {};
 	}
 	int tempPrev = -1;
-	int nCase = (int)pow(3, this->clk_size + this->in_size);
+	int nCase = (int)pow(2, this->clk_size + this->in_size);
 	this->result.assign(this->out_size, vector<int>(nCase, -1));
 	if (this->clk_size != 0){	// input에 clk이 있는경우
 		clk_result.assign(this->out_size, vector<int>(nCase, -1));
@@ -235,20 +239,25 @@ void LibBox::mkLib(){
 			for (int j = 0; j < this->result[i].size(); j++){
 				int temp_j = j;
 				for (int k = 0; k < cal_in.size(); k++){
-					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 3) - 1;
-					temp_j = temp_j / 3;
+					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 2) ;
+					temp_j = temp_j / 2;
 					Update(cal_in[k]);
 				}
 				db[cal_clk.CenterPoint().x / 10][cal_clk.CenterPoint().y / 10] = 0;
 				for (auto& o : obj){
 					UpdateDBoard();
 				}
+				//
+				printf("input : %d ", db[cal_in[0].CenterPoint().x / 10][cal_in[0].CenterPoint().y / 10]);
+				//
 				this->result[i][j] = db[cal_out[i].CenterPoint().x / 10][cal_out[i].CenterPoint().y / 10];
+				printf("result : %d", this->result[i][j]);
 				db[cal_clk.CenterPoint().x / 10][cal_clk.CenterPoint().y / 10] = 1;
 				for (auto& o : obj){
 					UpdateDBoard();
 				}
 				this->clk_result[i][j] = db[cal_out[i].CenterPoint().x / 10][cal_out[i].CenterPoint().y / 10];
+				printf("    ,clk_result : %d\n\n", this->clk_result[i][j]);
 			}
 		}
 
@@ -258,8 +267,8 @@ void LibBox::mkLib(){
 			for (int j = 0; j < this->result[i].size(); j++){
 				int temp_j = j;
 				for (int k = 0; k < cal_in.size(); k++){
-					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 3) - 1;
-					temp_j = temp_j / 3;
+					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 2) ;
+					temp_j = temp_j / 2;
 					Update(cal_in[k]);
 				}
 				UpdateDBoard();

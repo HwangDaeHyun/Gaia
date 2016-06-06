@@ -122,7 +122,7 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 			pDC->SelectObject(&p);
 			pDC->SelectObject(&b);
 			//pDC->MoveTo(elem->baseRect.left, elem->baseRect.top);
-			int d = elem->baseRect.Height(); 
+			int d = elem->baseRect.Height();
 			int rec_sz = 8;
 			pDC->Rectangle(elem->base_point.x, elem->base_point.y, elem->base_point.x + rec_sz, elem->base_point.y + rec_sz);
 			pDC->Rectangle(elem->base_point.x + d, elem->base_point.y, elem->base_point.x + d + rec_sz, elem->base_point.y + rec_sz);
@@ -284,7 +284,7 @@ void GaiaDrawView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	//== 선택한 오브젝트 이미지가 마우스를 따라옵니다.
 	//== AND 오브젝트만 있고 나머지는 추가해야함
-	this->AddingLogic(bDC, point);
+	this->ChasePoint(bDC, point);
 	//==
 	brush.DeleteObject();
 	pen.DeleteObject();
@@ -301,8 +301,9 @@ CRect GaiaDrawView::DrawDragRect(CDC& bDC, CPoint leftTop, CPoint rightBottom){
 	graphics.FillRectangle(&semiTransBrush, leftTop.x, leftTop.y, rightBottom.x - leftTop.x, rightBottom.y - leftTop.y);
 	return tempRect;
 }
-void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
+void GaiaDrawView::ChasePoint(CDC& bDC, CPoint point, bool isMove){
 	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE && SingleTon<GaiaGateInfo>::use()->selObj != -1){
+
 		CDC memDC;
 		memDC.CreateCompatibleDC(&bDC);
 		CBitmap bmp;
@@ -318,51 +319,51 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 
 		BOOL isBMP = TRUE;	// 비트맵이 아니라 다른거 그리려면 case에서 FALSE로
 		if (selNum < 10){
-			auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
-			drawObj = new LibBox(selNum);
+
+
 		}
 		else{
 			switch (SingleTon<GaiaGateInfo>::use()->selObj){
 			case 10:
-				drawObj = new AndGate();
+
 				bmp.LoadBitmapW(IDB_AND_0);
 				break;
 			case 11:
-				drawObj = new OrGate();
+
 				bmp.LoadBitmapW(IDB_OR_0);
 				break;
 			case 12:	//Not
-				drawObj = new NotGate();
+
 				bmp.LoadBitmapW(IDB_NOT_0);
 				break;
 			case 13:	//Nand
-				drawObj = new NandGate();
+
 				bmp.LoadBitmapW(IDB_NAND_0);
 				w = 70;
 				break;
 			case 14:	//Nor
-				drawObj = new NorGate();
+
 				bmp.LoadBitmapW(IDB_NOR_0);
 				break;
 			case 15:	//Xor
-				drawObj = new XorGate();
+
 				bmp.LoadBitmapW(IDB_XOR_0);
 				break;
 			case 26:	//D FF
-				drawObj = new DFF();
+
 				bmp.LoadBitmapW(IDB_DFF_0);
 				break;
 			case 27:	//T FF
-				drawObj = new TFF();
+
 				bmp.LoadBitmapW(IDB_TFF_0);
 				break;
 			case 28:	//JK FF
-				drawObj = new JKFF();
+
 				bmp.LoadBitmapW(IDB_JKFF_0);
 				break;
 			case 39:	//7 Seg
 				isBMP = FALSE;
-				drawObj = new SevenSegment();
+
 				bDC.SelectObject(&b);
 				bDC.SelectObject(&pen2);
 				bDC.RoundRect(CRect(point.x - 30, point.y - 30, point.x + 110, point.y + 110), { 9, 9 });
@@ -370,7 +371,7 @@ void GaiaDrawView::AddingLogic(CDC& bDC, CPoint point){
 				break;
 			case 40:	//input
 				isBMP = FALSE;
-				drawObj = new InputBtn();
+
 				bDC.SelectObject(&brush2);
 				bDC.RoundRect(CRect(point.x - 20, point.y - 20, point.x + 10, point.y + 10), { 30, 30 });
 				bDC.SelectObject(&brush);
@@ -523,7 +524,7 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// TODO:  여기에 특수화된 작성 코드를 추가합니다.
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
-	
+
 	return 0;
 
 
@@ -531,14 +532,12 @@ int GaiaDrawView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 }
 
-
 BOOL GaiaDrawView::OnEraseBkgnd(CDC* pDC)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	return TRUE;
 	return GaiaCView::OnEraseBkgnd(pDC);
 }
-
 
 void GaiaDrawView::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -592,11 +591,11 @@ R:{};
 	if (sel != -1){
 
 		auto& tbl = SingleTon<GaiaTableInfo>::use()->contents;
-		
+
 		while (tbl.size() > 2){
 			tbl.pop_back();
 		}
-		
+
 		SingleTon<GaiaTableInfo>::use()->title = e[sel]->name;
 		tbl[0].second = e[sel]->arrow;
 		tbl[1].second = e[sel]->name;
@@ -607,7 +606,7 @@ R:{};
 		CString index;
 		for (int i = 0; i < temp.size(); i++){
 			t_str.Format(_T("%d"), tdb[e[sel]->outs[i].CenterPoint().x / 10][e[sel]->outs[i].CenterPoint().y / 10]);
-			index.Format(_T("%d"), i+1);
+			index.Format(_T("%d"), i + 1);
 			index = _T("out (") + index + _T(")");
 			temp[i].first = index;
 			temp[i].second = t_str;
@@ -658,21 +657,70 @@ R:{};
 		this->dragSrc = point;
 	}
 	//== Object를 그립니다
-	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE){
-
-		pDoc->PushGaiaList();
-		//
-		e.push_back(drawObj);
-		e.back()->SetPoint((point.x - 30) / 10, (point.y - 30) / 10);
-		SingleTon < GaiaGateInfo>::use()->isDrawObject = FALSE;
-		SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
-
-	}
+	this->AddObject(point);
 	//==
 	GaiaCView::OnLButtonDown(nFlags, point);
 }
-
-
+void GaiaDrawView::AddObject(CPoint point){
+	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
+	auto& selNum = SingleTon<GaiaGateInfo>::use()->selObj;
+	if (SingleTon<GaiaGateInfo>::use()->isDrawObject == TRUE){
+		pDoc->PushGaiaList();
+		if (selNum < 10&&selNum>=0){
+			auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
+			drawObj = new LibBox(selNum);
+		}
+		else{
+			switch (SingleTon<GaiaGateInfo>::use()->selObj){
+			case 10:
+				drawObj = new AndGate();
+				break;
+			case 11:
+				drawObj = new OrGate();
+				break;
+			case 12:	//Not
+				drawObj = new NotGate();
+				break;
+			case 13:	//Nand
+				drawObj = new NandGate();
+				break;
+			case 14:	//Nor
+				drawObj = new NorGate();
+				break;
+			case 15:	//Xor
+				drawObj = new XorGate();
+				break;
+			case 26:	//D FF
+				drawObj = new DFF();
+				break;
+			case 27:	//T FF
+				drawObj = new TFF();
+				break;
+			case 28:	//JK FF
+				drawObj = new JKFF();
+				break;
+			case 39:	//7 Seg
+				drawObj = new SevenSegment();
+				break;
+			case 40:	//input
+				drawObj = new InputBtn();
+				break;
+			case 41:	//output
+				drawObj = new OutLamp();
+				break;
+			case 42:	//clk
+				drawObj = new ClockCycle();
+				break;
+			}
+		}	//
+		e.push_back(drawObj);
+		e.back()->SetPoint((point.x - 30) / 10, (point.y - 30) / 10);
+		selNum = -1;
+		SingleTon < GaiaGateInfo>::use()->isDrawObject = FALSE;
+		SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;
+	}
+}
 void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
@@ -799,7 +847,6 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 	GaiaCView::OnLButtonUp(nFlags, point);
 }
 
-
 void GaiaDrawView::OnSize(UINT nType, int cx, int cy)
 {
 	GaiaCView::OnSize(nType, cx, cy);
@@ -815,7 +862,6 @@ void GaiaDrawView::OnSize(UINT nType, int cx, int cy)
 	}
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
 }
-
 
 void GaiaDrawView::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
@@ -869,7 +915,6 @@ W:{};
 	GaiaCView::OnLButtonDblClk(nFlags, point);
 }
 
-
 void GaiaDrawView::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
@@ -901,7 +946,7 @@ void GaiaDrawView::OnTimer(UINT_PTR nIDEvent)
 	}
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
 	GaiaCView::OnTimer(nIDEvent);
-	
+
 }
 void GaiaDrawView::StartClock(int index){
 	int cycle = SingleTon<GaiaClockInfo>::use()->cycle;
@@ -992,7 +1037,7 @@ void GaiaDrawView::OnCut(){
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	auto& temp = SingleTon<GaiaTempRepo>::use()->tempV;
 	temp.clear();
-	std::sort(sel_idx.begin(), sel_idx.end(), [](int i, int j)->bool{return  j<i; });
+	std::sort(sel_idx.begin(), sel_idx.end(), [](int i, int j)->bool{return  j < i; });
 	for (int i = 0; i < sel_idx.size(); i++){
 		e[sel_idx[i]]->ClearPoint();
 		temp.push_back(e[sel_idx[i]]);

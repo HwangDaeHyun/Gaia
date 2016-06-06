@@ -13,7 +13,7 @@ InputBtn::InputBtn(){
 	this->outs[0] = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
 	SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->outs[0]);
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 0;
+	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 1;
 	Update(this->outs[0]);
 	
 }
@@ -30,9 +30,11 @@ InputBtn::InputBtn(int x, int y){
 	this->outs.assign(1, CRect());
 	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + this->GetLength() * 10 - 25, this->base_point.y + this->GetLength() * 10 - 25);
 	this->outs[0] = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
-	SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->outs[0]);
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
-	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 0;
+	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 1;
+	SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->outs[0]);
+	
+	
 	Update(this->outs[0]);
 }
 void InputBtn::Draw(CDC* pDC){

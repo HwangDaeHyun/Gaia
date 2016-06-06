@@ -86,6 +86,24 @@ void GaiaObject::Serialize(CArchive& ar){
 			ar << this->ins[i];
 		}
 		ar << this->prevC;
+
+		ar << this->in_size;
+		ar << this->out_size;
+		ar << this->clk_size;
+		ar << this->result.size();
+		for (int i = 0; i < this->result.size(); i++){
+			ar << this->result[i].size();
+			for (int j = 0; j < this->result[i].size(); j++){
+				ar << this->result[i][j];
+			}
+		}
+		ar << this->clk_result.size();
+		for (int i = 0; i < this->clk_result.size(); i++){
+			ar << this->clk_result[i].size();
+			for (int j = 0; j < this->clk_result[i].size(); j++){
+				ar << this->clk_result[i][j];
+			}
+		}
 	}
 	else{
 		int o_S;	//objectSize
@@ -118,8 +136,31 @@ void GaiaObject::Serialize(CArchive& ar){
 			ar >> tempIn;
 			this->ins.push_back(tempIn);
 		}
-
 		ar >> prevC;
-
+		ar >> this->in_size;
+		ar >> this->out_size;
+		ar >> this->clk_size;
+		int ResSize;
+		ar >> ResSize;
+		this->result.assign(ResSize, vector<int>());
+		for (int i = 0; i < ResSize; i++){
+			int rSize;
+			ar >> rSize;
+			this->result[i].assign(rSize,0);
+			for (int j = 0; j < rSize; j++){
+				ar >> this->result[i][j];
+			}
+		}
+		int clkSize;
+		ar >> clkSize;
+		this->clk_result.assign(clkSize, vector<int>());
+		for (int i = 0; i < clkSize; i++){
+			int cSize;
+			ar >> cSize;
+			this->clk_result[i].assign(cSize, 0);
+			for (int j = 0; j < cSize; j++){
+				ar >> this->clk_result[i][j];
+			}
+		}
 	}
 }

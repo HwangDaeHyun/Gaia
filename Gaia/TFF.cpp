@@ -8,7 +8,7 @@ TFF::TFF(){
 	this->objKind = TFLIP;
 	this->objSize = MID;
 	this->trigger = RISING;
-	this->name = _T("JK-FlipFlop");
+	this->name = _T("T-FlipFlop");
 	this->arrow = this->GetArrow();
 	this->inputGraph.assign(1, deque<int>());
 	this->outputGraph.assign(2, deque<int>());
@@ -73,19 +73,11 @@ void TFF::Calculate(){
 				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
 				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
 			}
-			else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
-				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
-				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
-			}
 		}
 	}
 	else if (this->trigger == FALLING){
 		if (tC == 1 && curr == 0){
 			if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 1){
-				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
-				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
-			}
-			else if (db[this->ins[0].CenterPoint().x / 10][this->ins[0].CenterPoint().y / 10] == 0){
 				db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^= 1;
 				db[this->outs[1].CenterPoint().x / 10][this->outs[1].CenterPoint().y / 10] = db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] ^ 1;
 			}

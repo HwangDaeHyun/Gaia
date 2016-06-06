@@ -180,6 +180,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 			else if ((*it)->myID == 2){			//불러오기
 				SingleTon<GaiaGateInfo>::use()->libName.clear();
 				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+				
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 				pDoc->OnOpenDocument();
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
@@ -191,7 +192,7 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 					LibBoxNameDlg dlg;
 					if (dlg.DoModal() == IDOK){
 						n.push_back(dlg.libName);
-						LibBox* lbox = new LibBox(dlg.libName);
+						GaiaObject* lbox = new LibBox(dlg.libName);
 						lib.push_back(lbox);
 						s.clear();
 						printf("lib size %d L name size : %d\n", lib.size(), n.size());
@@ -203,11 +204,12 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				}
 			}
 			else if ((*it)->myID == 5){		// 라이브러리 박스 삭제
-				if (SingleTon<GaiaSheetListRepo>::use()->sel_lib > 0){
+				auto& selLib = SingleTon<GaiaSheetListRepo>::use()->sel_lib;
+				if (selLib >= 0){
 					auto& lib = SingleTon<GaiaDrawGrid>::use()->lib_objects;
-					n.erase(n.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib);
-					lib.erase(lib.begin() + SingleTon<GaiaSheetListRepo>::use()->sel_lib - 1);
-					SingleTon<GaiaSheetListRepo>::use()->sel_lib = -1;
+					n.erase(n.begin() + selLib);
+					lib.erase(lib.begin() + selLib);
+					selLib = -1;
 					SingleTon<GaiaGateInfo>::use()->selObj = -1;
 					SingleTon<GaiaGateInfo>::use()->isDrawObject = FALSE;
 					SingleTon<GaiaSheetListRepo>::use()->sel_btn = -1;

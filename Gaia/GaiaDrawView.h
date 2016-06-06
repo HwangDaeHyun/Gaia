@@ -36,7 +36,8 @@ public:
 	//CRect& draggedRect;
 	CRect DrawDragRect(CDC& bDC, CPoint leftTop, CPoint rightBottm);
 	void MoveLogic(CDC& bDC, bool& possible);
-	void AddingLogic(CDC& bDC, CPoint point);
+	void ChasePoint(CDC& bDC, CPoint point, bool isMove = true);
+	void AddObject(CPoint);
 	void StartClock(int index);
 	void RotateSelObject()override;
 	void DrawSplitterBar()override;

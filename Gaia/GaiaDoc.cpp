@@ -82,6 +82,8 @@ void GaiaDoc::Serialize(CArchive& ar)
 		auto&inBtns = SingleTon<GaiaDrawGrid>::use()->inBtns;
 		auto&db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 		auto&grid = SingleTon<GaiaDrawGrid>::use()->grid;
+		auto& libName = SingleTon<GaiaGateInfo>::use()->libName;
+		auto& lib_objects = SingleTon<GaiaDrawGrid>::use()->lib_objects;
 		//object
 		ar << e.size();
 		for (int i = 0; i < e.size(); i++){
@@ -116,6 +118,17 @@ void GaiaDoc::Serialize(CArchive& ar)
 
 			}
 		}
+		//
+		//Gaiagateinfo -> libname
+		ar << libName.size();
+		for (int i = 0; i < libName.size(); i++){
+			ar << libName[i];
+		}
+		// lib object
+		ar << lib_objects.size();
+		for (int i = 0; i < lib_objects.size(); i++){
+			ar << lib_objects[i];
+		}
 	}
 	else{
 		// TODO: 여기에 로딩 코드를 추가합니다.
@@ -124,9 +137,12 @@ void GaiaDoc::Serialize(CArchive& ar)
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		auto& inBtns = SingleTon<GaiaDrawGrid>::use()->inBtns;
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		auto& libName = SingleTon<GaiaGateInfo>::use()->libName;
+		libName.clear();
 		SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
 		SingleTon<GaiaDrawGrid>::use()->sel_idx.clear();
-		SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+		auto& lib_obj = SingleTon<GaiaDrawGrid>::use()->lib_objects;
+		lib_obj.clear();
 		
 		while (SingleTon<GaiaTableInfo>::use()->contents.size() > 2){
 			SingleTon<GaiaTableInfo>::use()->contents.pop_back();
@@ -260,6 +276,25 @@ void GaiaDoc::Serialize(CArchive& ar)
 				grid[i][j] = (bool)temp;
 			}
 		}
+		//Gaiagateinfo -> libname
+		int nameSize;
+		ar >> nameSize;
+		CString tempName;
+		for (int i = 0; i < nameSize; i++){
+			ar >> tempName;
+			libName.push_back(tempName);
+			
+		}
+		int libSize;
+		// lib object
+		ar >> libSize;
+		GaiaObject* libT;
+		for (int i = 0; i < libSize; i++){
+			libT = new LibBox();
+			ar >> libT;
+			lib_obj.push_back(libT);
+		}
+		
 
 		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
 
