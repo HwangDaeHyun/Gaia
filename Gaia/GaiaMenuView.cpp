@@ -381,7 +381,7 @@ void GaiaMenuView::RotateSelObject(){
 			}
 		THERE:{};
 		}
-		s->SetRadius((s->GetRadius() + 1) % 3);
+		s->SetRadius((s->GetRadius() + 1) % 4);
 	}
 	
 }
