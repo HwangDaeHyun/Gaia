@@ -830,17 +830,18 @@ void GaiaDrawView::OnLButtonUp(UINT nFlags, CPoint point)
 			}
 
 			this->isLDown = FALSE;
+			auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
+			for (int i = 0; i < objs.size(); i++){
+				for (int j = 0; j < objs[i]->outs.size(); j++){
+					Update(objs[i]->outs[j]);
+				}
+			}
 		}
 	}
 	UpdateDBoard();
 	//auto& inBtns =SingleTon<GaiaDrawGrid>::use()->inBtns;
 
-	auto& objs = SingleTon<GaiaDrawGrid>::use()->objects;
-	for (int i = 0; i < objs.size(); i++){
-		for (int j = 0; j < objs[i]->outs.size(); j++){
-			Update(objs[i]->outs[j]);
-		}
-	}
+	
 
 	DrawArea(&bDC);
 	dc.BitBlt(0, 0, rect.Width(), rect.Height(), &bDC, 0, 0, SRCCOPY);
@@ -975,6 +976,7 @@ void GaiaDrawView::OnCopy(){
 void GaiaDrawView::OnPaste(){
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
+#pragma warning(suppress: 28159)
 	srand(GetTickCount());
 	int x = rand() % 10 - 5;
 	int y = rand() % 10 - 5;

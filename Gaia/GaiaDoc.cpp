@@ -390,7 +390,7 @@ BOOL GaiaDoc::OnSaveDocument()
 		}
 		else{
 			CArchive ar(&f, CArchive::store);
-			printf("%s  \n", temp);
+			
 			Serialize(ar);
 		}
 	}
@@ -415,7 +415,6 @@ BOOL GaiaDoc::OnOpenDocument()
 		}
 		else{
 			CArchive ar(&f, CArchive::load);
-			printf("%s\n", strPath);
 			Serialize(ar);
 
 		}

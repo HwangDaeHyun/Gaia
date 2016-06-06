@@ -61,12 +61,12 @@ void SevenSegment::Draw(CDC* pDC){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	CBrush brush1(RGB(255, 20, 20));
 	CBrush brush2(RGB(70, 70, 70));
-	for (int i = 0; i < ins.size(); i++){
+	for (int i = 0; i < 7; i++){
 		if (db[this->ins[i].CenterPoint().x / 10][this->ins[i].CenterPoint().y / 10] == TRUE){
-			pDC->FillRect(dRects + i, &brush1);
+			pDC->FillRect(dRects[i], &brush1);
 		}
 		else{
-			pDC->FillRect(dRects + i, &brush2);
+			pDC->FillRect(dRects[i], &brush2);
 		}
 	}
 }

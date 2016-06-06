@@ -123,11 +123,12 @@ void GaiaObject::Serialize(CArchive& ar){
 		ar >> this->basic;
 		ar >> this->mv;
 		int outSize;
+		this->outs.clear();
 		ar >> outSize;
 		CRect tempOut;
 		for (int i = 0; i < outSize; i++){
 			ar >> tempOut;
-			this->outs[i] = tempOut;
+			this->outs.push_back(tempOut);
 		}
 		int insSize;
 		ar >> insSize;
