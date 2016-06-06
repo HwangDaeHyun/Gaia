@@ -13,9 +13,10 @@ LibBox::LibBox()
 	else if (mx_sz < 6){
 		this->objSize = BIG;
 	}
-	else if (mx_sz < 9){
-		this->objSize = LARG;
+	else if (mx_sz < 10){
+		this->objSize = SUPER;
 	}
+
 	this->objKind = LIBBOX;
 	this->ins.assign(this->in_size, CRect());
 	this->outs.assign(this->out_size, CRect());
@@ -27,13 +28,13 @@ LibBox::LibBox(CString name)
 	mkLib();
 	this->mx_sz = this->in_size > this->out_size ? this->in_size : this->out_size;
 	if (mx_sz < 4){
-		this->objSize = BIG;
+		this->objSize = MID;
 	}
 	else if (mx_sz < 6){
 		this->objSize = BIG;
 	}
-	else if (mx_sz < 9){
-		this->objSize = LARG;
+	else if (mx_sz < 10){
+		this->objSize = SUPER;
 	}
 	this->objKind = LIBBOX;
 	this->ins.assign(this->in_size, CRect());
@@ -66,21 +67,22 @@ void LibBox::Draw(CDC* pDC)
 	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + this->GetLength() * 10 - 15, this->base_point.y + this->GetLength() * 10 - 15);
 	this->baseRect = rect;
 	CBrush b(RGB(0, 128, 255));
+	CPen pen(PS_SOLID, 2, RGB(20, 20, 20));
 	pDC->SelectObject(&b);
 	pDC->Rectangle(rect);
 	switch (this->radius){
 	case 0:	// 0
 		for (int i = 0; i < this->ins.size(); i++) {	//input
-			this->ins[i] = CRect(rect.left - 20, rect.top + 17 * (i + 1), rect.left - 10, rect.top + (i + 1) * 17 + 10);
+			this->ins[i] = CRect(rect.left - 20, rect.top + 20 * i+5, rect.left - 10, rect.top + i *  20 + 15);
 			pDC->MoveTo(this->ins[i].left + 5, (this->ins[i].top + this->ins[i].bottom) / 2);
 			pDC->LineTo(this->ins[i].right + 5, (this->ins[i].top + this->ins[i].bottom) / 2);
-			//pDC->Ellipse(this->ins[i]);
+			pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
-			this->outs[i] = CRect(rect.right + 17, rect.top + ((i + 1) * 17) + 5, rect.right + 27, rect.top + 15 + ((i + 1) * 17));
-			pDC->MoveTo(this->outs[i].left - 13, (this->outs[i].top + this->outs[i].bottom) / 2 - 1);
+			this->outs[i] = CRect(rect.right + 6, rect.top + i * 20 + 3, rect.right + 16, rect.top + 13 + i * 20);
+			pDC->MoveTo(this->outs[i].left - 9, (this->outs[i].top + this->outs[i].bottom) / 2 - 1);
 			pDC->LineTo(this->outs[i].right - 7, (this->outs[i].top + this->outs[i].bottom) / 2 - 1);
-			//pDC->Ellipse(this->outs[i]);
+			pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
 			this->clk = CRect((rect.left + rect.right) / 2, rect.top - 15, ((rect.left + rect.right) / 2) + 10, rect.top - 5);
@@ -92,13 +94,13 @@ void LibBox::Draw(CDC* pDC)
 			this->ins[i] = CRect(rect.left + 17 * (i + 1), rect.top - 15, rect.left + 17 * (i + 1) + 10, rect.top - 5);
 			pDC->MoveTo((this->ins[i].left + this->ins[i].right) / 2, this->ins[i].top + 5);
 			pDC->LineTo((this->ins[i].left + this->ins[i].right) / 2, this->ins[i].bottom);
-			//pDC->Ellipse(this->ins[i]);
+			pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
 			this->outs[i] = CRect(rect.left + 17 * (i + 1), rect.bottom + 15, rect.left + 17 * (i + 1) + 10, rect.bottom + 25);
 			pDC->MoveTo((this->outs[i].left + this->outs[i].right) / 2 - 5, this->outs[i].top - 10);
 			pDC->LineTo((this->outs[i].left + this->outs[i].right) / 2 - 5, this->outs[i].bottom - 10);
-			//pDC->Ellipse(this->outs[i]);
+			pDC->Ellipse(this->outs[i]);
 		}
 		if (this->clk_size != 0){
 			this->clk = CRect(rect.right + 10, (rect.top + rect.bottom) / 2, rect.right + 20, (rect.top + rect.bottom) / 2 + 10);
@@ -110,7 +112,7 @@ void LibBox::Draw(CDC* pDC)
 			this->ins[i] = CRect(rect.right + 10, rect.top + 17 * (i + 1), rect.right + 20, rect.top + (i + 1) * 17 + 10);
 			pDC->MoveTo(this->ins[i].left - 10, (this->ins[i].top + this->ins[i].bottom) / 2 - 1);
 			pDC->LineTo(this->ins[i].right - 7, (this->ins[i].top + this->ins[i].bottom) / 2 - 1);
-			//pDC->Ellipse(this->ins[i]);
+			pDC->Ellipse(this->ins[i]);
 		}
 		for (int i = 0; i < this->outs.size(); i++) {
 			this->outs[i] = CRect(rect.left - 30, rect.top + ((i + 1) * 17) + 5, rect.left - 20, rect.top + 15 + ((i + 1) * 17));
@@ -171,12 +173,15 @@ void LibBox::Calculate(){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	inCase.assign(this->ins.size(), 0);
 	for (int i = 0; i < this->ins.size(); i++){
-		inCase[i] = db[this->ins[i].CenterPoint().x / 10][this->ins[i].CenterPoint().y / 10] + 1;
+		if (db[this->ins[i].CenterPoint().x / 10][this->ins[i].CenterPoint().y / 10] == -1){
+			db[this->ins[i].CenterPoint().x / 10][this->ins[i].CenterPoint().y / 10] = 0;
+		}
+		inCase[i] = db[this->ins[i].CenterPoint().x / 10][this->ins[i].CenterPoint().y / 10];
 	}
 	int cnt = 0;
 	for (int i = 0; i < inCase.size(); i++){
 		for (int j = 1; j < i + 1; j++){
-			inCase[i] = inCase[i] * 3;
+			inCase[i] = inCase[i] * 2;
 		}
 		cnt = cnt + inCase[i];
 	}
@@ -226,7 +231,7 @@ void LibBox::mkLib(){
 	COME: {};
 	}
 	int tempPrev = -1;
-	int nCase = (int)pow(3, this->clk_size + this->in_size);
+	int nCase = (int)pow(2, this->clk_size + this->in_size);
 	this->result.assign(this->out_size, vector<int>(nCase, -1));
 	if (this->clk_size != 0){	// input에 clk이 있는경우
 		clk_result.assign(this->out_size, vector<int>(nCase, -1));
@@ -235,8 +240,8 @@ void LibBox::mkLib(){
 			for (int j = 0; j < this->result[i].size(); j++){
 				int temp_j = j;
 				for (int k = 0; k < cal_in.size(); k++){
-					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 3) - 1;
-					temp_j = temp_j / 3;
+					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 2) ;
+					temp_j = temp_j / 2;
 					Update(cal_in[k]);
 				}
 				db[cal_clk.CenterPoint().x / 10][cal_clk.CenterPoint().y / 10] = 0;
@@ -264,8 +269,8 @@ void LibBox::mkLib(){
 			for (int j = 0; j < this->result[i].size(); j++){
 				int temp_j = j;
 				for (int k = 0; k < cal_in.size(); k++){
-					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = (temp_j % 3) - 1;
-					temp_j = temp_j / 3;
+					db[cal_in[k].CenterPoint().x / 10][cal_in[k].CenterPoint().y / 10] = temp_j % 2 ;
+					temp_j = temp_j / 2;
 					Update(cal_in[k]);
 					
 				}

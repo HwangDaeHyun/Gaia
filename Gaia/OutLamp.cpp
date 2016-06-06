@@ -79,6 +79,9 @@ void OutLamp::Calculate(){
 		if (this->ins[0].PtInRect(edges[i].first.second)){
 			db[ins[0].CenterPoint().x / 10][ins[0].CenterPoint().y / 10] = db[edges[i].first.first.x / 10][edges[i].first.first.y / 10];
 		}
+		else if (this->ins[0].PtInRect(edges[i].first.first)){
+			db[ins[0].CenterPoint().x / 10][ins[0].CenterPoint().y / 10] = db[edges[i].first.second.x / 10][edges[i].first.second.y / 10];
+		}
 	}
 }
 IMPLEMENT_SERIAL(OutLamp, GaiaLLogic, 15)

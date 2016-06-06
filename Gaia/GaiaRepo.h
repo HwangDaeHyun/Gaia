@@ -166,6 +166,7 @@ CREATE_SINGLETON(GaiaObjectSizeInfo){
 	int sLen;		//small length
 	int bLen;		//big length
 	int largLen;
+	int suLen;
 	void SetLength(int l){
 		this->length = l;
 	}
@@ -189,6 +190,12 @@ CREATE_SINGLETON(GaiaObjectSizeInfo){
 	}
 	int GetLargLength(){
 		return this->largLen;
+	}
+	void SetSuperLength(int l){
+		this->suLen = l;
+	}
+	int GetSuperLength(){
+		return this->suLen;
 	}
 };
 

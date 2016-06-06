@@ -28,7 +28,8 @@ int GaiaObject::GetLength(){
 		return len = SingleTon<GaiaObjectSizeInfo>::use()->GetBigLength();
 	case LARG:
 		return len = SingleTon<GaiaObjectSizeInfo>::use()->GetLargLength();
-
+	case SUPER:
+		return len =  SingleTon<GaiaObjectSizeInfo>::use()->GetSuperLength();	
 	default:
 		return 0;
 	}
