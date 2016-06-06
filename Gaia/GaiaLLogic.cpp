@@ -98,7 +98,6 @@ bool DblCompare(double a, double b){
 	}
 }
 void DrawWay(CDC* pDC, deque<CRect>& way, bool b){
-	{
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 		CBrush brush(RGB(0, 0, 0));
 		CArray<CPoint, CPoint&> lines;
@@ -126,7 +125,7 @@ void DrawWay(CDC* pDC, deque<CRect>& way, bool b){
 		SingleTon<GaiaDrawGrid>::use()->grid[lines[i].x / 10][lines[i].y / 10] = b;
 		}
 		}*/
-	}
+	
 }
 CPoint MediatePoint(CPoint& point){
 	point.x += 5;
@@ -142,7 +141,7 @@ void UpdateLines(){
 	auto e = SingleTon<GaiaDrawGrid>::use()->edges;
 
 }
-deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad){
+deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad, BOOL rt){
 	CPoint mpt;
 	CRect rect;
 	view->GetWindowRect(&rect);
@@ -203,7 +202,7 @@ deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad){
 	CBrush brush(RGB(20, 110, 200));
 	deque<CRect> way;
 	while (board[point.x][point.y] != 0){
-		pDC->FillRect(CRect(point.x * 10 - 3, point.y * 10 - 3, point.x * 10 + 3, point.y * 10 + 3), &brush);
+		if(rt ==FALSE)pDC->FillRect(CRect(point.x * 10 - 3, point.y * 10 - 3, point.x * 10 + 3, point.y * 10 + 3), &brush);
 		way.push_back(CRect(point.x * 10 - 5, point.y * 10 - 5, point.x * 10 + 5, point.y * 10 + 5));
 		int val = board[point.x][point.y] - 1;
 		if (val == 0)break;
@@ -315,6 +314,7 @@ vector<int>* SearchObjects(CDC* pDC, CRect bound){
 	brush.DeleteObject();
 	return temp;
 }
+
 IMPLEMENT_SERIAL(GaiaLLogic, GaiaObject, 1)
 void GaiaLLogic::Serialize(CArchive& ar){
 	GaiaObject::Serialize(ar);

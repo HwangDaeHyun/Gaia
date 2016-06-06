@@ -48,9 +48,9 @@ void TFF::Calculate(){
 	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
 	int tC = this->prevC;
 
-	if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
-		db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
-	}
+	//if (db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] == -1){
+	//	db[this->outs[0].CenterPoint().x / 10][this->outs[0].CenterPoint().y / 10] = 0;
+	//}
 	int curr = db[this->clk.CenterPoint().x / 10][this->clk.CenterPoint().y / 10];
 	if (this->trigger == RISING){
 		if (tC == 0 && curr == 1){

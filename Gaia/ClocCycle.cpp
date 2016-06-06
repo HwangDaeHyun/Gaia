@@ -2,7 +2,20 @@
 #include "ClockCycle.h"
 #include "resource.h"
 ClockCycle::ClockCycle(){
-
+	this->outputGraph.assign(1, deque<int>());
+	this->objKind = CLOCKCYCLE;
+	this->objSize = SMALL;
+	this->SetRadius(0);
+	this->name = _T("Å¬·°");
+	this->arrow = this->GetArrow();
+	this->ins = vector<CRect>();
+	this->outs.assign(1, CRect());
+	CRect rect(this->base_point.x + 5, this->base_point.y + 5, this->base_point.x + this->GetLength() * 10 - 25, this->base_point.y + this->GetLength() * 10 - 25);
+	this->outs[0] = CRect(rect.right, (rect.bottom + rect.top) / 2 - 6, rect.right + 12, (rect.bottom + rect.top) / 2 + 6);
+	SingleTon<GaiaDrawGrid>::use()->inBtns.push_back(this->outs[0]);
+	auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+	db[outs[0].CenterPoint().x / 10][outs[0].CenterPoint().y / 10] = 0;
+	Update(this->outs[0]);
 }
 ClockCycle::ClockCycle(int x, int  y)
 {

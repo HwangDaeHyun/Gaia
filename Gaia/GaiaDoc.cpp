@@ -124,6 +124,15 @@ void GaiaDoc::Serialize(CArchive& ar)
 		auto& grid = SingleTon<GaiaDrawGrid>::use()->grid;
 		auto& inBtns = SingleTon<GaiaDrawGrid>::use()->inBtns;
 		auto& db = SingleTon<GaiaDrawGrid>::use()->dBoard;
+		SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
+		SingleTon<GaiaDrawGrid>::use()->sel_idx.clear();
+		SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+		
+		while (SingleTon<GaiaTableInfo>::use()->contents.size() > 2){
+			SingleTon<GaiaTableInfo>::use()->contents.pop_back();
+		}
+		SingleTon<GaiaTableInfo>::use()->isSel = false;
+		SingleTon<GaiaTableInfo>::use()->selNum = -1;
 		//grid.~vector();
 		e.clear();
 		edges.clear();
@@ -139,6 +148,11 @@ void GaiaDoc::Serialize(CArchive& ar)
 			ar >> tempKind;
 			objKind = (ObjectKind)tempKind;
 			switch (objKind){
+			case ObjectKind::LIBBOX:
+				obj = new LibBox();
+				ar >> obj;
+				e.push_back(obj);
+				break;
 			case ObjectKind::AND:
 				obj = new AndGate();
 				ar >> obj;
@@ -221,7 +235,9 @@ void GaiaDoc::Serialize(CArchive& ar)
 				tempEdge.second.push_back(tempWay);
 			}
 			edges.push_back(tempEdge);
+			tempEdge.second.clear();
 		}
+
 		//btn
 		int btnCnt;
 		ar >> btnCnt;
@@ -246,9 +262,7 @@ void GaiaDoc::Serialize(CArchive& ar)
 		}
 
 		SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
-		SingleTon<GaiaLayoutRepo>::use()->views[1]->Invalidate();
-		SingleTon<GaiaLayoutRepo>::use()->views[2]->Invalidate();
-		SingleTon<GaiaLayoutRepo>::use()->views[3]->Invalidate();
+
 
 	}
 }
@@ -400,7 +414,7 @@ void GaiaDoc::Undo(){
 			forRedo->obj_list.push_back(SingleTon<GaiaDrawGrid>::use()->objects[i]);
 		}
 		this->redo_list.push_back(forRedo);
-		if (redo_list.size()>20){
+		if (redo_list.size()>100){
 			redo_list.pop_front();
 		}
 		/////////////
@@ -513,7 +527,7 @@ void GaiaDoc::PushGaiaList(){
 		myList->obj_list.push_back(SingleTon<GaiaDrawGrid>::use()->objects[i]);
 	}
 	this->gaia_list.push_back(myList);
-	if (gaia_list.size()>20){
+	if (gaia_list.size()>100){
 		gaia_list.pop_front();
 	}
 }

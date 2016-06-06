@@ -38,6 +38,7 @@ public:
 	void MoveLogic(CDC& bDC, bool& possible);
 	void AddingLogic(CDC& bDC, CPoint point);
 	void StartClock(int index);
+	void RotateSelObject()override;
 	void DrawSplitterBar()override;
 	virtual void OnDraw(CDC* pDC);      // 이 뷰를 그리기 위해 재정의되었습니다.
 	virtual void OnCopy();

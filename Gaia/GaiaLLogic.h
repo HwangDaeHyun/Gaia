@@ -27,9 +27,10 @@ bool DblCompare(double a, double b);
 void DrawWay(CDC* pDC, deque<CRect>& way, bool b = true);
 CPoint MediatePoint(CPoint& point);
 void UpdateLines();
-deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE);
+deque<CRect> DrawEdge(CDC* pDC, DblPoint _pt, CWnd* view, BOOL ad = TRUE, BOOL rt= FALSE);
 void PaintGrid(CPoint pt, bool b = true);
 void UpdateDBoard();
 void Update(CRect& out);
+
 vector<int>* SearchObjects(CDC* pDC, CRect bound);
 #endif

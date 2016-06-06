@@ -96,24 +96,20 @@ void GaiaObject::Serialize(CArchive& ar){
 		this->objKind = (ObjectKind)o_K;
 		CPoint point;
 		ar >> this->base_point;
-
 		ar >> this->name;
 		ar >> this->arrow;
 		ar >> this->btn;
 		ar >> this->radius;
-		
 		ar >> this->baseRect;
 		ar >> this->clk;
-
 		ar >> this->basic;
-
 		ar >> this->mv;
 		int outSize;
 		ar >> outSize;
 		CRect tempOut;
 		for (int i = 0; i < outSize; i++){
 			ar >> tempOut;
-			this->outs.push_back(tempOut);
+			this->outs[i] = tempOut;
 		}
 		int insSize;
 		ar >> insSize;

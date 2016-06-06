@@ -121,7 +121,7 @@ void GaiaDrawView::DrawArea(CDC* pDC){
 			pDC->SelectObject(&p);
 			pDC->SelectObject(&b);
 			//pDC->MoveTo(elem->baseRect.left, elem->baseRect.top);
-			int d = elem->baseRect.Height();
+			int d = elem->baseRect.Height(); 
 			int rec_sz = 8;
 			pDC->Rectangle(elem->base_point.x, elem->base_point.y, elem->base_point.x + rec_sz, elem->base_point.y + rec_sz);
 			pDC->Rectangle(elem->base_point.x + d, elem->base_point.y, elem->base_point.x + d + rec_sz, elem->base_point.y + rec_sz);
@@ -920,8 +920,10 @@ void GaiaDrawView::StartClock(int index){
 void GaiaDrawView::OnCopy(){
 	//GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	//pDoc->PushGaiaList();
+
 	auto& sel_obj = SingleTon<GaiaDrawGrid>::use()->sel_objects;
 	auto& tempV = SingleTon<GaiaTempRepo>::use()->tempV;
+	tempV.clear();
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	for (int i = 0; i < sel_obj.size(); i++){
 		tempV.push_back(sel_obj[i]);
@@ -930,6 +932,9 @@ void GaiaDrawView::OnCopy(){
 void GaiaDrawView::OnPaste(){
 	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
 	pDoc->PushGaiaList();
+	srand(GetTickCount());
+	int x = rand() % 10 - 5;
+	int y = rand() % 10 - 5;
 	auto& tempV = SingleTon<GaiaTempRepo>::use()->tempV;
 	auto& e = SingleTon<GaiaDrawGrid>::use()->objects;
 	GaiaObject* obj;
@@ -966,7 +971,7 @@ void GaiaDrawView::OnPaste(){
 			obj = new InputBtn();
 			break;
 		case ObjectKind::CLOCKCYCLE:
-			obj = new ClockCycle(tempV[i]->base_point.x / 10 + 5, tempV[i]->base_point.y / 10 + 7);
+			obj = new ClockCycle(tempV[i]->base_point.x / 10 + x, tempV[i]->base_point.y / 10 + y);
 			goto WHICH;
 			break;
 		case ObjectKind::OUTLAMP:
@@ -976,7 +981,7 @@ void GaiaDrawView::OnPaste(){
 			obj = new OrGate();
 			break;
 		}
-		obj->SetPoint(tempV[i]->base_point.x/10 + 5, tempV[i]->base_point.y/10 + 7);
+		obj->SetPoint(tempV[i]->base_point.x / 10 + x, tempV[i]->base_point.y / 10 + y);
 	WHICH:{};
 		e.push_back(obj);
 	}
@@ -990,11 +995,13 @@ void GaiaDrawView::OnCut(){
 	auto& temp = SingleTon<GaiaTempRepo>::use()->tempV;
 	temp.clear();
 	std::sort(sel_idx.begin(), sel_idx.end(), [](int i, int j)->bool{return  j<i; });
-	
 	for (int i = 0; i < sel_idx.size(); i++){
 		e[sel_idx[i]]->ClearPoint();
 		temp.push_back(e[sel_idx[i]]);
-		e.erase(e.begin()+sel_idx[i]);
+		e.erase(e.begin() + sel_idx[i]);
 	}
 	Invalidate(false);
+}
+void GaiaDrawView::RotateSelObject(){
+
 }

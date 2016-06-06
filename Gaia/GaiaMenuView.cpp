@@ -8,6 +8,7 @@
 #include "GaiaMenuView.h"
 #include"LibBoxNameDlg.h"
 #include"ClkDialog.h"
+#include"GaiaLLogic.h"
 // GaiaMenuView
 
 IMPLEMENT_DYNCREATE(GaiaMenuView, GaiaCView)
@@ -159,6 +160,15 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 				SingleTon<GaiaDrawGrid>::use()->grid.assign(GSIZE, vector<bool>(GSIZE, false));
 				SingleTon<GaiaDrawGrid>::use()->inBtns.clear();
 				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
+				SingleTon<GaiaDrawGrid>::use()->sel_objects.clear();
+				SingleTon<GaiaDrawGrid>::use()->sel_idx.clear();
+				SingleTon<GaiaDrawGrid>::use()->lib_objects.clear();
+
+				while (SingleTon<GaiaTableInfo>::use()->contents.size() > 2){
+					SingleTon<GaiaTableInfo>::use()->contents.pop_back();
+				}
+				SingleTon<GaiaTableInfo>::use()->isSel = false;
+				SingleTon<GaiaTableInfo>::use()->selNum = -1;
 			}
 			else if ((*it)->myID == 3){	//ÀúÀå
 				GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
@@ -222,14 +232,11 @@ void GaiaMenuView::OnLButtonDown(UINT nFlags, CPoint point)
 
 			}
 			else if ((*it)->myID == 11){	//clik
-
-
+				
 			}
 			else if ((*it)->myID == 12){	//ROTATE
-				for (auto& s : SingleTon<GaiaDrawGrid>::use()->sel_objects){
-					s->SetRadius((s->GetRadius() + 1) % 4);
-				}
-				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate();
+				RotateSelObject();
+				SingleTon<GaiaLayoutRepo>::use()->views[0]->Invalidate(false);
 			}
 			else if ((*it)->myID == 13){	//TIMER
 				ClkDialog clkDialog;
@@ -335,4 +342,42 @@ void GaiaMenuView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	this->Invalidate(FALSE);
 	GaiaCView::OnMouseMove(nFlags, point);
+}
+void GaiaMenuView::RotateSelObject(){
+	GaiaDoc* pDoc = (GaiaDoc*)GetDocument();
+	pDoc->PushGaiaList();
+	auto& edges = SingleTon<GaiaDrawGrid>::use()->edges;
+	
+	vector<deque<CRect>> tempWays;
+	for (auto& s : SingleTon<GaiaDrawGrid>::use()->sel_objects){
+		for (int i = 0; i < edges.size(); i++){
+			for (int j = 0; j < s->outs.size(); j++){
+				if (s->outs[j].PtInRect(edges[i].first.first)){
+					PaintGrid({ edges[i].first.second.x / 10, edges[i].first.second.y / 10 }, false);
+					PaintGrid({ edges[i].first.first.x / 10, edges[i].first.first.y / 10 }, false);
+					edges.erase(begin(edges) + i);
+					i--;
+					goto THERE;
+				}
+			}
+			for (int j = 0; j < s->ins.size(); j++){
+				if (s->ins[j].PtInRect(edges[i].first.second)){
+					PaintGrid({edges[i].first.first.x / 10,edges[i].first.first.y / 10}, false);
+					PaintGrid({ edges[i].first.second.x / 10, edges[i].first.second.y / 10 }, false);
+					edges.erase(begin(edges) + i);
+					i--;
+					goto THERE;
+				}
+			}
+			if (s->clk.PtInRect(edges[i].first.second)){
+				PaintGrid({ edges[i].first.first.x / 10, edges[i].first.first.y / 10 }, false);
+				PaintGrid({ edges[i].first.first.x / 10, edges[i].first.first.y / 10 }, false);
+				edges.erase(begin(edges) + i);
+				i--;
+			}
+		THERE:{};
+		}
+		s->SetRadius((s->GetRadius() + 1) % 3);
+	}
+	
 }
